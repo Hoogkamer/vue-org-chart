@@ -5,6 +5,9 @@ Static website to generate an interactive organisation chart
 
 *WORK IN PROGRESS*
 
+
+![Screenshot](/assets/img/Screenshot?raw=true "Screenshot")
+
 ## Build Setup
 
 ``` bash
