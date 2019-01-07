@@ -3,7 +3,8 @@ export const state = () => ({
   orgArray: null,
   lines: [],
   showSideScreen: true,
-  options: { columnView: true }
+  columnView: true,
+  activeDepartment: null
 })
 
 export const mutations = {
@@ -13,12 +14,21 @@ export const mutations = {
     state.chart.showChildren = true
   },
   setColumnView(state, value) {
-    state.options.columnView = value
+    state.columnView = value
   },
-  swapShowChildren(state, dept) {
+  showChildren(state, dept) {
     var index = state.orgArray.findIndex(e => e.id === dept.id)
 
-    dept.showChildren = !dept.showChildren
+    dept.showChildren = true
+    state.orgArray.splice(index, 1, dept)
+  },
+  setActiveDepartment(state, dept) {
+    state.activeDepartment = dept
+  },
+  hideChildren(state, dept) {
+    var index = state.orgArray.findIndex(e => e.id === dept.id)
+
+    dept.showChildren = false
     state.orgArray.splice(index, 1, dept)
   },
   addLine(state) {
@@ -44,7 +54,6 @@ export const mutations = {
 function updateLines(dept, lines) {
   var svg = document.getElementById('svg')
   var xparent = document.getElementById('chart')
-  console.log('width', xparent.offsetWidth)
   svg.style.width = xparent.offsetWidth + 'px'
   svg.style.height = xparent.offsetHeight + 'px'
   if (dept.showChildren) {

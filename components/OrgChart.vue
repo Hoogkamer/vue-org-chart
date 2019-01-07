@@ -30,7 +30,7 @@ export default {
     ...mapState(['chart', 'orgArray', 'options']),
     columnView: {
       get() {
-        return this.$store.state.options.columnView
+        return this.$store.state.columnView
       },
       set(value) {
         this.$store.commit('setColumnView', value)

@@ -1,15 +1,18 @@
 <template lang='pug'>
     div
       template(v-if="departmentData")
-        .department1(v-if="departmentData" :id="departmentData.id" :class="['color_level' + level, type]")
-          .name(v-html="departmentData.name")
-        img(v-if='type!=="column" && !departmentData.showChildren && departmentData.children.length' class='down-icon1' src='~/assets/img/down.svg')
+          .department1( :id="departmentData.id" :class="['color_level' + level, type, active]" v-on:click="setActiveDepartment(departmentData)")
+            .name(v-html="departmentData.name")
+            i.material-icons.arrow.down(v-if='(type==="column" || !columnView) && !departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
+            i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
       template(v-else)
         .departmente(:class="['color_level' + level, type]")
 
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'DeptBox',
   components: {},
@@ -31,11 +34,44 @@ export default {
   data: function() {
     return {}
   },
-  mounted: function() {},
+  computed: {
+    ...mapState(['columnView', 'activeDepartment']),
+    active: function() {
+      return this.departmentData === this.activeDepartment
+        ? 'active_department'
+        : ''
+    }
+  },
+  mounted: function() {
+    console.log(this.columnView)
+  },
   destroyed: function() {
     // this.$store.commit('addLine')
   },
-  methods: {}
+  methods: {
+    doShowChildren(down) {
+      this.$store.commit('removeLines')
+      var department =
+        this.departmentData.parent &&
+        !this.departmentData.parent.showChildren &&
+        down
+          ? this.departmentData.parent
+          : this.departmentData
+      if (down) {
+        this.$store.commit('showChildren', department)
+      } else {
+        this.$store.commit('hideChildren', department)
+      }
+
+      setTimeout(x => {
+        this.$store.commit('addLine')
+      }, 500)
+    },
+
+    setActiveDepartment(department) {
+      this.$store.commit('setActiveDepartment', department)
+    }
+  }
 }
 </script>
 <style scoped>
@@ -44,13 +80,30 @@ export default {
   height: auto;
   margin: 3px 0px 0px 0px;
 }
+.active_department {
+  background-color: yellow !important;
+  color: black !important;
+}
+.arrow {
+  font-size: 30px;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  margin: -8px;
+}
+.down {
+  cursor: zoom-in;
+}
+.up {
+  cursor: zoom-out;
+}
 .department,
 .department1,
 .departmente {
   width: 114px;
   height: 50px;
   border: 1px solid grey;
-  margin: 40px 0px 0px 0px;
+  margin: 40px 0px 5px 0px;
   text-align: center;
   font-size: 11px;
   vertical-align: middle;
@@ -65,13 +118,15 @@ export default {
   margin-left: auto;
   margin-right: auto;
   padding: 2px 2px;
+  position: relative;
 }
 .departmente {
   background-color: transparent !important;
   border: none;
 }
 .column {
-  margin-top: 2px;
+  margin-top: 1px;
+  margin-bottom: 0px;
 }
 .staff {
   margin: 2px 80px 2px 80px;

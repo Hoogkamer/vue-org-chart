@@ -2,10 +2,10 @@
     .container
         table
             tr
-              td(:colspan="parent.showChildren?hierarchyChildren.length:1" v-on:click="doShowChildren(parent)")
+              td(:colspan="parent.showChildren?hierarchyChildren.length:1" )
                 dept-box(:department-data="parent" :level="level" type='normal')
             tr(v-if="parent.showChildren" v-for="staff in staffChildren")
-              td(:colspan="parent.showChildren?hierarchyChildren.length:1" v-on:click="doShowChildren(parent)")
+              td(:colspan="parent.showChildren?hierarchyChildren.length:1" )
                 table.staff
                   tr
                     td
@@ -78,17 +78,7 @@ export default {
     // }, 500)
   },
 
-  methods: {
-    doShowChildren(dept) {
-      this.$store.commit('removeLines')
-      this.$store.commit('swapShowChildren', dept)
-      console.log('--', this.parent)
-
-      setTimeout(x => {
-        this.$store.commit('addLine')
-      }, 500)
-    }
-  }
+  methods: {}
 }
 </script>
 <style scoped>
@@ -118,5 +108,6 @@ td {
   text-align: center;
   vertical-align: top;
   width: 150px;
+  padding: 0px;
 }
 </style>
