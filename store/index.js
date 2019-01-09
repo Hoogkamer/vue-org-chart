@@ -4,7 +4,9 @@ export const state = () => ({
   lines: [],
   showSideScreen: true,
   columnView: true,
-  activeDepartment: null
+  activeDepartment: null,
+  editMode: true,
+  showEditMenu: null
 })
 
 export const mutations = {
@@ -16,6 +18,12 @@ export const mutations = {
   setColumnView(state, value) {
     state.columnView = value
   },
+  setEditMode(state, value) {
+    state.editMode = value
+  },
+  showEditMenu(state, event) {
+    state.showEditMenu = event
+  },
   showChildren(state, dept) {
     var index = state.orgArray.findIndex(e => e.id === dept.id)
 
@@ -24,6 +32,26 @@ export const mutations = {
   },
   setActiveDepartment(state, dept) {
     state.activeDepartment = dept
+  },
+  deleteDepartment(state) {
+    var foundDept = findDept(state.chart, state.activeDepartment)
+    if (foundDept && foundDept.parent) {
+      foundDept.parent.children = foundDept.parent.children.filter(
+        child => child !== state.activeDepartment
+      )
+    }
+    state.activeDepartment = null
+    state.showEditMenu = null
+  },
+  updateActiveDepartmentName(state, name) {
+    state.activeDepartment.name = name
+  },
+  updateActiveDepartmentDescription(state, description) {
+    state.activeDepartment.description = description
+  },
+
+  updateActiveDepartmentIsStaff(state, isStaff) {
+    state.activeDepartment.isStaff = isStaff
   },
   hideChildren(state, dept) {
     var index = state.orgArray.findIndex(e => e.id === dept.id)
@@ -129,4 +157,18 @@ function createTree(array, parent, nextparent, tree) {
     })
   }
   return tree
+}
+function findDept(chart, dept) {
+  console.log(chart, dept)
+  if (chart === dept) {
+    return dept
+  } else {
+    var fnd = null
+    for (let child of chart.children) {
+      fnd = findDept(child, dept)
+      if (fnd) break
+    }
+    return fnd
+  }
+  return null
 }

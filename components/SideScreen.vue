@@ -6,15 +6,17 @@
       template(v-if="activeDepartment")
         .property
           span.label Name
-          br 
-          span.text {{activeDepartment.name}}
+          br
+          input.name(v-if='editMode' v-model="activeDepartment_name")
+          span(v-else).text {{activeDepartment_name}}
         .property
           span.label Description
           br 
-          span.text {{activeDepartment.description}}
+          textarea.description(v-if='editMode' v-model="activeDepartment_description")
+          span(v-else).text {{activeDepartment_description}}
         .property
           span.label Staff department
-          input.isstaff(type='checkbox' v-model="activeDepartment.isStaff" disabled="true")
+          input.isstaff(type='checkbox' v-model="activeDepartment_isStaff" :disabled="!editMode")
         .property
           span.label Hiearchy
           ul
@@ -42,7 +44,35 @@ export default {
   props: {},
 
   computed: {
-    ...mapState(['showSideScreen', 'activeDepartment']),
+    ...mapState(['showSideScreen', 'activeDepartment', 'editMode']),
+    activeDepartment_name: {
+      get: function() {
+        return this.$store.state.activeDepartment.name
+      },
+      set: function(val) {
+        this.$store.commit('updateActiveDepartmentName', val)
+      }
+    },
+    activeDepartment_description: {
+      get: function() {
+        return this.$store.state.activeDepartment.description
+      },
+      set: function(val) {
+        this.$store.commit('updateActiveDepartmentDescription', val)
+      }
+    },
+    activeDepartment_isStaff: {
+      get: function() {
+        return this.$store.state.activeDepartment.isStaff
+      },
+      set: function(val) {
+        this.$store.commit('removeLines')
+        this.$store.commit('updateActiveDepartmentIsStaff', val)
+        setTimeout(x => {
+          this.$store.commit('addLine')
+        }, 500)
+      }
+    },
     parents: function() {
       var parents = []
       var department = this.activeDepartment
@@ -75,6 +105,16 @@ h4 {
 }
 .clickable {
   cursor: pointer;
+}
+input.name {
+  width: 250px;
+}
+textarea.description {
+  width: 250px;
+  height: 80px;
+}
+.clickable:hover {
+  background-color: grey;
 }
 .noclickable {
   cursor: default;

@@ -1,7 +1,7 @@
 <template lang='pug'>
     div
       template(v-if="departmentData")
-          .department1( :id="departmentData.id" :class="['color_level' + level, type, active]" v-on:click="setActiveDepartment(departmentData)")
+          .department1( :id="departmentData.id" :class="['color_level' + level, type, active]" v-on:click="setActiveDepartment(departmentData, $event)")
             .name(v-html="departmentData.name")
             i.material-icons.arrow.down(v-if='(type==="column" || !columnView) && !departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
@@ -35,7 +35,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(['columnView', 'activeDepartment']),
+    ...mapState(['columnView', 'activeDepartment', 'editMode']),
     active: function() {
       return this.departmentData === this.activeDepartment
         ? 'active_department'
@@ -62,14 +62,20 @@ export default {
       } else {
         this.$store.commit('hideChildren', department)
       }
-
       setTimeout(x => {
         this.$store.commit('addLine')
       }, 500)
     },
 
-    setActiveDepartment(department) {
+    setActiveDepartment(department, event) {
       this.$store.commit('setActiveDepartment', department)
+      this.$store.commit('showEditMenu', null)
+
+      this.$nextTick(e => {
+        if (this.editMode) {
+          this.$store.commit('showEditMenu', event)
+        }
+      })
     }
   }
 }

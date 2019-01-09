@@ -2,18 +2,24 @@
     #chart
       input(type="checkbox" id="checkbox" v-model="columnView")
       label(for="checkbox") Column view
+      span &nbsp
+      input(type="checkbox" id="editmode" v-model="editMode")
+      label(for="editmode") Edit
+      
       show-dept(v-if="chart" :parent="chart" :level=1 :columnView="columnView")
       draw-lines(v-if="orgArray")
       button(v-on:click="$store.commit('addLine')") update
+      edit-menu(v-if="showEditMenu")
 </template>
 
 <script>
 import { createTree } from '~/plugins/HelpFunctions.js'
 import ShowDept from '~/components/ShowDept.vue'
 import DrawLines from '~/components/DrawLines.vue'
+import EditMenu from '~/components/EditMenu.vue'
 import { mapState } from 'vuex'
 export default {
-  components: { ShowDept, DrawLines },
+  components: { ShowDept, DrawLines, EditMenu },
   props: {
     orgData: {
       type: Array,
@@ -27,13 +33,21 @@ export default {
     }
   },
   computed: {
-    ...mapState(['chart', 'orgArray', 'options']),
+    ...mapState(['chart', 'orgArray', 'options', 'showEditMenu']),
     columnView: {
       get() {
         return this.$store.state.columnView
       },
       set(value) {
         this.$store.commit('setColumnView', value)
+      }
+    },
+    editMode: {
+      get() {
+        return this.$store.state.editMode
+      },
+      set(value) {
+        this.$store.commit('setEditMode', value)
       }
     }
   },

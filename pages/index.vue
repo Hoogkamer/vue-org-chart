@@ -24,7 +24,15 @@ export default {
     }
   },
   computed: {
-    ...mapState(['showSideScreen'])
+    ...mapState(['showSideScreen', 'chart'])
+  },
+  watch: {
+    chart: function(val) {
+      console.log('chart changed')
+      setTimeout(x => {
+        this.$store.commit('addLine')
+      }, 500)
+    }
   },
   mounted: function() {
     this.orgData = OrgStructure
@@ -32,6 +40,8 @@ export default {
       this.$set(x, 'showChildren', false)
       this.$set(x, 'parent', null)
       this.$set(x, 'children', null)
+      this.$set(x, 'isStaff', x.isStaff ? true : false)
+      this.$set(x, 'description', '')
     })
     var that = this
     window.onresize = function(event) {
@@ -39,6 +49,16 @@ export default {
       setTimeout(x => {
         that.$store.commit('addLine')
       }, 500)
+    }
+    document.body.addEventListener('keyup', e => {
+      if (e.keyCode === 27) {
+        this.cancelAll()
+      }
+    })
+  },
+  methods: {
+    cancelAll: function() {
+      this.$store.commit('showEditMenu', null)
     }
   }
 }
