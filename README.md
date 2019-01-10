@@ -2,9 +2,12 @@
 
 > Organization chart
 Static website to generate an interactive organisation chart
+(c) Michael Hoogkamer
 
 *WORK IN PROGRESS*
 
+
+[Demo] (https://hoogkamer.github.io/vue-org-chart/)
 
 ![Screenshot](/assets/img/Screenshot.PNG?raw=true "Screenshot")
 
