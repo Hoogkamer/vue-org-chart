@@ -7,7 +7,9 @@ Static website to generate an interactive organisation chart
 *WORK IN PROGRESS*
 
 
-[Demo] (https://hoogkamer.github.io/vue-org-chart/)
+[Demo](https://hoogkamer.github.io/vue-org-chart/)
+
+In editmode, use right mouse button on a department to bring up the context menu
 
 ![Screenshot](/assets/img/Screenshot.PNG?raw=true "Screenshot")
 
