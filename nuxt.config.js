@@ -2,7 +2,7 @@ const pkg = require('./package')
 
 module.exports = {
   mode: 'spa',
-  router: { base: 'vue-org-chart' },
+  router: {},
   /*
   ** Headers of the page
   */
