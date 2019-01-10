@@ -5,6 +5,7 @@ export const state = () => ({
   showSideScreen: true,
   columnView: true,
   activeDepartment: null,
+  moveDepartment: null,
   editMode: true,
   showEditMenu: null
 })
@@ -43,6 +44,21 @@ export const mutations = {
     state.activeDepartment = null
     state.showEditMenu = null
   },
+  addDepartment(state) {
+    var newdept = { ...state.activeDepartment }
+    for (var prop in newdept) {
+      newdept[prop] = null
+    }
+    newdept.name = ''
+    newdept.id = guid()
+    newdept.parent = state.activeDepartment
+    newdept.children = []
+    state.activeDepartment.children.push(newdept)
+    state.activeDepartment.parent.showChildren = true
+    state.activeDepartment.showChildren = true
+    state.activeDepartment = newdept
+    state.showEditMenu = null
+  },
   updateActiveDepartmentName(state, name) {
     state.activeDepartment.name = name
   },
@@ -58,6 +74,22 @@ export const mutations = {
 
     dept.showChildren = false
     state.orgArray.splice(index, 1, dept)
+  },
+  setMoveDepartment(state) {
+    state.moveDepartment = state.activeDepartment
+  },
+  cancelMoveDepartment(state) {
+    state.moveDepartment = null
+  },
+  doMoveDepartment(state) {
+    state.moveDepartment.parent.children = state.moveDepartment.parent.children.filter(
+      d => d !== state.moveDepartment
+    )
+    state.moveDepartment.parent = state.activeDepartment
+    state.activeDepartment.children.push(state.moveDepartment)
+    state.activeDepartment = state.moveDepartment
+    state.moveDepartment = null
+    state.showEditMenu = null
   },
   addLine(state) {
     state.lines = updateLines(state.chart, [])
@@ -76,6 +108,10 @@ export const mutations = {
     var chart = document.getElementById('chart')
     chart.style.marginLeft = '300px'
     state.lines = updateLines(state.chart, [])
+  },
+  cancelAll(state) {
+    state.showEditMenu = null
+    state.moveDepartment = null
   }
 }
 
@@ -171,4 +207,25 @@ function findDept(chart, dept) {
     return fnd
   }
   return null
+}
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1)
+  }
+  return (
+    s4() +
+    s4() +
+    '-' +
+    s4() +
+    '-' +
+    s4() +
+    '-' +
+    s4() +
+    '-' +
+    s4() +
+    s4() +
+    s4()
+  )
 }

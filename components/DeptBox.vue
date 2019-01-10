@@ -1,9 +1,9 @@
 <template lang='pug'>
     div
       template(v-if="departmentData")
-          .department1( :id="departmentData.id" :class="['color_level' + level, type, active]" v-on:click="setActiveDepartment(departmentData, $event)")
+          .department1( :id="departmentData.id" :class="['color_level' + level, type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
             .name(v-html="departmentData.name")
-            i.material-icons.arrow.down(v-if='(type==="column" || !columnView) && !departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
+            i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
       template(v-else)
         .departmente(:class="['color_level' + level, type]")
@@ -35,7 +35,12 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(['columnView', 'activeDepartment', 'editMode']),
+    ...mapState([
+      'columnView',
+      'activeDepartment',
+      'editMode',
+      'moveDepartment'
+    ]),
     active: function() {
       return this.departmentData === this.activeDepartment
         ? 'active_department'
@@ -68,6 +73,9 @@ export default {
     },
 
     setActiveDepartment(department, event) {
+      this.$store.commit('setActiveDepartment', department)
+    },
+    showCtxMenu(department, event) {
       this.$store.commit('setActiveDepartment', department)
       this.$store.commit('showEditMenu', null)
 

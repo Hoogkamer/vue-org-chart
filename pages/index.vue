@@ -52,15 +52,11 @@ export default {
     }
     document.body.addEventListener('keyup', e => {
       if (e.keyCode === 27) {
-        this.cancelAll()
+        this.$store.commit('cancelAll')
       }
     })
   },
-  methods: {
-    cancelAll: function() {
-      this.$store.commit('showEditMenu', null)
-    }
-  }
+  methods: {}
 }
 </script>
 

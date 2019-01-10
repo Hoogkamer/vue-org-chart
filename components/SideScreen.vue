@@ -7,7 +7,7 @@
         .property
           span.label Name
           br
-          input.name(v-if='editMode' v-model="activeDepartment_name")
+          input.name(v-if='editMode' :class="{error:!activeDepartment_name}" v-model="activeDepartment_name")
           span(v-else).text {{activeDepartment_name}}
         .property
           span.label Description
@@ -174,5 +174,8 @@ ul {
   outline: none;
 }
 .right i {
+}
+.error {
+  background-color: red;
 }
 </style>
