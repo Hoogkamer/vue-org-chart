@@ -59,3 +59,15 @@ module.exports = {
     }
   }
 }
+
+const routerBase =
+  process.env.DEPLOY_ENV === 'GH_PAGES'
+    ? {
+        router: {
+          base: '/vue-org-chart/'
+        }
+      }
+    : {}
+export default {
+  ...routerBase
+}
