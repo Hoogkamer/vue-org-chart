@@ -34,6 +34,14 @@ export const mutations = {
   setActiveDepartment(state, dept) {
     state.activeDepartment = dept
   },
+  setShowDepartment(state, dept) {
+    state.activeDepartment = dept
+    var p = dept.parent
+    while (p) {
+      p.showChildren = true
+      p = p.parent
+    }
+  },
   deleteDepartment(state) {
     var foundDept = findDept(state.chart, state.activeDepartment)
     if (foundDept && foundDept.parent) {

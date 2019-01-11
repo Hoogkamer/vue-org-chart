@@ -10,6 +10,7 @@
       draw-lines(v-if="orgArray")
       button(v-on:click="$store.commit('addLine')") update
       edit-menu(v-if="showEditMenu")
+     
 
       #move_dept(v-if="moveDepartment" :style="{ left: page.left + 'px', top: page.top + 'px' }")
         div {{moveDepartment.name}}
@@ -21,6 +22,7 @@ import { createTree } from '~/plugins/HelpFunctions.js'
 import ShowDept from '~/components/ShowDept.vue'
 import DrawLines from '~/components/DrawLines.vue'
 import EditMenu from '~/components/EditMenu.vue'
+
 import { mapState } from 'vuex'
 export default {
   components: { ShowDept, DrawLines, EditMenu },
@@ -87,6 +89,8 @@ export default {
   margin-left: 300px;
   margin-top: 50px;
   display: inline-block;
+
+  box-sizing: border-box;
 }
 #move_dept {
   position: absolute;

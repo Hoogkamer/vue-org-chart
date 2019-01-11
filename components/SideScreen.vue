@@ -88,7 +88,12 @@ export default {
   },
   methods: {
     setActiveDepartment(department) {
-      this.$store.commit('setActiveDepartment', department)
+      this.$store.commit('removeLines')
+      this.$store.commit('setShowDepartment', department)
+      this.searchField = ''
+      setTimeout(x => {
+        this.$store.commit('addLine')
+      }, 500)
     }
   }
 }

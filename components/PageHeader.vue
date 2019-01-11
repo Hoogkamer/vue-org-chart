@@ -1,9 +1,14 @@
 <template lang='pug'>
 .header {{pageTitle}}
+   search-box
 </template>
 
 <script>
+import SearchBox from '~/components/SearchBox.vue'
+
 export default {
+  components: { SearchBox },
+
   props: {
     pageTitle: {
       type: String,

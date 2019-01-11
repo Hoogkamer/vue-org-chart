@@ -2,7 +2,8 @@ const pkg = require('./package')
 
 module.exports = {
   mode: 'spa',
-  router: { base: '/vue-org-chart/' },
+  // change router for githup pages
+  // router: { base: '/vue-org-chart/' },
   /*
   ** Headers of the page
   */
