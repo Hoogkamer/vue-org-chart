@@ -3,7 +3,7 @@
     page-header(:page-title="'Organisation Chart'")
     .container1(id='xparent')
       org-chart(v-if="chart")
-    side-screen
+    side-screen(v-if='chart')
 </template>
 
 <script>
@@ -53,6 +53,7 @@ export default {
     })
     console.log(data)
     this.$store.commit('createTree', data)
+    this.$store.commit('setPeople', INPUT_DATA.people)
 
     window.onresize = function(event) {
       that.$store.commit('removeLines')

@@ -9,7 +9,8 @@ export const state = () => ({
   activeDepartment: null,
   moveDepartment: null,
   editMode: true,
-  showEditMenu: null
+  showEditMenu: null,
+  selectedPerson: null
 })
 
 export const mutations = {
@@ -21,6 +22,12 @@ export const mutations = {
   },
   setPeople(state, datas) {
     state.people = datas
+  },
+  setSelectedPerson(state, person) {
+    state.selectedPerson = person
+  },
+  updateSelectedPerson(state, data) {
+    state.selectedPerson[data.field] = data.value
   },
   setColumnView(state, value) {
     state.columnView = value
@@ -76,8 +83,15 @@ export const mutations = {
     state.activeDepartment = newdept
     state.showEditMenu = null
   },
+  addPerson(state, person) {
+    //TODO: check for duplicates
+    state.people.push(person)
+  },
   updateActiveDepartmentName(state, name) {
     state.activeDepartment.name = name
+  },
+  updateActiveDepartmentManager(state, person) {
+    state.activeDepartment.manager = person
   },
   updateActiveDepartmentDescription(state, description) {
     state.activeDepartment.description = description
