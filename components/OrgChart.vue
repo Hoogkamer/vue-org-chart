@@ -1,14 +1,7 @@
 <template lang='pug'>
-    #chart(v-on:mousemove.selve="onMouseMove")  
-      input(type="checkbox" id="checkbox" v-model="columnView")
-      label(for="checkbox") Column view
-      span &nbsp
-      input(type="checkbox" id="editmode" v-model="editMode")
-      label(for="editmode") Edit
-      
+    #chart(v-on:mousemove.selve="onMouseMove")   
       show-dept(v-if="chart" :parent="chart" :level=1 :columnView="columnView")
-      draw-lines(v-if="orgArray")
-      button(v-on:click="$store.commit('addLine')") update
+      draw-lines(v-if="chart")
       edit-menu(v-if="showEditMenu")
      
 
@@ -26,13 +19,6 @@ import EditMenu from '~/components/EditMenu.vue'
 import { mapState } from 'vuex'
 export default {
   components: { ShowDept, DrawLines, EditMenu },
-  props: {
-    orgData: {
-      type: Array,
-      required: true,
-      default: null
-    }
-  },
   data: function() {
     return {
       tree: null,
@@ -42,33 +28,13 @@ export default {
   computed: {
     ...mapState([
       'chart',
-      'orgArray',
       'options',
       'showEditMenu',
-      'moveDepartment'
-    ]),
-    columnView: {
-      get() {
-        return this.$store.state.columnView
-      },
-      set(value) {
-        this.$store.commit('setColumnView', value)
-        this.$store.commit('cancelAll')
-      }
-    },
-    editMode: {
-      get() {
-        return this.$store.state.editMode
-      },
-      set(value) {
-        this.$store.commit('setEditMode', value)
-        this.$store.commit('cancelAll')
-      }
-    }
+      'moveDepartment',
+      'columnView'
+    ])
   },
   mounted: function() {
-    this.$store.commit('createTree', this.orgData)
-    console.log(this.orgArray)
     setTimeout(x => {
       this.$store.commit('addLine')
     }, 500)

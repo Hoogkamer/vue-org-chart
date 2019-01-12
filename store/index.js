@@ -1,9 +1,11 @@
 export const state = () => ({
   chart: null,
+  people: null,
   orgArray: null,
   lines: [],
   showSideScreen: true,
   columnView: true,
+  managerNameView: true,
   activeDepartment: null,
   moveDepartment: null,
   editMode: true,
@@ -14,10 +16,17 @@ export const mutations = {
   createTree(state, datas) {
     state.orgArray = datas
     state.chart = createTree(datas)[0]
+    console.log(state.chart)
     state.chart.showChildren = true
+  },
+  setPeople(state, datas) {
+    state.people = datas
   },
   setColumnView(state, value) {
     state.columnView = value
+  },
+  setManagerNameView(state, value) {
+    state.managerNameView = value
   },
   setEditMode(state, value) {
     state.editMode = value

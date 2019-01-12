@@ -15,10 +15,12 @@
     "generate:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES nuxt generate"
   },
   "dependencies": {
+    "file-saver": "^2.0.0",
     "nuxt": "^2.0.0",
     "nuxt-material-design-icons": "^1.0.4",
     "pug": "^2.0.3",
-    "pug-plain-loader": "^1.0.0"
+    "pug-plain-loader": "^1.0.0",
+    "xlsx": "^0.14.1"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

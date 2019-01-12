@@ -9,6 +9,12 @@
           br
           input.name(v-if='editMode' :class="{error:!activeDepartment_name}" v-model="activeDepartment_name")
           span(v-else).text {{activeDepartment_name}}
+
+        .property
+          span.label Manager
+          br
+          span.text(v-if='activeDepartment.manager.name') {{activeDepartment.manager.name}}
+          span.untext(v-else) No manager
         .property
           span.label Description
           br 
@@ -129,6 +135,10 @@ textarea.description {
   text-decoration: underline;
 }
 .text {
+}
+.untext {
+  color: grey;
+  font-style: italic;
 }
 ul {
   list-style: none;

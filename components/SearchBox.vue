@@ -15,7 +15,7 @@ export default {
     return { searchField: '' }
   },
   computed: {
-    ...mapState(['chart']),
+    ...mapState(['chart', 'editMode']),
     searchresults: function() {
       var res
       if (this.searchField.length < 3) {
@@ -27,6 +27,14 @@ export default {
         }
       }
       return res
+    }
+  },
+  watch: {
+    searchField: function(val) {
+      if (val === '_edit') {
+        this.$store.commit('setEditMode', !this.editMode)
+        this.searchField = ''
+      }
     }
   },
   mounted: function() {},

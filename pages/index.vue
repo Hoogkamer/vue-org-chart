@@ -2,7 +2,7 @@
   .p-container
     page-header(:page-title="'Organisation Chart'")
     .container1(id='xparent')
-      org-chart(v-if="orgData" :org-data="orgData")
+      org-chart(v-if="chart")
     side-screen
 </template>
 
@@ -35,15 +35,25 @@ export default {
     }
   },
   mounted: function() {
-    this.orgData = OrgStructure
-    this.orgData.forEach(x => {
-      this.$set(x, 'showChildren', false)
-      this.$set(x, 'parent', null)
-      this.$set(x, 'children', null)
-      this.$set(x, 'isStaff', x.isStaff ? true : false)
-      this.$set(x, 'description', '')
+    console.log(INPUT_DATA)
+    var data = []
+    INPUT_DATA.chart.forEach(dept => {
+      var manager = INPUT_DATA.people.find(p => p.id == dept.manager_id)
+      data.push({
+        id: dept.id,
+        parentId: dept.parent_id,
+        isStaff: dept.staff_department == 'Y',
+        name: dept.name,
+        description: dept.description,
+        manager: manager ? manager : { name: '' },
+        showChildren: false,
+        parent: null,
+        children: null
+      })
     })
-    var that = this
+    console.log(data)
+    this.$store.commit('createTree', data)
+
     window.onresize = function(event) {
       that.$store.commit('removeLines')
       setTimeout(x => {

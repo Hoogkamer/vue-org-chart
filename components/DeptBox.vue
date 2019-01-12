@@ -3,6 +3,7 @@
       template(v-if="departmentData")
           .department1( :id="departmentData.id" :class="['color_level' + level, type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
             .name(v-html="departmentData.name")
+            .name_manager(v-if="managerNameView") {{departmentData.manager.name}}
             i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
       template(v-else)
@@ -37,6 +38,7 @@ export default {
   computed: {
     ...mapState([
       'columnView',
+      'managerNameView',
       'activeDepartment',
       'editMode',
       'moveDepartment'
@@ -149,6 +151,21 @@ export default {
   overflow-wrap: break-word;
   min-width: 1%;
   width: 114px;
+  display: inline-block;
+  position: absolute;
+  left: 0px;
+  top: 5px;
+}
+.name_manager {
+  overflow-wrap: break-word;
+  min-width: 1%;
+  width: 114px;
+  display: inline-block;
+  position: absolute;
+  left: 0px;
+  top: 25px;
+  font-style: italic;
+  opacity: 0.8;
 }
 
 .color_level1 {
