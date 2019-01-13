@@ -71,9 +71,7 @@ export default {
         : ''
     }
   },
-  mounted: function() {
-    console.log(this.columnView)
-  },
+  mounted: function() {},
   destroyed: function() {
     // this.$store.commit('addLine')
   },

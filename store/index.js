@@ -73,14 +73,18 @@ export const mutations = {
     state.showEditMenu = null
   },
   addDepartment(state) {
-    var newdept = { ...state.activeDepartment }
-    for (var prop in newdept) {
-      newdept[prop] = null
+    var newdept = {
+      children: [],
+      description: '',
+      id: guid(),
+      isStaff: false,
+      manager: { name: '', id: '', role: '' },
+      name: '',
+      parent: state.activeDepartment,
+      parentId: state.activeDepartment.id,
+      showChildren: false
     }
-    newdept.name = ''
-    newdept.id = guid()
-    newdept.parent = state.activeDepartment
-    newdept.children = []
+
     state.activeDepartment.children.push(newdept)
     state.activeDepartment.parent.showChildren = true
     state.activeDepartment.showChildren = true

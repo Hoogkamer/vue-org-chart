@@ -76,6 +76,7 @@ export default {
     // setTimeout(x => {
     //   this.$store.commit('addLine')
     // }, 500)
+    console.log('parent', this.parent)
   },
 
   methods: {}

@@ -55,6 +55,7 @@ export default {
     addDept: function() {
       this.$store.commit('removeLines')
       this.$store.commit('addDepartment')
+      console.log(this.activeDepartment)
       setTimeout(x => {
         this.$store.commit('addLine')
       }, 500)
