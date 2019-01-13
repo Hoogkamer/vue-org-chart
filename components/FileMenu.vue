@@ -83,6 +83,11 @@ export default {
         XLSX.utils.json_to_sheet(chartTable),
         'chart'
       )
+      XLSX.utils.book_append_sheet(
+        wb,
+        XLSX.utils.json_to_sheet(this.people),
+        'people'
+      )
       XLSX.writeFile(wb, 'chart_data.xlsx')
     },
     array2tree: function(array) {},

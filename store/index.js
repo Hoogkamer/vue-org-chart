@@ -6,6 +6,7 @@ export const state = () => ({
   showSideScreen: true,
   columnView: true,
   managerNameView: true,
+  managerPhotoView: true,
   activeDepartment: null,
   moveDepartment: null,
   editMode: true,
@@ -34,6 +35,9 @@ export const mutations = {
   },
   setManagerNameView(state, value) {
     state.managerNameView = value
+  },
+  setManagerPhotoView(state, value) {
+    state.managerPhotoView = value
   },
   setEditMode(state, value) {
     state.editMode = value
@@ -167,24 +171,25 @@ function getLine(dept) {
   if (dept.isStaff) {
     d =
       'M' +
-      Math.round(pos.parent.x + 57) +
+      Math.round(pos.parent.x + pos.parent.width / 2) +
       ' ' +
-      Math.round(pos.parent.y + 50) +
+      Math.round(pos.parent.y + pos.parent.height) +
       ' v' +
-      Math.round(pos.element.y - pos.parent.y - 25) +
+      Math.round(pos.element.y - pos.parent.y - pos.parent.height / 2) +
       ' H' +
-      Math.round(pos.element.x + 100)
+      Math.round(pos.element.x + pos.parent.width)
   } else {
     d =
       'M' +
-      Math.round(pos.parent.x + 57) +
+      Math.round(pos.parent.x + pos.parent.width / 2) +
       ' ' +
-      Math.round(pos.parent.y + 50) +
-      ' v' +
-      Math.round(pos.element.y - pos.parent.y - 70) +
+      Math.round(pos.parent.y + pos.parent.height) +
+      ' V' +
+      Math.round(pos.element.y - 10) +
       ' H' +
-      Math.round(pos.element.x + 57) +
-      ' v26'
+      Math.round(pos.element.x + pos.parent.width / 2) +
+      ' V' +
+      Math.round(pos.element.y)
   }
 
   return { d: d }

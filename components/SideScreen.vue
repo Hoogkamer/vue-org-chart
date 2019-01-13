@@ -1,45 +1,47 @@
 <template lang='pug'>
     .side-screen(v-if="showSideScreen")
+      
       button.right(v-on:click="$store.commit('closeSideScreen')")
         i.material-icons.arrow keyboard_arrow_left
-      .title(v-if='activeDepartment') {{activeDepartment.name}}
       template(v-if="activeDepartment")
-        .property
-          span.label Name
-          br
-          input.name(v-if='editMode' :class="{error:!activeDepartment_name}" v-model="activeDepartment_name")
-          span(v-else).text {{activeDepartment_name}}
+        .title(v-if='activeDepartment') {{activeDepartment.name}}
+        template(v-if="activeDepartment")
+          .property
+            span.label Name
+            br
+            input.name(v-if='editMode' :class="{error:!activeDepartment_name}" v-model="activeDepartment_name")
+            span(v-else).text {{activeDepartment_name}}
 
-        .property
-          span.label Manager
-          i.material-icons.edit(v-if='editMode' v-on:click='openPersonPicker=true') edit
-          br
-          span.text(v-if='activeDepartment.manager.name') {{activeDepartment.manager.name}}
-          span.untext(v-else) No manager
-        .property
-          span.label Description
-          br 
-          textarea.description(v-if='editMode' v-model="activeDepartment_description")
-          span(v-else).text {{activeDepartment_description}}
-        .property
-          span.label Staff department
-          input.isstaff(type='checkbox' v-model="activeDepartment_isStaff" :disabled="!editMode")
-        .property
-          span.label Hiearchy
-          ul
-            li.clickable(v-for='(parent, pnr) in parents' v-on:click="setActiveDepartment(parent)") 
-              span(v-for="n in pnr") &nbsp
-              i(v-if="pnr !==0").material-icons.sub subdirectory_arrow_right
-              span {{parent.name}}
-            li.noclickable
-              span(v-for="n in parents.length") &nbsp
-              i(v-if="parents.length").material-icons.sub subdirectory_arrow_right
-              span.this-department {{activeDepartment.name}}
-            li.clickable(v-for='child in activeDepartment.children' v-on:click="setActiveDepartment(child)") 
-              span(v-for="n in parents.length+5") &nbsp
-              span {{child.name}}
-      person-picker(v-if='openPersonPicker' v-on:close='openPersonPicker=false') 
-
+          .property
+            span.label Manager
+            i.material-icons.edit(v-if='editMode' v-on:click='openPersonPicker=true') edit
+            br
+            span.text(v-if='activeDepartment.manager.name') {{activeDepartment.manager.name}}
+            span.untext(v-else) No manager
+          .property
+            span.label Description
+            br 
+            textarea.description(v-if='editMode' v-model="activeDepartment_description")
+            span(v-else).text {{activeDepartment_description}}
+          .property
+            span.label Staff department
+            input.isstaff(type='checkbox' v-model="activeDepartment_isStaff" :disabled="!editMode")
+          .property
+            span.label Hiearchy
+            ul
+              li.clickable(v-for='(parent, pnr) in parents' v-on:click="setActiveDepartment(parent)") 
+                span(v-for="n in pnr") &nbsp
+                i(v-if="pnr !==0").material-icons.sub subdirectory_arrow_right
+                span {{parent.name}}
+              li.noclickable
+                span(v-for="n in parents.length") &nbsp
+                i(v-if="parents.length").material-icons.sub subdirectory_arrow_right
+                span.this-department {{activeDepartment.name}}
+              li.clickable(v-for='child in activeDepartment.children' v-on:click="setActiveDepartment(child)") 
+                span(v-for="n in parents.length+5") &nbsp
+                span {{child.name}}
+        person-picker(v-if='openPersonPicker' v-on:close='openPersonPicker=false') 
+        img.profile(:src='"photos/"+activeDepartment.manager.id+".png"')
     .noside-screen(v-else)
       button.right(v-on:click="$store.commit('openSideScreen')")
         i.material-icons.arrow keyboard_arrow_right
@@ -115,6 +117,14 @@ export default {
 </script>
 
 <style scoped>
+.profile {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  right: 16px;
+  top: 114px;
+  border: 1px solid grey;
+}
 .title {
   text-align: center;
   min-height: 50px;
@@ -130,10 +140,10 @@ export default {
   cursor: pointer;
 }
 input.name {
-  width: 250px;
+  width: calc(100% - 10px);
 }
 textarea.description {
-  width: 250px;
+  width: calc(100% - 10px);
   height: 80px;
 }
 .clickable:hover {

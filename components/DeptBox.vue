@@ -1,13 +1,34 @@
 <template lang='pug'>
     div
       template(v-if="departmentData")
-          .department1( :id="departmentData.id" :class="['color_level' + level, type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
+        template(v-if="!managerPhotoView")
+          .department1(v-if="!managerNameView" :id="departmentData.id" :class="['color_level' + level, type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
             .name(v-html="departmentData.name")
+            i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
+            i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
+          .department1(v-else :id="departmentData.id" :class="['color_level' + level, type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
+            .name1(v-html="departmentData.name")
             .name_manager(v-if="managerNameView") {{departmentData.manager.name}}
             i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
-      template(v-else)
-        .departmente(:class="['color_level' + level, type]")
+        template(v-else)
+          .department2( :id="departmentData.id" :class="['color_level' + level, type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
+            table
+              tr
+                td
+                  img.profile(:src='"photos/"+departmentData.manager.id+".png"')
+                td
+                  div.textdiv
+                    .name(v-html="departmentData.name")
+                    .name_manager(v-if="managerNameView") {{departmentData.manager.name}}
+            i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
+            i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
+
+      template(v-if="!departmentData")
+        template(v-if='!managerPhotoView')
+          .departmente(:class="['color_level' + level, type]")
+        template(v-else)
+          .departmente2(:class="['color_level' + level, type]")
 
 </template>
 
@@ -39,6 +60,7 @@ export default {
     ...mapState([
       'columnView',
       'managerNameView',
+      'managerPhotoView',
       'activeDepartment',
       'editMode',
       'moveDepartment'
@@ -96,6 +118,12 @@ export default {
   height: auto;
   margin: 3px 0px 0px 0px;
 }
+.profile {
+  width: 50px;
+  height: 50px;
+  border: 1px solid black;
+  background-color: white;
+}
 .active_department {
   background-color: yellow !important;
   color: black !important;
@@ -115,11 +143,14 @@ export default {
 }
 .department,
 .department1,
-.departmente {
+.departmente,
+.department2,
+.departmente2,
+.department3 {
   width: 114px;
   height: 50px;
   border: 1px solid grey;
-  margin: 40px 0px 5px 0px;
+  margin: 30px 0px 5px 0px;
   text-align: center;
   font-size: 11px;
   vertical-align: middle;
@@ -136,9 +167,24 @@ export default {
   padding: 2px 2px;
   position: relative;
 }
-.departmente {
+.department2,
+.departmente2 {
+  width: 180px;
+  height: 60px;
+  margin-top: 20px;
+}
+.department3 {
+  height: 60px;
+}
+.departmente,
+.departmente2 {
   background-color: transparent !important;
   border: none;
+}
+.textdiv {
+  width: 114px;
+  height: 50px;
+  position: relative;
 }
 .column {
   margin-top: 1px;
@@ -147,13 +193,17 @@ export default {
 .staff {
   margin: 2px 80px 2px 80px;
 }
-.name {
+.name,
+.name1 {
   overflow-wrap: break-word;
   min-width: 1%;
   width: 114px;
   display: inline-block;
   position: absolute;
   left: 0px;
+  top: 10px;
+}
+.name1 {
   top: 5px;
 }
 .name_manager {
@@ -163,7 +213,7 @@ export default {
   display: inline-block;
   position: absolute;
   left: 0px;
-  top: 25px;
+  bottom: 5px;
   font-style: italic;
   opacity: 0.8;
 }

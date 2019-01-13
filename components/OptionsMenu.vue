@@ -9,6 +9,9 @@
                 input(type="checkbox" id="checkbox1" v-model="managerNameView")
                 label(for="checkbox1") Show manager name
             li
+                input(type="checkbox" id="checkbox1" v-model="managerPhotoView")
+                label(for="checkbox1") Show manager photo
+            li
                 input(type="checkbox" id="checkbox2" v-model="editMode")
                 label(for="checkbox2") Edit Mode
             
@@ -43,6 +46,19 @@ export default {
       set(value) {
         this.$store.commit('setManagerNameView', value)
         this.$store.commit('cancelAll')
+      }
+    },
+    managerPhotoView: {
+      get() {
+        return this.$store.state.managerPhotoView
+      },
+      set(value) {
+        this.$store.commit('removeLines')
+        this.$store.commit('setManagerPhotoView', value)
+        this.$store.commit('cancelAll')
+        setTimeout(x => {
+          this.$store.commit('addLine')
+        }, 500)
       }
     },
     editMode: {

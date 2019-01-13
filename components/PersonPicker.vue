@@ -153,7 +153,7 @@ export default {
 <style scoped>
 #person_picker {
   position: absolute;
-  top: 30px;
+  top: 200px;
   left: 10px;
   width: 280px;
   height: 200px;
