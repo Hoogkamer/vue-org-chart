@@ -22,7 +22,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['chart', 'people', 'editMode'])
+    ...mapState(['chart', 'people', 'assignments', 'editMode'])
   },
   watch: {
     editMode: function(val) {
@@ -36,7 +36,11 @@ export default {
       var chartTable = this.tree2array(this.chart, [])
       var json =
         'var INPUT_DATA=' +
-        JSON.stringify({ chart: chartTable, people: this.people })
+        JSON.stringify({
+          chart: chartTable,
+          people: this.people,
+          assignments: this.assignments
+        })
       console.log(json)
       var blob = new Blob([json], { type: 'text/plain;charset=utf-8' })
       FileSaver.saveAs(blob, 'data.js')
@@ -55,9 +59,17 @@ export default {
         var people = XLSX.utils.sheet_to_json(workbook.Sheets['people'], {
           defval: ''
         })
+        var assignments = XLSX.utils.sheet_to_json(
+          workbook.Sheets['assignment'],
+          {
+            defval: ''
+          }
+        )
         var newchart = []
+
         chartdata.forEach(x => {
           var manager = people.find(p => p.id == x.manager_id)
+
           newchart.push({
             showChildren: false,
             parent: null,
@@ -72,6 +84,7 @@ export default {
         })
         that.$store.commit('createTree', newchart)
         that.$store.commit('setPeople', people)
+        that.$store.commit('setAssignments', assignments)
       }
       reader.readAsBinaryString(f)
     },
@@ -87,6 +100,11 @@ export default {
         wb,
         XLSX.utils.json_to_sheet(this.people),
         'people'
+      )
+      XLSX.utils.book_append_sheet(
+        wb,
+        XLSX.utils.json_to_sheet(this.assignments),
+        'assignment'
       )
       XLSX.writeFile(wb, 'chart_data.xlsx')
     },
@@ -104,6 +122,10 @@ export default {
       return array
     }
   }
+}
+const equijoin = (xs, ys, primary, foreign, sel) => {
+  const ix = xs.reduce((ix, row) => ix.set(row[primary], row), new Map())
+  return ys.map(row => sel(ix.get(row[foreign]), row))
 }
 </script>
 

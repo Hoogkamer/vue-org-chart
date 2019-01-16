@@ -1,6 +1,7 @@
 export const state = () => ({
   chart: null,
-  people: null,
+  people: [],
+  assignments: [],
   orgArray: null,
   lines: [],
   showSideScreen: true,
@@ -23,6 +24,12 @@ export const mutations = {
   },
   setPeople(state, datas) {
     state.people = datas
+  },
+  setAssignments(state, datas) {
+    datas.forEach((d, i) => {
+      d.id = guid()
+    })
+    state.assignments = datas
   },
   setSelectedPerson(state, person) {
     state.selectedPerson = person
@@ -129,6 +136,28 @@ export const mutations = {
     state.activeDepartment = state.moveDepartment
     state.moveDepartment = null
     state.showEditMenu = null
+  },
+  removePersonFromActiveDepartment(state, person) {
+    state.assignments = state.assignments.filter(
+      a => a.id !== person.assignment.id
+    )
+  },
+  updateActiveDepartmentPersonRole(state, inp) {
+    var assignment = state.assignments.find(
+      a => a.id === inp.person.assignment.id
+    )
+    assignment.role = inp.role
+    console.log(assignment)
+  },
+  addAssignmentToActiveDepartment(state, inp) {
+    console.log('in', inp)
+    console.log(state.assignments)
+    state.assignments.push({
+      department_id: state.activeDepartment.id,
+      id: guid(),
+      person_id: inp.id,
+      role: ''
+    })
   },
   addLine(state) {
     state.lines = updateLines(state.chart, [])

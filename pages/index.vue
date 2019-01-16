@@ -54,6 +54,7 @@ export default {
     console.log(data)
     this.$store.commit('createTree', data)
     this.$store.commit('setPeople', INPUT_DATA.people)
+    this.$store.commit('setAssignments', INPUT_DATA.assignments)
 
     window.onresize = function(event) {
       that.$store.commit('removeLines')

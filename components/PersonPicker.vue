@@ -42,7 +42,12 @@
 import { mapState } from 'vuex'
 export default {
   components: {},
-  props: {},
+  props: {
+    type: {
+      type: String,
+      default: ''
+    }
+  },
   data: function() {
     return {
       searchField: '',
@@ -113,7 +118,7 @@ export default {
   watch: {},
   mounted: function() {
     console.log('ppl', this.people)
-    if (this.activeDepartment.manager.name.length) {
+    if (this.type === 'manager' && this.activeDepartment.manager.name.length) {
       this.$store.commit('setSelectedPerson', this.activeDepartment.manager)
     }
   },
@@ -129,7 +134,11 @@ export default {
       this.$emit('close')
     },
     assignManager: function(person) {
-      this.$store.commit('updateActiveDepartmentManager', person)
+      if (this.type === 'manager') {
+        this.$store.commit('updateActiveDepartmentManager', person)
+      } else {
+        this.$store.commit('addAssignmentToActiveDepartment', person)
+      }
       this.$store.commit('setSelectedPerson', null)
       this.$emit('close')
     },
@@ -143,7 +152,11 @@ export default {
         )
       } else {
         this.$store.commit('addPerson', person)
-        this.$store.commit('updateActiveDepartmentManager', person)
+        if (this.type === 'manager') {
+          this.$store.commit('updateActiveDepartmentManager', person)
+        } else {
+          this.$store.commit('addAssignmentToActiveDepartment', person)
+        }
         this.$emit('close')
       }
     }

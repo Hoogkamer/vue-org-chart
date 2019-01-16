@@ -5,7 +5,10 @@
         i.material-icons.arrow keyboard_arrow_left
       template(v-if="activeDepartment")
         .title(v-if='activeDepartment') {{activeDepartment.name}}
-        template(v-if="activeDepartment")
+        .tabs
+          button.tab(:class='{active:activeTab===1}' v-on:click='activeTab=1') Details
+          button.tab(:class='{active:activeTab===2}' v-on:click='activeTab=2') People
+        template(v-if="activeTab===1")
           .property
             span.label Name
             br
@@ -14,7 +17,7 @@
 
           .property
             span.label Manager
-            i.material-icons.edit(v-if='editMode' v-on:click='openPersonPicker=true') edit
+            i.material-icons.edit(v-if='editMode' v-on:click='personPicker="manager"') edit
             br
             span.text(v-if='activeDepartment.manager.name') {{activeDepartment.manager.name}}
             span.untext(v-else) No manager
@@ -40,8 +43,24 @@
               li.clickable(v-for='child in activeDepartment.children' v-on:click="setActiveDepartment(child)") 
                 span(v-for="n in parents.length+5") &nbsp
                 span {{child.name}}
-        person-picker(v-if='openPersonPicker' v-on:close='openPersonPicker=false') 
-        img.profile(:src='"photos/"+activeDepartment.manager.id+".png"')
+          img.profile(:src='"photos/"+activeDepartment.manager.id+".png"')
+        template(v-if='activeTab===2')
+          .assignment(v-for='person in department_people')
+            table
+              tr
+                td
+                  img.photo(:src='"photos/"+person.person.id+".png"')
+                td
+                  .name 
+                    span {{person.person.name}}
+                  .role(v-if='!editMode') {{person.assignment.role}}
+                  .role(v-else) 
+                    input(:value="person.assignment.role" @input="updateRole(person, $event)")
+            template(v-if='editMode')
+              i.material-icons.delete(title='remove from department' v-on:click='removeFromDepartment(person)') delete
+          button(v-if='editMode' v-on:click='personPicker="person"') Add person   
+        person-picker(v-if='personPicker' :type='personPicker' v-on:close='personPicker=null') 
+        
     .noside-screen(v-else)
       button.right(v-on:click="$store.commit('openSideScreen')")
         i.material-icons.arrow keyboard_arrow_right
@@ -56,12 +75,19 @@ export default {
   props: {},
   data: function() {
     return {
-      openPersonPicker: false
+      personPicker: null,
+      activeTab: 1
     }
   },
 
   computed: {
-    ...mapState(['showSideScreen', 'activeDepartment', 'editMode']),
+    ...mapState([
+      'showSideScreen',
+      'activeDepartment',
+      'editMode',
+      'people',
+      'assignments'
+    ]),
     activeDepartment_name: {
       get: function() {
         return this.$store.state.activeDepartment.name
@@ -90,6 +116,21 @@ export default {
         }, 500)
       }
     },
+    department_people: function() {
+      var person_ids = this.assignments.filter(
+        a => a.department_id == this.activeDepartment.id
+      )
+      console.log('pids', person_ids)
+      var people = []
+      person_ids.forEach(pid => {
+        var person = this.people.find(p => p.id == pid.person_id)
+        if (person) {
+          people.push({ person: person, assignment: pid })
+        }
+      })
+
+      return people
+    },
     parents: function() {
       var parents = []
       var department = this.activeDepartment
@@ -111,6 +152,17 @@ export default {
       setTimeout(x => {
         this.$store.commit('addLine')
       }, 500)
+    },
+    removeFromDepartment(person) {
+      console.log(person)
+      this.$store.commit('removePersonFromActiveDepartment', person)
+    },
+    updateRole(person, e) {
+      console.log(e.target.value)
+      this.$store.commit('updateActiveDepartmentPersonRole', {
+        person: person,
+        role: e.target.value
+      })
     }
   }
 }
@@ -122,7 +174,7 @@ export default {
   height: 80px;
   position: absolute;
   right: 16px;
-  top: 114px;
+  top: 154px;
   border: 1px solid grey;
 }
 .title {
@@ -132,6 +184,57 @@ export default {
   font-size: 20px;
   font-weight: 600;
   width: calc(100% - 30px);
+}
+.assignment {
+  width: 90%;
+  height: 60px;
+  background-color: cadetblue;
+  margin: 4px auto;
+  position: relative;
+}
+.photo {
+  width: 50px;
+  height: 50px;
+}
+.name {
+  font-size: 16px;
+}
+.role {
+  color: white;
+  font-size: 14px;
+}
+.delete {
+  position: absolute;
+  top: 5px;
+  right: 0px;
+  font-size: 20px;
+  color: red;
+  cursor: pointer;
+}
+.edit1 {
+  font-size: 20px;
+  color: black;
+  cursor: pointer;
+}
+.tabs {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 0px 10px;
+  border-bottom: 2px solid grey;
+}
+.tab {
+  width: 130px;
+  margin: 0px 0px 0px 0px;
+  border: none;
+  background: none;
+  margin-bottom: -2px;
+  border-bottom: 2px solid transparent;
+  outline: none;
+  cursor: pointer;
+}
+.tab.active {
+  border: 2px solid grey;
+  border-bottom: 2px solid rgb(245, 250, 255);
 }
 .property {
   margin-bottom: 20px;
