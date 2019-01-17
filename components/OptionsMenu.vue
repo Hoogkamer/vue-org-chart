@@ -11,7 +11,7 @@
             li
                 input(type="checkbox" id="checkbox1" v-model="managerPhotoView")
                 label(for="checkbox1") Show manager photo
-            li
+            li(v-if="false")
                 input(type="checkbox" id="checkbox2" v-model="editMode")
                 label(for="checkbox2") Edit Mode
             

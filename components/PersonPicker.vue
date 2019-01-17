@@ -9,32 +9,34 @@
     br
 
     .addnew
-        table
-            tr
-                td Name
-                td
-                    input(v-if='selectedPerson' v-model='selectedPerson_name')
-                    input(v-else v-model='person.name')
-            tr
-                td Id
-                td
-                    input(v-if='selectedPerson' v-model='selectedPerson_id')
-                    input(v-else v-model='person.id')
-            tr
-                td Function
-                td
-                    input(v-if='selectedPerson' v-model='selectedPerson_function')
-                    input(v-else v-model='person.function')
-            tr
-                td Photo URL
-                td
-                    input(v-if='selectedPerson' v-model='selectedPerson_photo')
-                    input(v-else v-model='person.photo')
-            tr
-                td(v-if='selectedPerson')
-                    button.select(v-on:click='assignManager(selectedPerson)') Select
-                td(v-else)
-                    button.select(:disabled="!(person.id && person.name)" v-on:click='createPerson(person)') Create & Select
+      button.select(v-if='selectedPerson' v-on:click='$store.commit("setSelectedPerson", null)') Unselect
+
+      table
+          tr
+              td Name
+              td
+                  input(v-if='selectedPerson' v-model='selectedPerson_name')
+                  input(v-else v-model='person.name')
+          tr
+              td Id
+              td
+                  input(v-if='selectedPerson' v-model='selectedPerson_id')
+                  input(v-else v-model='person.id')
+          tr
+              td Function
+              td
+                  input(v-if='selectedPerson' v-model='selectedPerson_function')
+                  input(v-else v-model='person.function')
+          tr
+              td Photo URL
+              td
+                  input(v-if='selectedPerson' v-model='selectedPerson_photo')
+                  input(v-else v-model='person.photo')
+          tr
+              td(v-if='selectedPerson')
+                  button.select(v-on:click='assignManager(selectedPerson)') Select
+              td(v-else)
+                  button.select(:disabled="!(person.id && person.name)" v-on:click='createPerson(person)') Create & Select
 
 </template>
 

@@ -10,7 +10,7 @@ export const state = () => ({
   managerPhotoView: true,
   activeDepartment: null,
   moveDepartment: null,
-  editMode: true,
+  editMode: false,
   showEditMenu: null,
   selectedPerson: null
 })
