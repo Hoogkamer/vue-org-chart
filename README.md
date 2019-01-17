@@ -29,10 +29,11 @@ Static website (no webserver required) to generate an interactive organisation c
         To enable profile photo's, put them in the \photos folder, and name them with the id used in the people tab with type png. So if the id of someone is P0001, then name the photo P0001.png
 
 In stead of xls you can also edit in the page when in edit mode.:
-    - Left-click on a department and edit the name, description of type staff in the left screen. To change the manager, press the pencil and search for the right person. You can also add a new person, by filling in a name and id. First unselect the current manager then, if the department already has a manager
-    - Add people the same way (use the people tab in the left screen). You can also provide the role the person has in the department
-    - Right-click on a department in the chart to add a department below
-    - With right-click you can also move a department: select Cut, then click on another department and right-click and select paste. Do not paste a parent under one of its children (this check has to be build)
+
+- Left-click on a department and edit the name, description of type staff in the left screen. To change the manager, press the pencil and search for the right person. You can also add a new person, by filling in a name and id. First unselect the current manager then, if the department already has a manager
+- Add people the same way (use the people tab in the left screen). You can also provide the role the person has in the department
+- Right-click on a department in the chart to add a department below
+- With right-click you can also move a department: select Cut, then click on another department and right-click and select paste. Do not paste a parent under one of its children (this check has to be build)
 
 ## Build Setup
 
