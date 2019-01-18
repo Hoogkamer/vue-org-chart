@@ -9,11 +9,20 @@ module.exports = {
   */
 
   head: {
-    title: pkg.name,
+    title: 'Organization chart',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: pkg.description }
+      {
+        hid: 'description',
+        name: 'description',
+        content: 'Free Organization Chart generator and viewer'
+      },
+      {
+        hid: 'keywords',
+        name: 'keywords',
+        content: 'vuejs, nuxt, javascript, orgchart, organization, open-source'
+      }
     ],
     script: [
       {

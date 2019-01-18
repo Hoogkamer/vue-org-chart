@@ -1,13 +1,14 @@
 <template lang='pug'>
-    #chart(v-on:mousemove.selve="onMouseMove")   
-      show-dept(v-if="chart" :parent="chart" :level=1 :columnView="columnView")
-      draw-lines(v-if="chart")
-      edit-menu(v-if="showEditMenu")
-     
+    #chart(v-on:mousemove.selve="onMouseMove")
+      .chart_container   
+        show-dept(v-if="chart" :parent="chart" :level=1 :columnView="columnView")
+        draw-lines(v-if="chart")
+        edit-menu(v-if="showEditMenu")
+      
 
-      #move_dept(v-if="moveDepartment" :style="{ left: page.left + 'px', top: page.top + 'px' }")
-        div {{moveDepartment.name}}
-        i.material-icons.arrow.down(v-if='moveDepartment.children.length') arrow_drop_down
+        #move_dept(v-if="moveDepartment" :style="{ left: page.left + 'px', top: page.top + 'px' }")
+          div {{moveDepartment.name}}
+          i.material-icons.arrow.down(v-if='moveDepartment.children.length') arrow_drop_down
 </template>
 
 <script>
@@ -53,10 +54,16 @@ export default {
 #chart {
   position: relative;
   margin-left: 300px;
+  padding: 10px;
   margin-top: 50px;
   display: inline-block;
-
+  text-align: center;
   box-sizing: border-box;
+  width: calc(100% - 300px);
+}
+.chart-container {
+  margin: auto;
+  display: inline-block;
 }
 #move_dept {
   position: absolute;

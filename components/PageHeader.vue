@@ -1,7 +1,9 @@
 <template lang='pug'>
 .header {{pageTitle}}
-   search-box
-   .menu
+  a(href='https://github.com/Hoogkamer/vue-org-chart' target='_blank')
+    img.gh(src="~/assets/img/gh.svg" title='Go to Github project page')
+  search-box
+  .menu
     file-menu(v-if='editMode')
     options-menu
 </template>
@@ -54,5 +56,11 @@ export default {
   font-size: 16px;
   width: 200px;
   text-align: left;
+}
+.gh {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  width: 40px;
 }
 </style>
