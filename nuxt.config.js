@@ -27,7 +27,8 @@ module.exports = {
     script: [
       {
         src: 'data.js'
-      }
+      },
+      { src: 'config.js' }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },

@@ -1,6 +1,6 @@
 <template lang='pug'>
   .p-container
-    page-header(:page-title="'Organisation Chart'")
+    page-header
     .container1(id='xparent')
       org-chart(v-if="chart")
     side-screen(v-if='chart')
@@ -35,7 +35,6 @@ export default {
     }
   },
   mounted: function() {
-    console.log(INPUT_DATA)
     var data = []
     INPUT_DATA.chart.forEach(dept => {
       var manager = INPUT_DATA.people.find(p => p.id == dept.manager_id)
@@ -55,7 +54,7 @@ export default {
     this.$store.commit('createTree', data)
     this.$store.commit('setPeople', INPUT_DATA.people)
     this.$store.commit('setAssignments', INPUT_DATA.assignments)
-
+    var that = this
     window.onresize = function(event) {
       that.$store.commit('removeLines')
       setTimeout(x => {

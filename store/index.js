@@ -1,4 +1,5 @@
 export const state = () => ({
+  config: CONFIG,
   chart: null,
   people: [],
   assignments: [],

@@ -2,7 +2,7 @@
 
     svg.graph(id='svg')
       template(v-for="line in lines")
-                path(:d="line.d" style="stroke:rgb(100,100,100);stroke-width:2" fill="transparent")
+                path(:d="line.d" style="stroke:#b6b4b4;stroke-width:2" fill="transparent")
 </template>
 
 <script>

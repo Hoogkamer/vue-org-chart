@@ -59,7 +59,7 @@ export default {
   display: inline-block;
   text-align: center;
   box-sizing: border-box;
-  width: calc(100% - 300px);
+  min-width: calc(100% - 300px);
 }
 .chart-container {
   margin: auto;

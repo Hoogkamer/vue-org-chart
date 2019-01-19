@@ -1,5 +1,5 @@
 <template lang='pug'>
-.header {{pageTitle}}
+.header(:style='{backgroundColor:config.title.color}') {{config.title.text}}
   a(href='https://github.com/Hoogkamer/vue-org-chart' target='_blank')
     img.gh(src="~/assets/img/gh.svg" title='Go to Github project page')
   search-box
@@ -17,18 +17,12 @@ import { mapState } from 'vuex'
 export default {
   components: { SearchBox, FileMenu, OptionsMenu },
 
-  props: {
-    pageTitle: {
-      type: String,
-      required: true,
-      default: ''
-    }
-  },
+  props: {},
   data: function() {
     return {}
   },
   computed: {
-    ...mapState(['chart', 'editMode'])
+    ...mapState(['chart', 'editMode', 'config'])
   },
   watch: {},
   methods: {}
@@ -39,7 +33,6 @@ export default {
 .header {
   width: 100%;
   height: 50px;
-  background-color: #006696;
   color: white;
   text-align: center;
   font-size: 40px;
@@ -48,6 +41,7 @@ export default {
   left: 0px;
   top: 0px;
   z-index: 2;
+  box-shadow: 5px 2px 5px grey;
 }
 .menu {
   position: absolute;

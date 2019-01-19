@@ -2,21 +2,24 @@
     div
       template(v-if="departmentData")
         template(v-if="!managerPhotoView")
-          .department1(v-if="!managerNameView" :id="departmentData.id" :class="['color_level' + level, type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
-            .name(v-html="departmentData.name")
+          .department1(v-if="!managerNameView" :id="departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
+            .level_indicator(:class="['color_level' + level]")
+            .name2(v-html="departmentData.name")
             i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
-          .department1(v-else :id="departmentData.id" :class="['color_level' + level, type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
+          .department1(v-else :id="departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
+            .level_indicator(:class="['color_level' + level]")
             .name1(v-html="departmentData.name")
             .name_manager(v-if="managerNameView") {{departmentData.manager.name}}
             i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
         template(v-else)
-          .department2( :id="departmentData.id" :class="['color_level' + level, type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
+          .department2( :id="departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
+            .level_indicator(:class="['color_level' + level]")
             table
               tr
                 td
-                  img.profile(:src='"photos/"+departmentData.manager.id+".png"')
+                  img.profile(:src='config.photoUrl.prefix+departmentData.manager.id+config.photoUrl.suffix')
                 td
                   div.textdiv
                     .name(v-html="departmentData.name")
@@ -26,9 +29,9 @@
 
       template(v-if="!departmentData")
         template(v-if='!managerPhotoView')
-          .departmente(:class="['color_level' + level, type]")
+          .departmente(:class="[type]")
         template(v-else)
-          .departmente2(:class="['color_level' + level, type]")
+          .departmente2(:class="[type]")
 
 </template>
 
@@ -63,7 +66,8 @@ export default {
       'managerPhotoView',
       'activeDepartment',
       'editMode',
-      'moveDepartment'
+      'moveDepartment',
+      'config'
     ]),
     active: function() {
       return this.departmentData === this.activeDepartment
@@ -117,10 +121,10 @@ export default {
   margin: 3px 0px 0px 0px;
 }
 .profile {
-  width: 50px;
-  height: 50px;
-  border: 1px solid black;
-  background-color: white;
+  width: 55px;
+  max-height: 55px;
+  display: block;
+  margin: auto;
 }
 .active_department {
   background-color: yellow !important;
@@ -145,9 +149,9 @@ export default {
 .department2,
 .departmente2,
 .department3 {
-  width: 114px;
-  height: 50px;
-  border: 1px solid grey;
+  width: 120px;
+  height: 60px;
+  border: 1px solid lightgrey;
   margin: 30px 0px 5px 0px;
   text-align: center;
   font-size: 11px;
@@ -164,6 +168,7 @@ export default {
   margin-right: auto;
   padding: 2px 2px;
   position: relative;
+  box-shadow: 3px 3px 3px lightgrey;
 }
 .department2,
 .departmente2 {
@@ -178,6 +183,15 @@ export default {
 .departmente2 {
   background-color: transparent !important;
   border: none;
+  box-shadow: none;
+}
+.level_indicator {
+  position: absolute;
+  height: 3px;
+  width: 100px;
+  right: 10px;
+  top: 3px;
+  border-radius: 5px;
 }
 .textdiv {
   width: 114px;
@@ -192,17 +206,21 @@ export default {
   margin: 2px 80px 2px 80px;
 }
 .name,
-.name1 {
+.name1,
+.name2 {
   overflow-wrap: break-word;
   min-width: 1%;
   width: 114px;
   display: inline-block;
   position: absolute;
   left: 0px;
-  top: 10px;
+  top: 8px;
 }
 .name1 {
-  top: 5px;
+  top: 10px;
+}
+.name2 {
+  top: 14px;
 }
 .name_manager {
   overflow-wrap: break-word;
@@ -212,8 +230,7 @@ export default {
   position: absolute;
   left: 0px;
   bottom: 5px;
-  font-style: italic;
-  opacity: 0.8;
+  color: grey;
 }
 
 .color_level1 {

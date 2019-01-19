@@ -43,13 +43,14 @@
               li.clickable(v-for='child in activeDepartment.children' v-on:click="setActiveDepartment(child)") 
                 span(v-for="n in parents.length+5") &nbsp
                 span {{child.name}}
-          img.profile(:src='"photos/"+activeDepartment.manager.id+".png"')
+          img.profile(:src='config.photoUrl.prefix+activeDepartment.manager.id+config.photoUrl.suffix')
         template(v-if='activeTab===2')
           .assignment(v-for='person in department_people')
             table
               tr
                 td
-                  img.photo(:src='"photos/"+person.person.id+".png"')
+                  img.photo(v-if="person.photoURL" :src='person.photoURL' @error="markPho_toNotFound(person)")
+                  i(v-else).material-icons.nophoto account_box
                 td
                   .name 
                     span {{person.person.name}}
@@ -76,7 +77,8 @@ export default {
   data: function() {
     return {
       personPicker: null,
-      activeTab: 1
+      activeTab: 1,
+      noPhotos: []
     }
   },
 
@@ -86,7 +88,8 @@ export default {
       'activeDepartment',
       'editMode',
       'people',
-      'assignments'
+      'assignments',
+      'config'
     ]),
     activeDepartment_name: {
       get: function() {
@@ -120,12 +123,32 @@ export default {
       var person_ids = this.assignments.filter(
         a => a.department_id == this.activeDepartment.id
       )
-      console.log('pids', person_ids)
       var people = []
+      if (!this.editMode) {
+        people.push({
+          person: {
+            name: this.activeDepartment.manager.name,
+            id: this.activeDepartment.manager.id
+          },
+          assignment: { role: 'Manager' },
+          photoURL:
+            this.config.photoUrl.prefix +
+            this.activeDepartment.manager.id +
+            this.config.photoUrl.suffix
+        })
+      }
+
       person_ids.forEach(pid => {
         var person = this.people.find(p => p.id == pid.person_id)
         if (person) {
-          people.push({ person: person, assignment: pid })
+          people.push({
+            person: person,
+            assignment: pid,
+            photoURL:
+              this.config.photoUrl.prefix +
+              person.id +
+              this.config.photoUrl.suffix
+          })
         }
       })
 
@@ -145,6 +168,12 @@ export default {
     }
   },
   methods: {
+    markPhotoNotFound(person) {
+      if (!noPhotos.find(p => p === person)) {
+        noPhotos.push(person)
+      }
+      console.log(noPhotos)
+    },
     setActiveDepartment(department) {
       this.$store.commit('removeLines')
       this.$store.commit('setShowDepartment', department)
@@ -188,19 +217,23 @@ export default {
 .assignment {
   width: 90%;
   height: 60px;
-  background-color: cadetblue;
   margin: 4px auto;
   position: relative;
+  border: 1px solid lightgrey;
+  box-shadow: 3px 3px 3px lightgrey;
+  border-radius: 5px;
 }
 .photo {
-  width: 50px;
-  height: 50px;
+  width: 56px;
+  max-height: 56px;
+  display: block;
+  margin: auto;
 }
 .name {
   font-size: 16px;
 }
 .role {
-  color: white;
+  color: grey;
   font-size: 14px;
 }
 .delete {
@@ -220,7 +253,7 @@ export default {
   width: 100%;
   margin-bottom: 20px;
   padding: 0px 10px;
-  border-bottom: 2px solid grey;
+  border-bottom: 2px solid lightgrey;
 }
 .tab {
   width: 130px;
@@ -233,8 +266,10 @@ export default {
   cursor: pointer;
 }
 .tab.active {
-  border: 2px solid grey;
-  border-bottom: 2px solid rgb(245, 250, 255);
+  border: 2px solid lightgrey;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  background-color: lightgrey;
 }
 .property {
   margin-bottom: 20px;
@@ -319,7 +354,6 @@ ul {
   background-color: red;
 }
 .material-icons.arrow {
-  border: 1px solid black;
 }
 .material-icons.edit {
   font-size: 16px;
