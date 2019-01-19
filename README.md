@@ -9,7 +9,7 @@ Static website (no webserver required) to generate an interactive organisation c
 
 [Demo](https://hoogkamer.github.io/vue-org-chart/)
 
-![Screenshot](/assets/img/Screenshot.PNG?raw=true "Screenshot")
+![Screenshot](/assets/img/Screenshot1.PNG?raw=true "Screenshot")
 
 ## Use as static website
 
