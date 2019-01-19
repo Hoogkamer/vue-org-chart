@@ -12,9 +12,10 @@ Static website (no webserver required) to generate an interactive organisation c
 ![Screenshot](/assets/img/Screenshot1.PNG?raw=true "Screenshot")
 
 ## Use as static website
+You can use it as-is as a static website: no install, no webserver needed!
 
 1. Copy content of \docs folder to any location, like a folder on your computer, AWS S3 bucket or webserver
-2. Open index.html in the browser. When you use Internet Explorer it will not work if you placed the files on a folder (Chrome does work). S3 or webwer will work for both browsers
+2. Open index.html in the browser. When you use Internet Explorer it will not work if you placed the files on a folder (Chrome does work). S3 or webserverer will work for both browsers
 
 ## User manual for website
 - Options > Column view: shows underlying departments in a column, giving a compact overview
