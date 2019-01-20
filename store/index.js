@@ -232,9 +232,9 @@ function getLine(dept) {
 function getPosOfElement(dept) {
   var pos = {
     parent: dept.parent
-      ? document.getElementById(dept.parent.id).getBoundingClientRect()
+      ? document.getElementById('ID_' + dept.parent.id).getBoundingClientRect()
       : null,
-    element: document.getElementById(dept.id).getBoundingClientRect()
+    element: document.getElementById('ID_' + dept.id).getBoundingClientRect()
   }
   var chartpos = document.getElementById('chart').getBoundingClientRect()
   if (pos.parent) {

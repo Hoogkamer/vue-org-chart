@@ -17,13 +17,34 @@ import ShowDept from '~/components/ShowDept.vue'
 import DrawLines from '~/components/DrawLines.vue'
 import EditMenu from '~/components/EditMenu.vue'
 
+var VueScrollTo = require('vue-scrollto')
+
 import { mapState } from 'vuex'
 export default {
   components: { ShowDept, DrawLines, EditMenu },
   data: function() {
     return {
       tree: null,
-      page: { left: 0, top: 0 }
+      page: { left: 0, top: 0 },
+      cancelScroll: null,
+      scrollOptions: {
+        container: 'body',
+        easing: 'ease-in',
+        offset: -500,
+        force: true,
+        cancelable: true,
+        onStart: function(element) {
+          // scrolling started
+        },
+        onDone: function(element) {
+          // scrolling is done
+        },
+        onCancel: function() {
+          // scrolling has been interrupted
+        },
+        x: true,
+        y: true
+      }
     }
   },
   computed: {
@@ -32,8 +53,15 @@ export default {
       'options',
       'showEditMenu',
       'moveDepartment',
-      'columnView'
+      'columnView',
+      'activeDepartment'
     ])
+  },
+  watch: {
+    activeDepartment: function(val) {
+      console.log('activeDepartment', val)
+      var x = VueScrollTo.scrollTo('#ID_' + val.id, 500, this.scrollOptions)
+    }
   },
   mounted: function() {
     setTimeout(x => {

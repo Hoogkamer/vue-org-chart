@@ -322,18 +322,21 @@ ul {
   top: 50px;
   width: 300px;
   height: 100vh;
-  border: 1px solid grey;
+  border: 1px solid lightgrey;
   background-color: rgb(245, 250, 255);
   padding: 5px;
+  box-shadow: 3px 3px 3px lightgrey;
 }
 .noside-screen {
   position: fixed;
   left: 0px;
   top: 50px;
-  width: 20px;
-  height: 100vh;
-  border: 1px solid grey;
+  width: 25px;
+  height: 45px;
+
+  border: 1px solid lightgray;
   background-color: rgb(245, 250, 255);
+  box-shadow: 3px 3px 3px lightgrey;
 }
 
 .right {

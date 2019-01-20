@@ -171,7 +171,7 @@ export default {
   top: 200px;
   left: 10px;
   width: 280px;
-  height: 200px;
+  height: 220px;
   background-color: lightgrey;
   padding: 10px;
 }

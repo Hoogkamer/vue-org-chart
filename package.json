@@ -20,6 +20,7 @@
     "nuxt-material-design-icons": "^1.0.4",
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
+    "vue-scrollto": "^2.13.0",
     "xlsx": "^0.14.1"
   },
   "devDependencies": {
