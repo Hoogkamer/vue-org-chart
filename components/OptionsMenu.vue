@@ -37,6 +37,10 @@ export default {
       set(value) {
         this.$store.commit('setColumnView', value)
         this.$store.commit('cancelAll')
+        this.$store.commit('removeLines')
+        setTimeout(x => {
+          this.$store.commit('addLine')
+        }, 500)
       }
     },
     managerNameView: {

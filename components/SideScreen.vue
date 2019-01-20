@@ -49,7 +49,7 @@
             table
               tr
                 td
-                  img.photo(v-if="person.photoURL" :src='person.photoURL' @error="markPho_toNotFound(person)")
+                  img.photo(v-if="person.photoURL" :src='person.photoURL' @error="markPhotoNotFound(person)")
                   i(v-else).material-icons.nophoto account_box
                 td
                   .name 
@@ -169,10 +169,10 @@ export default {
   },
   methods: {
     markPhotoNotFound(person) {
-      if (!noPhotos.find(p => p === person)) {
-        noPhotos.push(person)
+      if (!this.noPhotos.find(p => p === person)) {
+        this.noPhotos.push(person)
       }
-      console.log(noPhotos)
+      console.log(this.noPhotos)
     },
     setActiveDepartment(department) {
       this.$store.commit('removeLines')
@@ -256,7 +256,7 @@ export default {
   border-bottom: 2px solid lightgrey;
 }
 .tab {
-  width: 130px;
+  width: 120px;
   margin: 0px 0px 0px 0px;
   border: none;
   background: none;
@@ -326,6 +326,8 @@ ul {
   background-color: rgb(245, 250, 255);
   padding: 5px;
   box-shadow: 3px 3px 3px lightgrey;
+  overflow: auto;
+  padding-bottom: 80px;
 }
 .noside-screen {
   position: fixed;

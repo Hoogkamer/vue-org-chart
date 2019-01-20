@@ -10,8 +10,14 @@
                   tr
                     td
                       dept-box(:department-data="staff.left" :level="level+1" type='staff')
+                      table(v-if="staff.left.children && ((staff.left.showChildren))")
+                        tr(v-for="st_child in staff.left.children")
+                          dept-box(:department-data="st_child" :level="level+1" type='staff')
                     td
                       dept-box(:department-data="staff.right" :level="level+1" type='staff')
+                      table(v-if="staff.right && staff.right.children && ((staff.right.showChildren))")
+                        tr(v-for="st_child in staff.right.children")
+                          dept-box(:department-data="st_child" :level="level+1" type='staff')
             tr(v-if="parent.showChildren")
               td(v-for="child in hierarchyChildren")
                 show-dept(:parent="child" :level="level+1", :columnView="columnView")
