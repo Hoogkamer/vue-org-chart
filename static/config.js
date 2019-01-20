@@ -4,7 +4,7 @@ var CONFIG = {
     text: 'Organisation chart example'
   },
   photoUrl: {
-    prefix: 'photos1/',
+    prefix: 'photos/',
     suffix: '.png'
   }
 }
