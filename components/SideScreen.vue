@@ -27,8 +27,14 @@
             textarea.description(v-if='editMode' v-model="activeDepartment_description")
             span(v-else).text {{activeDepartment_description}}
           .property
-            span.label Staff department
-            input.isstaff(type='checkbox' v-model="activeDepartment_isStaff" :disabled="!editMode")
+            template(v-if='!editMode')
+              span.label Department type
+              br
+              span(v-if='activeDepartment_isStaff') Staff department
+              span(v-else) Normal department
+            template(v-else)
+              span.label Staff department:
+              input.isstaff(type='checkbox' v-model="activeDepartment_isStaff" :disabled="!editMode")
           .property
             span.label Hiearchy
             ul
