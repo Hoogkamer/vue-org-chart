@@ -2,20 +2,18 @@
     div
       template(v-if="departmentData")
         template(v-if="!managerPhotoView")
-          .department1(v-if="!managerNameView" :id="'ID_'+ departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
-            .level_indicator(:class="['color_level' + level]")
-            .name2(v-html="departmentData.name")
-            i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
-            i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
-          .department1(v-else :id="'ID_'+ departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
-            .level_indicator(:class="['color_level' + level]")
-            .name1(v-html="departmentData.name")
-            .name_manager(v-if="managerNameView") {{departmentData.manager.name}}
+          .department( :id="'ID_'+ departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
+            .level_indicator(:style="{backgroundColor:config.levelColors[level-1]||'#FFFFFF'}")
+            template(v-if="managerNameView")
+              .name1(v-html="departmentData.name")
+              .name_manager(v-if="managerNameView") {{departmentData.manager.name}}
+            template(v-else)
+              .name2(v-html="departmentData.name")
             i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
         template(v-else)
-          .department2( :id="'ID_'+ departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
-            .level_indicator(:class="['color_level' + level]")
+          .department.manager_photo(:id="'ID_'+ departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
+            .level_indicator(:style="{backgroundColor:config.levelColors[level-1]||'#FFFFFF'}")
             table
               tr
                 td
@@ -28,10 +26,8 @@
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
 
       template(v-if="!departmentData")
-        template(v-if='!managerPhotoView')
-          .departmente(:class="[type]")
-        template(v-else)
-          .departmente2(:class="[type]")
+          .department.invisible(v-if='!managerPhotoView' :class="[type]")
+          .department.manager_photo.invisible(v-else :class="[type]")
 
 </template>
 
@@ -143,12 +139,7 @@ export default {
 .up {
   cursor: zoom-out;
 }
-.department,
-.department1,
-.departmente,
-.department2,
-.departmente2,
-.department3 {
+.department {
   width: 120px;
   height: 60px;
   border: 1px solid lightgrey;
@@ -170,20 +161,13 @@ export default {
   position: relative;
   box-shadow: 3px 3px 3px lightgrey;
 }
-.department2,
-.departmente2 {
+.manager_photo {
   width: 180px;
   height: 60px;
   margin-top: 20px;
 }
-.department3 {
-  height: 60px;
-}
-.departmente,
-.departmente2 {
-  background-color: transparent !important;
-  border: none;
-  box-shadow: none;
+.invisible {
+  visibility: hidden;
 }
 .level_indicator {
   position: absolute;
@@ -202,8 +186,12 @@ export default {
   margin-top: 1px;
   margin-bottom: 0px;
 }
-.staff {
+.staff,
+.staff_column {
   margin: 2px 80px 2px 80px;
+}
+.staff_child {
+  margin: 2px 80px 2px 100px;
 }
 .name,
 .name1,
@@ -231,33 +219,5 @@ export default {
   left: 0px;
   bottom: 5px;
   color: grey;
-}
-
-.color_level1 {
-  background-color: #05668d;
-  color: white;
-}
-.color_level2 {
-  background-color: #05668d;
-  color: white;
-}
-
-.color_level3 {
-  background-color: #028090;
-  color: white;
-}
-
-.color_level4 {
-  background-color: #00a896;
-  color: white;
-}
-
-.color_level5 {
-  background-color: #02c39a;
-  color: black;
-}
-.color_level6 {
-  background-color: #f0f3bd;
-  color: black;
 }
 </style>

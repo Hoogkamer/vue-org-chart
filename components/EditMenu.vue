@@ -83,14 +83,17 @@ export default {
 <style scoped>
 #edit_menu {
   position: absolute;
-  width: 200px;
-  height: 100px;
+  width: 150px;
+
   background-color: lightgrey;
   box-shadow: 5px 5px 5px black;
   top: 50px;
   left: 50px;
   padding: 5px;
   z-index: 2;
+  text-align: left;
+  border-radius: 2px;
+  font-size: 14px;
 }
 
 #edit_menu ul {

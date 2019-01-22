@@ -6,11 +6,15 @@
                 input(type="checkbox" id="checkbox" v-model="columnView")
                 label(for="checkbox") Column view
             li
+              span &nbsp &nbsp
+              input(type="checkbox" id="checkbox3" v-model="columnView_noStaff")
+              label(for="checkbox3") Exclude staff dept
+            li
                 input(type="checkbox" id="checkbox1" v-model="managerNameView")
                 label(for="checkbox1") Show manager name
             li
-                input(type="checkbox" id="checkbox1" v-model="managerPhotoView")
-                label(for="checkbox1") Show manager photo
+                input(type="checkbox" id="checkbox4" v-model="managerPhotoView")
+                label(for="checkbox4") Show manager photo
             li(v-if="false")
                 input(type="checkbox" id="checkbox2" v-model="editMode")
                 label(for="checkbox2") Edit Mode
@@ -35,8 +39,25 @@ export default {
         return this.$store.state.columnView
       },
       set(value) {
+        this.$store.commit('removeLines')
         this.$store.commit('setColumnView', value)
         this.$store.commit('cancelAll')
+        setTimeout(x => {
+          this.$store.commit('addLine')
+        }, 500)
+      }
+    },
+    columnView_noStaff: {
+      get() {
+        return this.$store.state.columnView_noStaff
+      },
+      set(value) {
+        this.$store.commit('removeLines')
+        this.$store.commit('setColumnView_noStaff', value)
+        this.$store.commit('cancelAll')
+        setTimeout(x => {
+          this.$store.commit('addLine')
+        }, 500)
       }
     },
     managerNameView: {

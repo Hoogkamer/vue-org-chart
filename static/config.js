@@ -6,5 +6,6 @@ var CONFIG = {
   photoUrl: {
     prefix: 'photos/',
     suffix: '.png'
-  }
+  },
+  levelColors: ['#0c058d', '#05668d', '#8d6e05', '#8d2305', '#cfb303']
 }

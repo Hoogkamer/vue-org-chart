@@ -3,7 +3,9 @@
     input.search_input(v-model='searchField' placeholder='Search...')
     #search_results(v-if="searchField.length")
         ul
-            li(v-if="searchresults.length" v-for="result in searchresults" v-on:click="findDept(result)") {{result.name}}
+            li(v-if="searchresults.length" v-for="result in searchresults" v-on:click="findDept(result)") 
+              .name {{result.name}}
+              .parent(v-if="result.parent") {{result.parent.name}}
 </template>
 
 <script>
@@ -106,5 +108,12 @@ li {
 li:hover {
   background: lightblue;
   cursor: pointer;
+}
+.name {
+  color: black;
+}
+.parent {
+  color: chocolate;
+  font-size: 10px;
 }
 </style>

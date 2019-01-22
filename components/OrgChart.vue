@@ -1,7 +1,7 @@
 <template lang='pug'>
     #chart(v-on:mousemove.selve="onMouseMove")
       .chart_container   
-        show-dept(v-if="chart" :parent="chart" :level=1 :columnView="columnView")
+        show-dept(v-if="chart" :parent="chart" :level=1 :columnView="columnView", :columnView_noStaff="columnView_noStaff")
         draw-lines(v-if="chart")
         edit-menu(v-if="showEditMenu")
       
@@ -54,6 +54,7 @@ export default {
       'showEditMenu',
       'moveDepartment',
       'columnView',
+      'columnView_noStaff',
       'activeDepartment'
     ])
   },

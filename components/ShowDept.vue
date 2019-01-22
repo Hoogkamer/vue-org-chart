@@ -10,8 +10,18 @@
                   tr
                     td
                       dept-box(:department-data="staff.left" :level="level+1" type='staff')
+                      table(v-if="(columnView && !columnView_noStaff) || staff.left.showChildren")
+                        tr(v-for="child in staff.left.children")
+                          td
+                             dept-box(:department-data="child" :level="level+2" :type='staff.left.showChildren?"staff_child":"staff_column"')
+
                     td
                       dept-box(:department-data="staff.right" :level="level+1" type='staff')
+                      table(v-if="staff.right && ((columnView && !columnView_noStaff) || staff.right.showChildren)")
+                        tr(v-for="child in staff.right.children")
+                          td
+                             dept-box(:department-data="child" :level="level+2" :type='staff.right.showChildren?"staff_child":"staff_column"')
+
             tr(v-if="parent.showChildren")
               td(v-for="child in hierarchyChildren")
                 show-dept(:parent="child" :level="level+1", :columnView="columnView")
@@ -38,6 +48,10 @@ export default {
       default: 0
     },
     columnView: {
+      type: Boolean,
+      default: false
+    },
+    columnView_noStaff: {
       type: Boolean,
       default: false
     }

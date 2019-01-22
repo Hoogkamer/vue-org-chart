@@ -7,6 +7,7 @@ export const state = () => ({
   lines: [],
   showSideScreen: true,
   columnView: true,
+  columnView_noStaff: true,
   managerNameView: true,
   managerPhotoView: true,
   activeDepartment: null,
@@ -40,6 +41,9 @@ export const mutations = {
   },
   setColumnView(state, value) {
     state.columnView = value
+  },
+  setColumnView_noStaff(state, value) {
+    state.columnView_noStaff = value
   },
   setManagerNameView(state, value) {
     state.managerNameView = value

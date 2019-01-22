@@ -27,8 +27,15 @@
             textarea.description(v-if='editMode' v-model="activeDepartment_description")
             span(v-else).text {{activeDepartment_description}}
           .property
-            span.label Staff department
-            input.isstaff(type='checkbox' v-model="activeDepartment_isStaff" :disabled="!editMode")
+            
+            template(v-if='!editMode')
+              span.label Department type
+              br
+              span(v-if='activeDepartment_isStaff') Staff department
+              span(v-else) Normal department
+            template(v-else)
+              span.label Staff department:
+              input.isstaff(type='checkbox' v-model="activeDepartment_isStaff" :disabled="!editMode")
           .property
             span.label Hiearchy
             ul
@@ -36,7 +43,7 @@
                 span(v-for="n in pnr") &nbsp
                 i(v-if="pnr !==0").material-icons.sub subdirectory_arrow_right
                 span {{parent.name}}
-              li.noclickable
+              li.clickable(v-on:click="setActiveDepartment(activeDepartment)")
                 span(v-for="n in parents.length") &nbsp
                 i(v-if="parents.length").material-icons.sub subdirectory_arrow_right
                 span.this-department {{activeDepartment.name}}
@@ -176,6 +183,7 @@ export default {
     },
     setActiveDepartment(department) {
       this.$store.commit('removeLines')
+      this.$store.commit('setActiveDepartment', null)
       this.$store.commit('setShowDepartment', department)
       this.searchField = ''
       setTimeout(x => {
@@ -256,7 +264,7 @@ export default {
   border-bottom: 2px solid lightgrey;
 }
 .tab {
-  width: 130px;
+  width: 120px;
   margin: 0px 0px 0px 0px;
   border: none;
   background: none;
@@ -326,6 +334,7 @@ ul {
   background-color: rgb(245, 250, 255);
   padding: 5px;
   box-shadow: 3px 3px 3px lightgrey;
+  overflow: auto;
 }
 .noside-screen {
   position: fixed;
