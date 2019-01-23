@@ -67,12 +67,12 @@ export const mutations = {
     state.activeDepartment = dept
   },
   setShowDepartment(state, dept) {
-    state.activeDepartment = dept
     var p = dept.parent
     while (p) {
       p.showChildren = true
       p = p.parent
     }
+    state.activeDepartment = dept
   },
   deleteDepartment(state) {
     var foundDept = findDept(state.chart, state.activeDepartment)
@@ -262,7 +262,7 @@ function createTree(array, parent, nextparent, tree) {
     parent['parent'] = nextparent.id ? nextparent : null
   }
   if (children.length) {
-    children.forEach(function(child) {
+    children.forEach(child => {
       createTree(array, child, parent)
     })
   }

@@ -42,6 +42,7 @@ export default {
   mounted: function() {},
   methods: {
     findDept: function(dept) {
+      this.$store.commit('setActiveDepartment', null)
       this.$store.commit('removeLines')
       this.$store.commit('setShowDepartment', dept)
       this.searchField = ''

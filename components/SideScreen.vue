@@ -42,7 +42,7 @@
                 span(v-for="n in pnr") &nbsp
                 i(v-if="pnr !==0").material-icons.sub subdirectory_arrow_right
                 span {{parent.name}}
-              li.noclickable
+              li.clickable(v-on:click="setActiveDepartment(activeDepartment)")
                 span(v-for="n in parents.length") &nbsp
                 i(v-if="parents.length").material-icons.sub subdirectory_arrow_right
                 span.this-department {{activeDepartment.name}}
@@ -182,6 +182,7 @@ export default {
     },
     setActiveDepartment(department) {
       this.$store.commit('removeLines')
+      this.$store.commit('setActiveDepartment', null)
       this.$store.commit('setShowDepartment', department)
       this.searchField = ''
       setTimeout(x => {
@@ -282,6 +283,7 @@ export default {
 }
 .clickable {
   cursor: pointer;
+  font-size: 14px;
 }
 input.name {
   width: calc(100% - 10px);
