@@ -6,27 +6,15 @@
      ul(v-else)
         li(v-on:click="addDept()") Add department
         li(v-on:click="moveTo()") Cut (move to...)
-        li &nbsp
+        li.noclick ---------------------------------------
         li.delete(v-on:click="removeDept()") Delete
 </template>
 
 <script>
 import { mapState } from 'vuex'
 export default {
-  components: {},
-  props: {},
-  data: function() {
-    return {}
-  },
   computed: {
-    ...mapState([
-      'chart',
-      'orgArray',
-      'options',
-      'showEditMenu',
-      'activeDepartment',
-      'moveDepartment'
-    ])
+    ...mapState(['chart', 'showEditMenu', 'activeDepartment', 'moveDepartment'])
   },
   mounted: function() {
     var d = document.getElementById('edit_menu')
@@ -55,7 +43,6 @@ export default {
     addDept: function() {
       this.$store.commit('removeLines')
       this.$store.commit('addDepartment')
-      console.log(this.activeDepartment)
       setTimeout(x => {
         this.$store.commit('addLine')
       }, 500)
@@ -84,7 +71,6 @@ export default {
 #edit_menu {
   position: absolute;
   width: 150px;
-
   background-color: lightgrey;
   box-shadow: 5px 5px 5px black;
   top: 50px;
@@ -96,18 +82,25 @@ export default {
   font-size: 14px;
 }
 
-#edit_menu ul {
+ul {
   padding: 0;
   list-style-type: none;
   margin: 0px;
 }
 
-#edit_menu ul li {
+li {
   cursor: pointer;
 }
-#edit_menu ul li:hover {
+li:hover {
   background-color: grey;
   color: white;
+}
+.noclick {
+  cursor: default;
+}
+.noclick:hover {
+  background-color: lightgrey;
+  color: black;
 }
 .delete {
   color: red;
