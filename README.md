@@ -17,6 +17,23 @@ You can use it as-is as a static website: no install, no webserver needed!
 1. Copy content of \docs folder to any location, like a folder on your computer, AWS S3 bucket or webserver
 2. Open index.html in the browser. When you use Internet Explorer it will not work if you placed the files on a folder (Chrome does work). S3 or webserverer will work for both browsers
 
+## Configure
+``` bash
+var CONFIG = {
+  title: {
+    color: '#05668d',
+    text: 'Organisation chart example'
+  },
+  photoUrl: {
+    prefix: 'photos/',
+    suffix: '.png'
+  },
+  levelColors: ['#0c058d', '#05668d', '#8d6e05', '#8d2305', '#cfb303']
+}
+```
+You can set the header color and title, the colors of each level in the orgchart and the position where to get the photo's
+For these locations it is fetched from "prefix" + userid + "suffix". So if you have userid P0001, it will be fetched from "photos/P0001.png". If you have an api or other locations which delivers photo's based on the userid you can change that here.
+
 ## User manual for website
 - Options > Column view: shows underlying departments in a column, giving a compact overview
 - Switch to edit mode: type "_edit" in the search box. This will bring up the File menu, and makes the chart editable
