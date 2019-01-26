@@ -48,7 +48,7 @@
               li.clickable(v-for='child in activeDepartment.children' v-on:click="setActiveDepartment(child)") 
                 span(v-for="n in parents.length+5") &nbsp
                 span {{child.name}}
-          img.profile(:src='config.photoUrl.prefix+activeDepartment.manager.id+config.photoUrl.suffix')
+          img.profile(:src='config.photoUrl.prefix+activeDepartment.manager.photo+config.photoUrl.suffix')
         template(v-if='activeTab===2')
           .assignment(v-for='person in department_people')
             table
