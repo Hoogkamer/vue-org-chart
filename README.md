@@ -33,19 +33,19 @@ var CONFIG = {
 ```
 The config file is in /config.js or if you want to build yourself in /static/config.js
 You can set the header color and title, the colors of each level in the orgchart and the position where to get the photo's
-For these locations it is fetched from "prefix" + userid + "suffix". So if you have userid P0001, it will be fetched from "photos/P0001.png". If you have an api or other locations which delivers photo's based on the userid you can change that here.
+For these locations it is fetched from "prefix" + photoURL + "suffix". So if you have photoURL P0001, it will be fetched from "photos/P0001.png". If you have an api or other locations which delivers photo's based on the userid you can change that here.
 
 ## User manual for website
 - Options > Column view: shows underlying departments in a column, giving a compact overview
 - Switch to edit mode: type "_edit" in the search box. This will bring up the File menu, and makes the chart editable
 - File > Export excel: export the data to excel, so you can edit it in excel. It contains:
     - chart: id, name, description, parent, indicator for staff department, and id of the manager (from the people tab)
-    - people: id, name, link to photo (not used currently), and main role/function of the person
+    - people: id, name, link to photo (see also config.js above), and main role/function of the person
     - assignment: department id (from chart tab), person id (from people tabl) and role. These are the people working for the department. (manager is assigned in the chart tab)
         People can be assigned to multiple departments, or even more times to 1 department (with different role for example)
 - File > Import excel: replaces the chart with data from the excel (export to excel first to get proper layout of the sheets)
 - File > Generate inputfile: Creates the inputfile to make changes you made persistent. Overwrite this file in the root \data.js
-        To enable profile photo's, put them in the \photos folder, and name them with the id used in the people tab with type png. So if the id of someone is P0001, then name the photo P0001.png
+        To enable profile photo's, put them in the \photos folder (see also config.js above), and name them with the photoURL used in the people tab with type png. So if the photoURL of someone is P0001, then name the photo P0001.png
 
 In stead of xls you can also edit in the page when in edit mode.:
 
