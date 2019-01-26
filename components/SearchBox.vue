@@ -2,17 +2,15 @@
   #search_div
     input.search_input(v-model='searchField' placeholder='Search...')
     #search_results(v-if="searchField.length")
-        ul
-            li(v-if="searchresults.length" v-for="result in searchresults" v-on:click="findDept(result)") 
-              .name {{result.name}}
-              .parent(v-if="result.parent") {{result.parent.name}}
+      ul
+        li(v-if="searchresults.length" v-for="result in searchresults" v-on:click="findDept(result)") 
+          .name {{result.name}}
+          .parent(v-if="result.parent") {{result.parent.name}}
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
-  components: {},
-  props: {},
   data: function() {
     return { searchField: '' }
   },
@@ -20,8 +18,8 @@ export default {
     ...mapState(['chart', 'editMode']),
     searchresults: function() {
       var res
-      if (this.searchField.length < 3) {
-        res = [{ name: 'Type at least 3 characters' }]
+      if (this.searchField.length < 2) {
+        res = [{ name: 'Type at least 2 characters' }]
       } else {
         res = this.searchDept(this.chart, this.searchField, [])
         if (!res.length) {
@@ -39,24 +37,18 @@ export default {
       }
     }
   },
-  mounted: function() {},
   methods: {
+    ...mapActions(['setShowDepartment']),
     findDept: function(dept) {
-      this.$store.commit('setActiveDepartment', null)
-      this.$store.commit('removeLines')
-      this.$store.commit('setShowDepartment', dept)
       this.searchField = ''
-      setTimeout(x => {
-        this.$store.commit('addLine')
-      }, 500)
+      this.setShowDepartment(dept)
     },
     searchDept: function(dept, search, matches) {
       if (dept.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
         matches.push(dept)
       }
-      var that = this
-      dept.children.forEach(function(child) {
-        that.searchDept(child, search, matches)
+      dept.children.forEach(child => {
+        this.searchDept(child, search, matches)
       })
       return matches
     }

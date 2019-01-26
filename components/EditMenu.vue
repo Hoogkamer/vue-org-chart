@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapState(['chart', 'showEditMenu', 'activeDepartment', 'moveDepartment'])
@@ -24,6 +24,7 @@ export default {
     d.style.top = this.showEditMenu.clientY + -chartpos.top + 'px'
   },
   methods: {
+    ...mapActions(['deleteDepartment', 'addDepartment', 'doMoveDepartment']),
     removeDept: function() {
       var confirmed = true
       if (this.activeDepartment.children.length) {
@@ -33,19 +34,11 @@ export default {
       }
       this.$store.commit('showEditMenu', null)
       if (confirmed) {
-        this.$store.commit('removeLines')
-        this.$store.commit('deleteDepartment')
-        setTimeout(x => {
-          this.$store.commit('addLine')
-        }, 500)
+        this.deleteDepartment()
       }
     },
     addDept: function() {
-      this.$store.commit('removeLines')
-      this.$store.commit('addDepartment')
-      setTimeout(x => {
-        this.$store.commit('addLine')
-      }, 500)
+      this.addDepartment()
     },
     moveTo: function() {
       this.$store.commit('setMoveDepartment')
@@ -56,13 +49,9 @@ export default {
       this.$store.commit('showEditMenu', null)
     },
     doMoveTo: function() {
-      this.$store.commit('removeLines')
       if (this.moveDepartment) {
-        this.$store.commit('doMoveDepartment')
+        this.doMoveDepartment()
       }
-      setTimeout(x => {
-        this.$store.commit('addLine')
-      }, 500)
     }
   }
 }

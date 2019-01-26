@@ -4,8 +4,6 @@
         show-dept(v-if="chart" :parent="chart" :level=1 :columnView="columnView", :columnView_noStaff="columnView_noStaff")
         draw-lines(v-if="chart")
         edit-menu(v-if="showEditMenu")
-      
-
         #move_dept(v-if="moveDepartment" :style="{ left: page.left + 'px', top: page.top + 'px' }")
           div {{moveDepartment.name}}
           i.material-icons.arrow.down(v-if='moveDepartment.children.length') arrow_drop_down
@@ -60,8 +58,10 @@ export default {
   },
   watch: {
     activeDepartment: function(val) {
-      console.log('activeDepartment', val)
-      var x = VueScrollTo.scrollTo('#ID_' + val.id, 500, this.scrollOptions)
+      var that = this
+      setTimeout(x => {
+        VueScrollTo.scrollTo('#ID_' + val.id, 500, that.scrollOptions)
+      }, 500)
     }
   },
   mounted: function() {

@@ -17,6 +17,80 @@ export const state = () => ({
   selectedPerson: null
 })
 
+export const actions = {
+  setShowDepartment({ commit, state }, dept) {
+    commit('setActiveDepartment', null)
+    commit('removeLines')
+    commit('setShowDepartment', dept)
+    setTimeout(x => {
+      commit('addLine')
+    }, 500)
+  },
+  updateActiveDepartmentIsStaff({ commit, state }, dept) {
+    commit('removeLines')
+    commit('updateActiveDepartmentIsStaff', dept)
+    setTimeout(x => {
+      commit('addLine')
+    }, 500)
+  },
+  showChildren({ commit, state }, dept) {
+    commit('removeLines')
+    commit('showChildren', dept)
+    setTimeout(x => {
+      commit('addLine')
+    }, 500)
+  },
+  hideChildren({ commit, state }, dept) {
+    commit('removeLines')
+    commit('hideChildren', dept)
+    setTimeout(x => {
+      commit('addLine')
+    }, 500)
+  },
+  deleteDepartment({ commit, state }, dept) {
+    commit('removeLines')
+    commit('deleteDepartment', dept)
+    setTimeout(x => {
+      commit('addLine')
+    }, 500)
+  },
+  addDepartment({ commit, state }, dept) {
+    commit('removeLines')
+    commit('addDepartment', dept)
+    setTimeout(x => {
+      commit('addLine')
+    }, 500)
+  },
+  doMoveDepartment({ commit, state }) {
+    commit('removeLines')
+    commit('doMoveDepartment')
+    setTimeout(x => {
+      commit('addLine')
+    }, 500)
+  },
+  setManagerPhotoView({ commit, state }, value) {
+    commit('removeLines')
+    commit('setManagerPhotoView', value)
+    setTimeout(x => {
+      commit('addLine')
+    }, 500)
+  },
+  setColumnView_noStaff({ commit, state }, value) {
+    commit('removeLines')
+    commit('setColumnView_noStaff', value)
+    setTimeout(x => {
+      commit('addLine')
+    }, 500)
+  },
+  setColumnView({ commit, state }, value) {
+    commit('removeLines')
+    commit('setColumnView', value)
+    setTimeout(x => {
+      commit('addLine')
+    }, 500)
+  }
+}
+
 export const mutations = {
   createTree(state, datas) {
     state.orgArray = datas

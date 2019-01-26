@@ -32,11 +32,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'DeptBox',
-  components: {},
   props: {
     departmentData: {
       type: Object,
@@ -51,9 +50,6 @@ export default {
       type: String,
       default: ''
     }
-  },
-  data: function() {
-    return {}
   },
   computed: {
     ...mapState([
@@ -71,13 +67,9 @@ export default {
         : ''
     }
   },
-  mounted: function() {},
-  destroyed: function() {
-    // this.$store.commit('addLine')
-  },
   methods: {
+    ...mapActions(['showChildren', 'hideChildren']),
     doShowChildren(down) {
-      this.$store.commit('removeLines')
       var department =
         this.departmentData.parent &&
         !this.departmentData.parent.showChildren &&
@@ -85,13 +77,10 @@ export default {
           ? this.departmentData.parent
           : this.departmentData
       if (down) {
-        this.$store.commit('showChildren', department)
+        this.showChildren(department)
       } else {
-        this.$store.commit('hideChildren', department)
+        this.hideChildren(department)
       }
-      setTimeout(x => {
-        this.$store.commit('addLine')
-      }, 500)
     },
 
     setActiveDepartment(department, event) {

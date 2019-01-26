@@ -18,14 +18,12 @@
             li(v-if="false")
                 input(type="checkbox" id="checkbox2" v-model="editMode")
                 label(for="checkbox2") Edit Mode
-            
-
 </template>
 
 <script>
 import XLSX from 'xlsx'
 
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   data: function() {
     return {
@@ -39,12 +37,8 @@ export default {
         return this.$store.state.columnView
       },
       set(value) {
-        this.$store.commit('removeLines')
-        this.$store.commit('setColumnView', value)
+        this.setColumnView(value)
         this.$store.commit('cancelAll')
-        setTimeout(x => {
-          this.$store.commit('addLine')
-        }, 500)
       }
     },
     columnView_noStaff: {
@@ -52,12 +46,8 @@ export default {
         return this.$store.state.columnView_noStaff
       },
       set(value) {
-        this.$store.commit('removeLines')
-        this.$store.commit('setColumnView_noStaff', value)
+        this.setColumnView_noStaff(value)
         this.$store.commit('cancelAll')
-        setTimeout(x => {
-          this.$store.commit('addLine')
-        }, 500)
       }
     },
     managerNameView: {
@@ -74,12 +64,8 @@ export default {
         return this.$store.state.managerPhotoView
       },
       set(value) {
-        this.$store.commit('removeLines')
-        this.$store.commit('setManagerPhotoView', value)
+        this.setManagerPhotoView(value)
         this.$store.commit('cancelAll')
-        setTimeout(x => {
-          this.$store.commit('addLine')
-        }, 500)
       }
     },
     editMode: {
@@ -92,8 +78,13 @@ export default {
       }
     }
   },
-  watch: {},
-  methods: {}
+  methods: {
+    ...mapActions([
+      'setManagerPhotoView',
+      'setColumnView_noStaff',
+      'setColumnView'
+    ])
+  }
 }
 </script>
 
@@ -127,8 +118,7 @@ ul {
   padding: 5px;
   text-align: left;
 }
-li {
-}
+
 input {
   margin: 0px 5px;
 }

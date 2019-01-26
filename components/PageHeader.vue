@@ -16,16 +16,9 @@ import OptionsMenu from '~/components/OptionsMenu.vue'
 import { mapState } from 'vuex'
 export default {
   components: { SearchBox, FileMenu, OptionsMenu },
-
-  props: {},
-  data: function() {
-    return {}
-  },
   computed: {
     ...mapState(['chart', 'editMode', 'config'])
-  },
-  watch: {},
-  methods: {}
+  }
 }
 </script>
 

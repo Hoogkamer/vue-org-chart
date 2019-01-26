@@ -56,6 +56,7 @@ export default {
     document.body.addEventListener('keyup', e => {
       if (e.keyCode === 27) {
         this.$store.commit('cancelAll')
+        this.$store.commit('setActiveDepartment', null)
       }
     })
   }

@@ -41,13 +41,11 @@ export default {
           people: this.people,
           assignments: this.assignments
         })
-      console.log(json)
       var blob = new Blob([json], { type: 'text/plain;charset=utf-8' })
       FileSaver.saveAs(blob, 'data.js')
     },
     importData: function(infile) {
       var f = infile.target.files[0]
-      console.log(f)
       var reader = new FileReader()
       var that = this
       reader.onload = function(e) {
@@ -108,7 +106,6 @@ export default {
       )
       XLSX.writeFile(wb, 'chart_data.xlsx')
     },
-    array2tree: function(array) {},
     tree2array(chart, array) {
       array.push({
         id: chart.id,
@@ -122,10 +119,6 @@ export default {
       return array
     }
   }
-}
-const equijoin = (xs, ys, primary, foreign, sel) => {
-  const ix = xs.reduce((ix, row) => ix.set(row[primary], row), new Map())
-  return ys.map(row => sel(ix.get(row[foreign]), row))
 }
 </script>
 
@@ -155,11 +148,8 @@ const equijoin = (xs, ys, primary, foreign, sel) => {
 }
 ul {
   list-style: none;
-
   padding: 5px;
   text-align: left;
-}
-li {
 }
 
 li:hover {

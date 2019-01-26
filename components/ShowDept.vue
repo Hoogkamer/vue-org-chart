@@ -69,7 +69,6 @@ export default {
     staffChildren() {
       var staff = this.parent.children.filter(e => e.isStaff)
       var result = []
-
       staff.forEach((e, i) => {
         if (i % 2 === 0) {
           result.push({ left: e, right: null })
@@ -77,7 +76,6 @@ export default {
           result[result.length - 1].right = e
         }
       })
-      console.log('result', result)
       return result
     },
     staffChildrenR() {
@@ -85,15 +83,7 @@ export default {
         return e.isStaff && i % 2 === 0
       })
     }
-  },
-  mounted: function() {
-    // setTimeout(x => {
-    //   this.$store.commit('addLine')
-    // }, 500)
-    console.log('parent', this.parent)
-  },
-
-  methods: {}
+  }
 }
 </script>
 <style scoped>

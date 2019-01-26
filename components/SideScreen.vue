@@ -1,10 +1,9 @@
 <template lang='pug'>
     .side-screen(v-if="showSideScreen")
-      
       button.right(v-on:click="$store.commit('closeSideScreen')")
         i.material-icons.arrow keyboard_arrow_left
       template(v-if="activeDepartment")
-        .title(v-if='activeDepartment') {{activeDepartment.name}}
+        .title {{activeDepartment.name}}
         .tabs
           button.tab(:class='{active:activeTab===1}' v-on:click='activeTab=1') Details
           button.tab(:class='{active:activeTab===2}' v-on:click='activeTab=2') People
@@ -74,12 +73,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import PersonPicker from '~/components/PersonPicker.vue'
 
 export default {
   components: { PersonPicker },
-  props: {},
   data: function() {
     return {
       personPicker: null,
@@ -87,7 +85,6 @@ export default {
       noPhotos: []
     }
   },
-
   computed: {
     ...mapState([
       'showSideScreen',
@@ -118,11 +115,7 @@ export default {
         return this.$store.state.activeDepartment.isStaff
       },
       set: function(val) {
-        this.$store.commit('removeLines')
-        this.$store.commit('updateActiveDepartmentIsStaff', val)
-        setTimeout(x => {
-          this.$store.commit('addLine')
-        }, 500)
+        this.updateActiveDepartmentIsStaff(val)
       }
     },
     department_people: function() {
@@ -174,27 +167,19 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setShowDepartment', 'updateActiveDepartmentIsStaff']),
     markPhotoNotFound(person) {
       if (!this.noPhotos.find(p => p === person)) {
         this.noPhotos.push(person)
       }
-      console.log(this.noPhotos)
     },
     setActiveDepartment(department) {
-      this.$store.commit('removeLines')
-      this.$store.commit('setActiveDepartment', null)
-      this.$store.commit('setShowDepartment', department)
-      this.searchField = ''
-      setTimeout(x => {
-        this.$store.commit('addLine')
-      }, 500)
+      this.setShowDepartment(department)
     },
     removeFromDepartment(person) {
-      console.log(person)
       this.$store.commit('removePersonFromActiveDepartment', person)
     },
     updateRole(person, e) {
-      console.log(e.target.value)
       this.$store.commit('updateActiveDepartmentPersonRole', {
         person: person,
         role: e.target.value
@@ -229,6 +214,7 @@ export default {
   border: 1px solid lightgrey;
   box-shadow: 3px 3px 3px lightgrey;
   border-radius: 5px;
+  background-color: white;
 }
 .photo {
   width: 56px;
@@ -249,11 +235,6 @@ export default {
   right: 0px;
   font-size: 20px;
   color: red;
-  cursor: pointer;
-}
-.edit1 {
-  font-size: 20px;
-  color: black;
   cursor: pointer;
 }
 .tabs {
@@ -301,8 +282,6 @@ textarea.description {
 .label {
   font-weight: 600;
   text-decoration: underline;
-}
-.text {
 }
 .untext {
   color: grey;
@@ -361,12 +340,8 @@ ul {
 .right:focus {
   outline: none;
 }
-.right i {
-}
 .error {
   background-color: red;
-}
-.material-icons.arrow {
 }
 .material-icons.edit {
   font-size: 16px;
