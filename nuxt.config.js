@@ -22,6 +22,10 @@ module.exports = {
         hid: 'keywords',
         name: 'keywords',
         content: 'vuejs, nuxt, javascript, orgchart, organization, open-source'
+      },
+      {
+        name: 'google-site-verification',
+        content: 'faMBWsCcw7RZQp1wVNh-Hgy7aQ8D2KMMNpwg0LKtsu4'
       }
     ],
     script: [
