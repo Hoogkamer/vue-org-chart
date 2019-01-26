@@ -31,6 +31,7 @@ var CONFIG = {
   levelColors: ['#0c058d', '#05668d', '#8d6e05', '#8d2305', '#cfb303']
 }
 ```
+The config file is in /config.js or if you want to build yourself in /static/config.js
 You can set the header color and title, the colors of each level in the orgchart and the position where to get the photo's
 For these locations it is fetched from "prefix" + userid + "suffix". So if you have userid P0001, it will be fetched from "photos/P0001.png". If you have an api or other locations which delivers photo's based on the userid you can change that here.
 
