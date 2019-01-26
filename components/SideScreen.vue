@@ -326,6 +326,7 @@ ul {
   border: 1px solid lightgray;
   background-color: rgb(245, 250, 255);
   box-shadow: 3px 3px 3px lightgrey;
+  z-index: 9;
 }
 
 .right {

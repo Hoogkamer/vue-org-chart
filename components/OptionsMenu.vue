@@ -107,7 +107,7 @@ export default {
   display: inline-block;
   position: absolute;
   left: 0px;
-  top: 40px;
+  top: 45px;
   width: 170px;
   border: 1px solid grey;
   border-top: 1px solid white;
