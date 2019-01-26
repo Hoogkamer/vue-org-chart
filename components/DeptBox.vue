@@ -17,7 +17,7 @@
             table
               tr
                 td
-                  img.profile(:src='config.photoUrl.prefix+departmentData.manager.id+config.photoUrl.suffix')
+                  img.profile(:src='config.photoUrl.prefix+departmentData.manager.photo+config.photoUrl.suffix')
                 td
                   div.textdiv
                     .name(v-html="departmentData.name")
