@@ -199,7 +199,7 @@ export default {
 <style scoped>
 .profile {
   width: 80px;
-  height: 80px;
+  max-height: 80px;
   position: absolute;
   right: 16px;
   top: 154px;
