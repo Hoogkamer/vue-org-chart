@@ -110,6 +110,7 @@ export default {
   max-height: 55px;
   display: block;
   margin: auto;
+  border-radius: 30px;
 }
 .active_department {
   background-color: yellow !important;

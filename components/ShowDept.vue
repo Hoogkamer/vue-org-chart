@@ -138,6 +138,6 @@ td {
   text-align: center;
   vertical-align: top;
   width: 150px;
-  padding: 0px;
+  padding: 0px 3px;
 }
 </style>
