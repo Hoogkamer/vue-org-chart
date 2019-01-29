@@ -1,11 +1,11 @@
 <template lang='pug'>
   #search_div
-    input.search_input(v-model='searchField' placeholder='Search...')
+    input.search_input(v-model='searchField' placeholder='Search department or manager...')
     #search_results(v-if="searchField.length")
       ul
-        li(v-if="searchresults.length" v-for="result in searchresults" v-on:click="findDept(result)") 
+        li(v-if="searchresults.length" v-for="result in searchresults" v-on:click="findDept(result.dept)") 
           .name {{result.name}}
-          .parent(v-if="result.parent") {{result.parent.name}}
+          .parent(v-if="result.context") {{result.context}}
 </template>
 
 <script>
@@ -45,7 +45,18 @@ export default {
     },
     searchDept: function(dept, search, matches) {
       if (dept.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
-        matches.push(dept)
+        matches.push({
+          dept: dept,
+          name: dept.name,
+          context: dept.parent ? dept.parent.name : ''
+        })
+      }
+      if (dept.manager.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+        matches.push({
+          dept: dept,
+          name: dept.manager.name,
+          context: 'Manager of: ' + dept.name
+        })
       }
       dept.children.forEach(child => {
         this.searchDept(child, search, matches)

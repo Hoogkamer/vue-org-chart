@@ -48,9 +48,9 @@
               li.clickable(v-for='child in activeDepartment.children' v-on:click="setActiveDepartment(child)") 
                 span(v-for="n in parents.length+5") &nbsp
                 span {{child.name}}
-          img.profile(:src='config.photoUrl.prefix+activeDepartment.manager.photo+config.photoUrl.suffix')
+          img.profile(:src='config.photoUrl.prefix+activeDepartment.manager.photo+config.photoUrl.suffix' v-on:click='visitProfile(activeDepartment.manager)')
         template(v-if='activeTab===2')
-          .assignment(v-for='person in department_people')
+          .assignment(v-for='person in department_people' v-on:click='visitProfile(person.person)')
             table
               tr
                 td
@@ -184,6 +184,13 @@ export default {
         person: person,
         role: e.target.value
       })
+    },
+    visitProfile(person) {
+      console.log(person)
+      if (!this.config.linkUrl) return
+      var url =
+        this.config.linkUrl.prefix + person.id + this.config.linkUrl.suffix
+      window.open(url, '_blank')
     }
   }
 }
@@ -197,6 +204,10 @@ export default {
   right: 16px;
   top: 154px;
   border: 1px solid grey;
+  cursor: pointer;
+}
+.profile:hover {
+  border: 2px solid orange;
 }
 .title {
   text-align: center;
@@ -215,10 +226,14 @@ export default {
   box-shadow: 3px 3px 3px lightgrey;
   border-radius: 5px;
   background-color: white;
+  cursor: pointer;
+}
+.assignment:hover {
+  border: 2px solid orange;
 }
 .photo {
-  width: 56px;
-  max-height: 56px;
+  width: 52px;
+  max-height: 52px;
   display: block;
   margin: auto;
 }
