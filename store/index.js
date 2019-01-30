@@ -92,6 +92,12 @@ export const actions = {
 }
 
 export const mutations = {
+  initStore(state) {
+    state.columnView = state.config.startView.columnview
+    state.columnView_noStaff = !state.config.startView.staffColumnview
+    state.managerNameView = state.config.startView.names
+    state.managerPhotoView = state.config.startView.photos
+  },
   createTree(state, datas) {
     state.orgArray = datas
     state.chart = createTree(datas)[0]

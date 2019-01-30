@@ -43,6 +43,7 @@ export default {
         children: null
       })
     })
+    this.$store.commit('initStore')
     this.$store.commit('createTree', data)
     this.$store.commit('setPeople', INPUT_DATA.people)
     this.$store.commit('setAssignments', INPUT_DATA.assignments)

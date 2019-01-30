@@ -6,5 +6,8 @@
             "language": "vue",
             "autoFix": true
         }
-    ]
+    ],
+    "files.exclude": {
+        "**/.git": false
+    }
 }
