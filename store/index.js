@@ -18,6 +18,40 @@ export const state = () => ({
 })
 
 export const actions = {
+  initStore({ commit, state }, dept) {
+    commit('setConfig')
+    var data = []
+    INPUT_DATA.chart.forEach(dept => {
+      var manager = INPUT_DATA.people.find(p => p.id == dept.manager_id)
+      data.push({
+        id: dept.id,
+        parentId: dept.parent_id,
+        isStaff: dept.staff_department == 'Y',
+        name: dept.name,
+        description: dept.description,
+        manager: manager ? manager : { name: '' },
+        showChildren: false,
+        parent: null,
+        children: null
+      })
+    })
+    commit('createTree', data)
+    commit('setPeople', INPUT_DATA.people)
+    commit('setAssignments', INPUT_DATA.assignments)
+    var that = this
+    window.onresize = function(event) {
+      commit('removeLines')
+      setTimeout(x => {
+        commit('addLine')
+      }, 500)
+    }
+    document.body.addEventListener('keyup', e => {
+      if (e.keyCode === 27) {
+        commit('cancelAll')
+        commit('setActiveDepartment', null)
+      }
+    })
+  },
   setShowDepartment({ commit, state }, dept) {
     commit('setActiveDepartment', null)
     commit('removeLines')
@@ -92,7 +126,7 @@ export const actions = {
 }
 
 export const mutations = {
-  initStore(state) {
+  setConfig(state) {
     state.columnView = state.config.startView.columnview
     state.columnView_noStaff = !state.config.startView.staffColumnview
     state.managerNameView = state.config.startView.names
