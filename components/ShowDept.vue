@@ -71,9 +71,15 @@ export default {
   computed: {
     ...mapState(['columnView', 'columnView_noStaff']),
     hierarchyChildren() {
+      if (this.parent.onlyShowThisChild) {
+        return [this.parent.onlyShowThisChild]
+      }
       return this.parent.children.filter(e => !e.isStaff)
     },
     staffChildren() {
+      if (this.parent.onlyShowThisChild) {
+        return []
+      }
       var staff = this.parent.children.filter(e => e.isStaff)
       var result = []
       staff.forEach((e, i) => {

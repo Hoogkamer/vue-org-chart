@@ -1,5 +1,5 @@
 <template lang='pug'>
-    div
+    div(v-on:mouseenter="mouseOverBox(true)" v-on:mouseleave="mouseOverBox(false)")
       template(v-if="departmentData")
         template(v-if="!managerPhotoView")
           .department( :id="'ID_'+ departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
@@ -24,6 +24,7 @@
                     .name_manager(v-if="managerNameView") {{departmentData.manager.name}}
             i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
+            i.material-icons.hide_siblings(v-if="displaySiblingIcon" v-on:click="hideSiblings()" title="hide/show siblings") visibility
 
       template(v-if="!departmentData")
           .department.invisible(v-if='!managerPhotoView' :class="[type]")
@@ -49,6 +50,11 @@ export default {
     type: {
       type: String,
       default: ''
+    }
+  },
+  data: function() {
+    return {
+      displaySiblingIcon: false
     }
   },
   computed: {
@@ -95,6 +101,21 @@ export default {
           this.$store.commit('showEditMenu', event)
         }
       })
+    },
+    mouseOverBox(value) {
+      if (!value) {
+        this.displaySiblingIcon = false
+      } else {
+        if (
+          this.departmentData.parent &&
+          this.departmentData.parent.showChildren
+        ) {
+          this.displaySiblingIcon = true
+        }
+      }
+    },
+    hideSiblings() {
+      this.$store.dispatch('setHideSiblings', this.departmentData)
     }
   }
 }
@@ -128,6 +149,14 @@ export default {
 }
 .up {
   cursor: zoom-out;
+}
+.hide_siblings {
+  font-size: 24px;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  margin: 0px;
+  color: black;
 }
 .department {
   width: 120px;

@@ -32,7 +32,8 @@ export const actions = {
         manager: manager ? manager : { name: '' },
         showChildren: false,
         parent: null,
-        children: null
+        children: null,
+        onlyShowThisChild: null
       })
     })
     commit('createTree', data)
@@ -119,6 +120,13 @@ export const actions = {
   setColumnView({ commit, state }, value) {
     commit('removeLines')
     commit('setColumnView', value)
+    setTimeout(x => {
+      commit('addLine')
+    }, 500)
+  },
+  setHideSiblings({ commit, state }, dept) {
+    commit('removeLines')
+    commit('setHideSiblings', dept)
     setTimeout(x => {
       commit('addLine')
     }, 500)
@@ -299,6 +307,13 @@ export const mutations = {
   cancelAll(state) {
     state.showEditMenu = null
     state.moveDepartment = null
+  },
+  setHideSiblings(state, dept) {
+    if (!dept.parent.onlyShowThisChild) {
+      dept.parent.onlyShowThisChild = dept
+    } else {
+      dept.parent.onlyShowThisChild = null
+    }
   }
 }
 
@@ -307,10 +322,14 @@ function updateLines(dept, lines) {
   var xparent = document.getElementById('chart')
   svg.style.width = xparent.offsetWidth + 'px'
   svg.style.height = xparent.offsetHeight + 'px'
+  var line
   if (dept.showChildren) {
     dept.children.forEach(child => {
-      lines.push(getLine(child))
-      updateLines(child, lines)
+      line = getLine(child)
+      if (line) {
+        lines.push(getLine(child))
+        updateLines(child, lines)
+      }
     })
   }
   return lines
@@ -348,6 +367,12 @@ function getLine(dept) {
 }
 
 function getPosOfElement(dept) {
+  var parentElement = document.getElementById('ID_' + dept.parent.id)
+  var childElement = document.getElementById('ID_' + dept.id)
+  if (!parentElement || !childElement) {
+    console.log(parentElement, childElement)
+    return { parent: null }
+  }
   var pos = {
     parent: dept.parent
       ? document.getElementById('ID_' + dept.parent.id).getBoundingClientRect()
