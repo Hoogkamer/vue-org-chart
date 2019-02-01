@@ -1,7 +1,7 @@
 var CONFIG = {
   title: {
     color: '#05668d',
-    text: 'Organisation chart example'
+    text: 'Interactive organization chart'
   },
   photoUrl: {
     prefix: 'photos/',
