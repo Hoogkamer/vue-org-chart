@@ -143,7 +143,6 @@ export const mutations = {
   createTree(state, datas) {
     state.orgArray = datas
     state.chart = createTree(datas)[0]
-    console.log(state.chart)
     state.chart.showChildren = true
   },
   setPeople(state, datas) {
@@ -192,6 +191,7 @@ export const mutations = {
     var p = dept.parent
     while (p) {
       p.showChildren = true
+      p.onlyShowThisChild = null
       p = p.parent
     }
     state.activeDepartment = dept
@@ -274,11 +274,8 @@ export const mutations = {
       a => a.id === inp.person.assignment.id
     )
     assignment.role = inp.role
-    console.log(assignment)
   },
   addAssignmentToActiveDepartment(state, inp) {
-    console.log('in', inp)
-    console.log(state.assignments)
     state.assignments.push({
       department_id: state.activeDepartment.id,
       id: guid(),
@@ -370,7 +367,6 @@ function getPosOfElement(dept) {
   var parentElement = document.getElementById('ID_' + dept.parent.id)
   var childElement = document.getElementById('ID_' + dept.id)
   if (!parentElement || !childElement) {
-    console.log(parentElement, childElement)
     return { parent: null }
   }
   var pos = {
@@ -408,7 +404,6 @@ function createTree(array, parent, nextparent, tree) {
   return tree
 }
 function findDept(chart, dept) {
-  console.log(chart, dept)
   if (chart === dept) {
     return dept
   } else {

@@ -74,7 +74,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showChildren', 'hideChildren']),
+    ...mapActions(['showChildren', 'hideChildren', 'setHideSiblings']),
     doShowChildren(down) {
       var department =
         this.departmentData.parent &&
@@ -115,7 +115,7 @@ export default {
       }
     },
     hideSiblings() {
-      this.$store.dispatch('setHideSiblings', this.departmentData)
+      this.setHideSiblings(this.departmentData)
     }
   }
 }
