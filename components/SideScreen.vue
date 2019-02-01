@@ -187,6 +187,7 @@ export default {
     },
     visitProfile(person) {
       console.log(person)
+      if (this.editMode) return
       if (!this.config.linkUrl) return
       var url =
         this.config.linkUrl.prefix + person.id + this.config.linkUrl.suffix
