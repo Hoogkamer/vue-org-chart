@@ -21,7 +21,7 @@ You can use it as-is as a static website: no install, no webserver needed!
 var CONFIG = {
   title: {
     color: '#05668d',
-    text: 'Organisation chart example'
+    text: 'Interactive organization chart'
   },
   photoUrl: {
     prefix: 'photos/',
@@ -37,16 +37,25 @@ var CONFIG = {
     columnview: true,
     staffColumnview: false
   },
+  enableScreenCapture: true,
   levelColors: ['#0c058d', '#05668d', '#8d6e05', '#8d2305', '#cfb303']
 }
+
 
 ```
 
 The config file is in /config.js or if you want to build yourself in /static/config.js
-You can set the header color and title, the colors of each level in the orgchart and the position where to get the photo's
+
+- You can set the header color and title, and the colors of each level in the orgchart
+-  The position where to get the photo's  
 For these locations it is fetched from "prefix" + photo + "suffix". So if you have photo P0001, it will be fetched from "photos/P0001.png". If you have an api or other locations which delivers photo's based on the photo field you can change that here.
-Same for the linkUrl, it will open a new tab to navigate to that page when clicked in the sidescreen on a person. In this example it will just fetch the photo in a new tab, but if you have an api which shows a user profile page you can enter the location here.
+
+- The linkUrl  
+It will open a new tab to navigate to that page when clicked in the sidescreen on a person. In this example it will just fetch the photo in a new tab, but if you have an api which shows a user profile page you can enter the location here.
 startView sets the inital options (the user can change them in the menu bar)
+
+- Enable screen capture  
+This shows the icon to make an image of the graph to save. This does not work when you are on a local folder, so disable this option then
 
 ## User manual for website
 

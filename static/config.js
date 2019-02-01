@@ -17,5 +17,6 @@ var CONFIG = {
     columnview: true,
     staffColumnview: false
   },
+  enableScreenCapture: true,
   levelColors: ['#0c058d', '#05668d', '#8d6e05', '#8d2305', '#cfb303']
 }

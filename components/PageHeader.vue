@@ -8,7 +8,7 @@
   .menu
     file-menu(v-if='editMode')
     options-menu
-    .screenshot1
+    .screenshot1(v-if='config.enableScreenCapture')
       i.material-icons.screenshot(v-on:click="capture" title='Save as image') photo_camera
 </template>
 
