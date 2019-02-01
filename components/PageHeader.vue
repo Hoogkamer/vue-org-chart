@@ -1,5 +1,6 @@
 <template lang='pug'>
 .header(:style='{backgroundColor:config.title.color}') {{config.title.text}}
+  .edit_indicator(v-if="editMode" v-on:click="$store.commit('setEditMode', false)") Click to leave editmode
   a(href='https://github.com/Hoogkamer/vue-org-chart' target='_blank')
     img.gh(src="~/assets/img/gh.svg" title='Go to Github project page')
   search-box
@@ -49,5 +50,14 @@ export default {
   top: 5px;
   right: 10px;
   width: 40px;
+}
+.edit_indicator {
+  position: absolute;
+  top: 50px;
+  right: 0px;
+  font-size: 16px;
+  background-color: red;
+  padding: 5px;
+  cursor: pointer;
 }
 </style>
