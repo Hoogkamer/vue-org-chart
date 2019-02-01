@@ -1,5 +1,6 @@
 <template lang='pug'>
-    .file(v-on:click='editMenuOpen = !editMenuOpen') File
+    .file(v-on:click='editMenuOpen = !editMenuOpen')
+      i.material-icons.screenshot(v-on:click="" title='Load/Save') save
       .file_menu(v-if='editMenuOpen')
           ul
             li 
@@ -124,10 +125,24 @@ export default {
 
 <style scoped>
 .file {
-  padding: 10px;
   display: inline-block;
   position: relative;
 }
+.file {
+  display: inline-block;
+  box-sizing: content-box;
+  position: absolute;
+  top: 10px;
+  left: 130px;
+}
+.screenshot {
+  cursor: pointer;
+  color: white;
+}
+.screenshot:hover {
+  border: 1px solid white;
+}
+
 .file_select,
 .file {
   cursor: pointer;
@@ -141,7 +156,7 @@ export default {
   display: inline-block;
   position: absolute;
   left: 0px;
-  top: 45px;
+  top: 35px;
   width: 150px;
   border: 1px solid grey;
   border-top: 1px solid white;

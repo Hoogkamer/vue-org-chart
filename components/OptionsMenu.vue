@@ -1,5 +1,6 @@
 <template lang='pug'>
-    .file(v-on:click='editMenuOpen = !editMenuOpen') Options
+    .file(v-on:click='editMenuOpen = !editMenuOpen') 
+      i.material-icons.settings(v-on:click="" title='Set options') settings
       .file_menu(v-if='editMenuOpen')
           ul
             li
@@ -103,9 +104,15 @@ export default {
 
 <style scoped>
 .file {
-  padding: 10px;
   display: inline-block;
   position: relative;
+  width: 50px;
+  height: 50px;
+}
+.settings {
+}
+.settings:hover {
+  border: 1px solid white;
 }
 .file_select,
 .file {
@@ -120,7 +127,7 @@ export default {
   display: inline-block;
   position: absolute;
   left: 0px;
-  top: 45px;
+  top: 35px;
   width: 170px;
   border: 1px solid grey;
   border-top: 1px solid white;
