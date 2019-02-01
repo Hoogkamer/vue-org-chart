@@ -14,7 +14,8 @@ export const state = () => ({
   moveDepartment: null,
   editMode: false,
   showEditMenu: null,
-  selectedPerson: null
+  selectedPerson: null,
+  onlyShowParents: false
 })
 
 export const actions = {
@@ -130,6 +131,9 @@ export const actions = {
     setTimeout(x => {
       commit('addLine')
     }, 500)
+  },
+  setOnlyShowParents({ commit, state }, value) {
+    commit('setOnlyShowParents', value)
   }
 }
 
@@ -179,19 +183,29 @@ export const mutations = {
     state.showEditMenu = event
   },
   showChildren(state, dept) {
-    var index = state.orgArray.findIndex(e => e.id === dept.id)
+    //var index = state.orgArray.findIndex(e => e.id === dept.id)
 
     dept.showChildren = true
-    state.orgArray.splice(index, 1, dept)
+    if (dept.parent && state.onlyShowParents) {
+      dept.parent.onlyShowThisChild = dept
+    }
+    //state.orgArray.splice(index, 1, dept)
   },
   setActiveDepartment(state, dept) {
     state.activeDepartment = dept
   },
   setShowDepartment(state, dept) {
     var p = dept.parent
+    if (p && state.onlyShowParents) {
+      p.onlyShowThisChild = dept
+    }
+    dept.onlyShowThisChild = null
     while (p) {
       p.showChildren = true
-      p.onlyShowThisChild = null
+
+      if (state.onlyShowParents && p.parent) {
+        p.parent.onlyShowThisChild = p
+      }
       p = p.parent
     }
     state.activeDepartment = dept
@@ -311,6 +325,9 @@ export const mutations = {
     } else {
       dept.parent.onlyShowThisChild = null
     }
+  },
+  setOnlyShowParents(state, val) {
+    state.onlyShowParents = val
   }
 }
 

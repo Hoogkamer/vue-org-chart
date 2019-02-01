@@ -11,6 +11,7 @@
               .name2(v-html="departmentData.name")
             i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
+            div.hidden_dept(v-if='hiddenDept' title='Nr of subdepartments') {{departmentData.children.length}}
         template(v-else)
           .department.manager_photo(:id="'ID_'+ departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
             .level_indicator(:style="{backgroundColor:config.levelColors[level-1]||'#FFFFFF'}")
@@ -25,7 +26,7 @@
             i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
             i.material-icons.hide_siblings(v-if="displaySiblingIcon" v-on:click="hideSiblings()" title="hide/show siblings") visibility
-
+            div.hidden_dept(v-if='hiddenDept' title='Nr of subdepartments') {{departmentData.children.length}}
       template(v-if="!departmentData")
           .department.invisible(v-if='!managerPhotoView' :class="[type]")
           .department.manager_photo.invisible(v-else :class="[type]")
@@ -54,7 +55,8 @@ export default {
   },
   data: function() {
     return {
-      displaySiblingIcon: false
+      displaySiblingIcon: false,
+      hiddenDept: 5
     }
   },
   computed: {
@@ -238,5 +240,15 @@ export default {
   left: 0px;
   bottom: 5px;
   color: grey;
+}
+.hidden_dept {
+  position: absolute;
+  bottom: 1px;
+  left: 1px;
+  background-color: white;
+  color: grey;
+  font-size: 12px;
+  padding: 0px 2px;
+  border-radius: 4px;
 }
 </style>

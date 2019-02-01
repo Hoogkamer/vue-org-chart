@@ -15,6 +15,9 @@
             li
                 input(type="checkbox" id="checkbox4" v-model="managerPhotoView")
                 label(for="checkbox4") Show manager photo
+            li
+                input(type="checkbox" id="checkbox5" v-model="onlyShowParents")
+                label(for="checkbox5") Only parent hierarchy
             li(v-if="false")
                 input(type="checkbox" id="checkbox2" v-model="editMode")
                 label(for="checkbox2") Edit Mode
@@ -76,13 +79,23 @@ export default {
         this.$store.commit('setEditMode', value)
         this.$store.commit('cancelAll')
       }
+    },
+    onlyShowParents: {
+      get() {
+        return this.$store.state.onlyShowParents
+      },
+      set(value) {
+        this.setOnlyShowParents(value)
+        this.$store.commit('cancelAll')
+      }
     }
   },
   methods: {
     ...mapActions([
       'setManagerPhotoView',
       'setColumnView_noStaff',
-      'setColumnView'
+      'setColumnView',
+      'setOnlyShowParents'
     ])
   }
 }
