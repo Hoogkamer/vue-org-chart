@@ -10,13 +10,35 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+
 export default {
   data: function() {
     return { searchField: '' }
   },
+  asyncComputed: {
+    searchresults: {
+      get() {
+        return new Promise((resolve, reject) => {
+          var res
+          if (this.searchField.length < 2) {
+            res = [{ name: 'Type at least 2 characters' }]
+          } else {
+            //res = this.searchDept(this.chart, this.searchField, [])
+            res = this.searchDept(this.searchField)
+            if (!res.length) {
+              res = [{ name: 'No matches' }]
+            }
+          }
+
+          resolve(res)
+        })
+      },
+      default: [{ name: 'Searching....' }]
+    }
+  },
   computed: {
     ...mapState(['chart', 'editMode', 'orgArray']),
-    searchresults: function() {
+    searchresults1: function() {
       var res
       if (this.searchField.length < 2) {
         res = [{ name: 'Type at least 2 characters' }]
