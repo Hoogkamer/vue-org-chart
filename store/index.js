@@ -1,3 +1,7 @@
+var panzoom = require('panzoom')
+import 'array-from-polyfill'
+
+
 export const state = () => ({
   config: CONFIG,
   chart: null,
@@ -16,7 +20,8 @@ export const state = () => ({
   showEditMenu: null,
   showViewMenu: null,
   selectedPerson: null,
-  onlyShowParents: false
+  onlyShowParents: false,
+  zoomInstance: null
 })
 
 export const actions = {
@@ -57,7 +62,35 @@ export const actions = {
       }
     })
 
+  },
+  initZoom({ commit, state }) {
+    var area = document.querySelector('#chart')
+    console.log(area)
 
+    if (state.zoomInstance)
+      state.zoomInstance.dispose()
+
+    var instance = panzoom(area, {
+      smoothScroll: false,
+      maxZoom: 1,
+      minZoom: 1
+    })
+    instance.zoomAbs(
+      300, // initial x position
+      10, // initial y position
+      1 // initial zoom
+    )
+
+
+    instance.on('panend', function (e) {
+      // console.log('Fired when pan ended', e)
+      // var chartpos = document.getElementById('chart').getBoundingClientRect()
+      // console.log(chartpos)
+      // var chartpos1 = document.getElementById('ID_1').getBoundingClientRect()
+      // console.log(chartpos1)
+    })
+    commit('setZoomInstance', instance)
+    //instance.moveTo(600, 100)
   },
   setShowDepartment({ commit, state }, dept) {
     commit('setActiveDepartment', null)
@@ -371,6 +404,16 @@ export const mutations = {
     } else {
       state.chart = state.orgArray.find(e => !e.parent)
     }
+  },
+  setZoomInstance(state, val) {
+    state.zoomInstance = val
+  },
+  resetZoom(state, val) {
+    state.zoomInstance.zoomAbs(
+      300, // initial x position
+      10, // initial y position
+      1 // initial zoom
+    )
   }
 }
 
@@ -442,7 +485,7 @@ function getPosOfElement(dept) {
   }
   pos.element.x = pos.element.left - chartpos.left
   pos.element.y = pos.element.top - chartpos.top
-  console.log(chartpos)
+
   return pos
 }
 

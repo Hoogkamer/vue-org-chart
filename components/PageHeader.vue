@@ -17,29 +17,36 @@ import html2canvas from 'html2canvas'
 import SearchBox from '~/components/SearchBox.vue'
 import FileMenu from '~/components/FileMenu.vue'
 import OptionsMenu from '~/components/OptionsMenu.vue'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+var panzoom = require('panzoom')
 export default {
   components: { SearchBox, FileMenu, OptionsMenu },
   computed: {
     ...mapState(['chart', 'editMode', 'config'])
   },
   methods: {
+    ...mapActions(['initZoom']),
     capture: function() {
-      var x = document.querySelector('#chart')
-      var svgContainer = document.querySelector('#chart')
-      console.log(svgContainer)
-      html2canvas(x, {
-        onclone: element => {
-          const svgElements = element.body.getElementsByTagName('svg')
-          Array.from(svgElements).forEach(svgElement => {
-            const bBox = svgElement.getBBox()
-            svgElement.setAttribute('width', svgContainer.offsetWidth)
-            svgElement.setAttribute('height', svgContainer.offsetHeight)
-          })
-        }
-      }).then(canvas => {
-        saveAs(canvas.toDataURL(), 'orgchart.png')
-      })
+      var area = document.querySelector('#chart')
+      console.log(area)
+      this.initZoom()
+      setTimeout(x => {
+        var x = document.querySelector('#chart')
+        var svgContainer = document.querySelector('#chart')
+        console.log(svgContainer)
+        html2canvas(x, {
+          onclone: element => {
+            const svgElements = element.body.getElementsByTagName('svg')
+            Array.from(svgElements).forEach(svgElement => {
+              const bBox = svgElement.getBBox()
+              svgElement.setAttribute('width', svgContainer.offsetWidth)
+              svgElement.setAttribute('height', svgContainer.offsetHeight)
+            })
+          }
+        }).then(canvas => {
+          saveAs(canvas.toDataURL(), 'orgchart.png')
+        })
+      }, 500)
     }
   }
 }

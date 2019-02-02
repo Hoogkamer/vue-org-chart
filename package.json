@@ -15,6 +15,8 @@
     "generate:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES nuxt generate"
   },
   "dependencies": {
+    "array-from-polyfill": "^1.0.1",
+    "eventsource": "^1.0.7",
     "file-saver": "^2.0.0",
     "html2canvas": "^1.0.0-alpha.12",
     "nuxt": "^2.0.0",

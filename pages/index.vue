@@ -29,5 +29,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+*:focus {
+  outline: 0;
+}
+body {
+  background-color: white;
+}
 </style>

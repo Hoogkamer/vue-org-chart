@@ -20,7 +20,8 @@ import ViewMenu from '~/components/ViewMenu.vue'
 var VueScrollTo = require('vue-scrollto')
 var panzoom = require('panzoom')
 
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+
 export default {
   components: { ShowDept, DrawLines, EditMenu, ViewMenu },
   data: function() {
@@ -64,28 +65,18 @@ export default {
     activeDepartment: function(val) {
       var that = this
       setTimeout(x => {
-        VueScrollTo.scrollTo('#ID_' + val.id, 500, that.scrollOptions)
+        //VueScrollTo.scrollTo('#ID_' + val.id, 500, that.scrollOptions)
       }, 500)
     }
   },
   mounted: function() {
-    /*
-    var area = document.querySelector('#chart')
-    var instance = panzoom(area)
-
-    instance.on('panend', function(e) {
-      console.log('Fired when pan ended', e)
-      var chartpos = document.getElementById('chart').getBoundingClientRect()
-      console.log(chartpos)
-      var chartpos1 = document.getElementById('ID_1').getBoundingClientRect()
-      console.log(chartpos1)
-    })
-  */
+    this.initZoom()
     setTimeout(x => {
       this.$store.commit('addLine')
     }, 500)
   },
   methods: {
+    ...mapActions(['initZoom']),
     onMouseMove(e) {
       var chartpos = document.getElementById('chart').getBoundingClientRect()
 
@@ -104,9 +95,12 @@ export default {
   display: inline-block;
   text-align: center;
   box-sizing: border-box;
-  min-width: calc(100% - 300px);
+  min-width: 500px;
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+  box-shadow: 0px 0px 25px 3px lightgrey;
+
+  background-color: white;
 }
 .chart-container {
   margin: auto;
