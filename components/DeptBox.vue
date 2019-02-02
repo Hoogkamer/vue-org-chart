@@ -11,6 +11,8 @@
               .name2(v-html="departmentData.name")
             i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
+            i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="view options") visibility
+            i.material-icons.hidden_parents1(v-if="hiddenParents") more_vert
             div.hidden_dept(v-if='hiddenDept' title='Nr of subdepartments') {{departmentData.children.length}}
         template(v-else)
           .department.manager_photo(:id="'ID_'+ departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
@@ -264,11 +266,15 @@ export default {
   padding: 0px 2px;
   border-radius: 4px;
 }
-.hidden_parents {
+.hidden_parents,
+.hidden_parents1 {
   position: absolute;
   top: -24px;
   left: 78px;
   font-size: 24px;
   color: grey;
+}
+.hidden_parents1 {
+  left: 50px;
 }
 </style>
