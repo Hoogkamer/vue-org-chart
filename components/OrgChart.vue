@@ -18,6 +18,7 @@ import EditMenu from '~/components/EditMenu.vue'
 import ViewMenu from '~/components/ViewMenu.vue'
 
 var VueScrollTo = require('vue-scrollto')
+var panzoom = require('panzoom')
 
 import { mapState } from 'vuex'
 export default {
@@ -68,6 +69,18 @@ export default {
     }
   },
   mounted: function() {
+    /*
+    var area = document.querySelector('#chart')
+    var instance = panzoom(area)
+
+    instance.on('panend', function(e) {
+      console.log('Fired when pan ended', e)
+      var chartpos = document.getElementById('chart').getBoundingClientRect()
+      console.log(chartpos)
+      var chartpos1 = document.getElementById('ID_1').getBoundingClientRect()
+      console.log(chartpos1)
+    })
+  */
     setTimeout(x => {
       this.$store.commit('addLine')
     }, 500)
@@ -92,6 +105,8 @@ export default {
   text-align: center;
   box-sizing: border-box;
   min-width: calc(100% - 300px);
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
 }
 .chart-container {
   margin: auto;

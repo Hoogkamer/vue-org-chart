@@ -44,7 +44,7 @@ export const actions = {
     commit('setPeople', INPUT_DATA.people)
     commit('setAssignments', INPUT_DATA.assignments)
     var that = this
-    window.onresize = function(event) {
+    window.onresize = function (event) {
       commit('removeLines')
       setTimeout(x => {
         commit('addLine')
@@ -56,6 +56,8 @@ export const actions = {
         commit('setActiveDepartment', null)
       }
     })
+
+
   },
   setShowDepartment({ commit, state }, dept) {
     commit('setActiveDepartment', null)
@@ -74,9 +76,11 @@ export const actions = {
   },
   showChildren({ commit, state }, dept) {
     commit('removeLines')
+    commit('setActiveDepartment', null)
     commit('showChildren', dept)
     setTimeout(x => {
       commit('addLine')
+      commit('setActiveDepartment', dept)
     }, 500)
   },
   hideChildren({ commit, state }, dept) {
@@ -143,10 +147,14 @@ export const actions = {
     }, 500)
   },
   setHideParents({ commit, state }, value) {
+
     commit('removeLines')
     commit('setHideParents', value)
     setTimeout(x => {
       commit('addLine')
+      var adev = state.activeDepartment;
+      commit('setActiveDepartment', null)
+      commit('setActiveDepartment', adev)
     }, 500)
   }
 }
@@ -210,7 +218,7 @@ export const mutations = {
     //state.orgArray.splice(index, 1, dept)
   },
   setActiveDepartment(state, dept) {
-    if (state.chart.parent && !findDept(state.chart, dept)) {
+    if (state.chart.parent && dept && !findDept(state.chart, dept)) {
       state.chart = state.orgArray.find(e => !e.parent)
     }
     state.activeDepartment = dept
@@ -434,7 +442,7 @@ function getPosOfElement(dept) {
   }
   pos.element.x = pos.element.left - chartpos.left
   pos.element.y = pos.element.top - chartpos.top
-
+  console.log(chartpos)
   return pos
 }
 

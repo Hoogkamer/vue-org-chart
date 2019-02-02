@@ -13,7 +13,7 @@
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
             i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="view options") visibility
             i.material-icons.hidden_parents1(v-if="hiddenParents") more_vert
-            div.hidden_dept(v-if='hiddenDept' title='Nr of subdepartments') {{departmentData.children.length}}
+            div.hidden_dept(v-if='departmentData.children.length' title='Nr of subdepartments') {{departmentData.children.length}}
         template(v-else)
           .department.manager_photo(:id="'ID_'+ departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
             .level_indicator(:style="{backgroundColor:config.levelColors[level-1]||'#FFFFFF'}")
@@ -29,7 +29,7 @@
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
             i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="view options") visibility
             i.material-icons.hidden_parents(v-if="hiddenParents") more_vert
-            div.hidden_dept(v-if='hiddenDept' title='Nr of subdepartments') {{departmentData.children.length}}
+            div.hidden_dept(v-if='departmentData.children.length' title='Nr of subdepartments') {{departmentData.children.length}}
       template(v-if="!departmentData")
           .department.invisible(v-if='!managerPhotoView' :class="[type]")
           .department.manager_photo.invisible(v-else :class="[type]")
