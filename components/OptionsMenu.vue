@@ -16,7 +16,7 @@
             li
                 input(type="checkbox" id="checkbox4" v-model="managerPhotoView")
                 label(for="checkbox4") Show manager photo
-            li
+            li(v-if="false")
                 input(type="checkbox" id="checkbox5" v-model="onlyShowParents")
                 label(for="checkbox5") Only parent hierarchy
             li(v-if="false")

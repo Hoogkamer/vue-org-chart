@@ -15,13 +15,14 @@ export default {
     return { searchField: '' }
   },
   computed: {
-    ...mapState(['chart', 'editMode']),
+    ...mapState(['chart', 'editMode', 'orgArray']),
     searchresults: function() {
       var res
       if (this.searchField.length < 2) {
         res = [{ name: 'Type at least 2 characters' }]
       } else {
-        res = this.searchDept(this.chart, this.searchField, [])
+        //res = this.searchDept(this.chart, this.searchField, [])
+        res = this.searchDept(this.searchField)
         if (!res.length) {
           res = [{ name: 'No matches' }]
         }
@@ -43,7 +44,29 @@ export default {
       this.searchField = ''
       this.setShowDepartment(dept)
     },
-    searchDept: function(dept, search, matches) {
+
+    searchDept: function(search) {
+      var result = []
+      this.orgArray.forEach(e => {
+        if (e.manager.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+          result.push({
+            dept: e,
+            name: e.manager.name,
+            context: 'Manager of:' + e.name
+          })
+        }
+        if (e.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+          result.push({
+            dept: e,
+            name: e.name,
+            context: e.parent ? e.parent.name : ''
+          })
+        }
+      })
+      return result
+    },
+
+    searchDept1: function(dept, search, matches) {
       if (dept.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
         matches.push({
           dept: dept,

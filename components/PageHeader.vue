@@ -25,9 +25,7 @@ export default {
   },
   methods: {
     capture: function() {
-      var x = document.querySelector('#ID_1').parentElement.parentElement
-        .parentElement.parentElement.parentElement
-      x = document.querySelector('#chart')
+      var x = document.querySelector('#chart')
       var svgContainer = document.querySelector('#chart')
       console.log(svgContainer)
       html2canvas(x, {

@@ -4,6 +4,7 @@
         show-dept(v-if="chart" :parent="chart" :level=1)
         draw-lines(v-if="chart")
         edit-menu(v-if="showEditMenu")
+        view-menu(v-if="showViewMenu")
         #move_dept(v-if="moveDepartment" :style="{ left: page.left + 'px', top: page.top + 'px' }")
           div {{moveDepartment.name}}
           i.material-icons.arrow.down(v-if='moveDepartment.children.length') arrow_drop_down
@@ -14,12 +15,13 @@ import { createTree } from '~/plugins/HelpFunctions.js'
 import ShowDept from '~/components/ShowDept.vue'
 import DrawLines from '~/components/DrawLines.vue'
 import EditMenu from '~/components/EditMenu.vue'
+import ViewMenu from '~/components/ViewMenu.vue'
 
 var VueScrollTo = require('vue-scrollto')
 
 import { mapState } from 'vuex'
 export default {
-  components: { ShowDept, DrawLines, EditMenu },
+  components: { ShowDept, DrawLines, EditMenu, ViewMenu },
   data: function() {
     return {
       tree: null,
@@ -50,6 +52,7 @@ export default {
       'chart',
       'options',
       'showEditMenu',
+      'showViewMenu',
       'moveDepartment',
       'columnView',
       'columnView_noStaff',

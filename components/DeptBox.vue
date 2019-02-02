@@ -25,7 +25,8 @@
                     .name_manager(v-if="managerNameView") {{departmentData.manager.name}}
             i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
-            i.material-icons.hide_siblings(v-if="displaySiblingIcon" v-on:click="hideSiblings()" title="hide/show siblings") visibility
+            i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="view options") visibility
+            i.material-icons.hidden_parents(v-if="hiddenParents") more_vert
             div.hidden_dept(v-if='hiddenDept' title='Nr of subdepartments') {{departmentData.children.length}}
       template(v-if="!departmentData")
           .department.invisible(v-if='!managerPhotoView' :class="[type]")
@@ -67,12 +68,16 @@ export default {
       'activeDepartment',
       'editMode',
       'moveDepartment',
-      'config'
+      'config',
+      'chart'
     ]),
     active: function() {
       return this.departmentData === this.activeDepartment
         ? 'active_department'
         : ''
+    },
+    hiddenParents: function() {
+      return this.departmentData === this.chart && this.chart.parent
     }
   },
   methods: {
@@ -102,6 +107,14 @@ export default {
         if (this.editMode) {
           this.$store.commit('showEditMenu', event)
         }
+      })
+    },
+    showViewMenu(department, event) {
+      this.$store.commit('setActiveDepartment', department)
+      this.$store.commit('showViewMenu', null)
+
+      this.$nextTick(e => {
+        this.$store.commit('showViewMenu', event)
       })
     },
     mouseOverBox(value) {
@@ -152,7 +165,7 @@ export default {
 .up {
   cursor: zoom-out;
 }
-.hide_siblings {
+.view_button {
   font-size: 24px;
   position: absolute;
   top: 0px;
@@ -250,5 +263,12 @@ export default {
   font-size: 12px;
   padding: 0px 2px;
   border-radius: 4px;
+}
+.hidden_parents {
+  position: absolute;
+  top: -24px;
+  left: 78px;
+  font-size: 24px;
+  color: grey;
 }
 </style>

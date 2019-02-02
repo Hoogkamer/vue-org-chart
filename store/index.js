@@ -14,6 +14,7 @@ export const state = () => ({
   moveDepartment: null,
   editMode: false,
   showEditMenu: null,
+  showViewMenu: null,
   selectedPerson: null,
   onlyShowParents: false
 })
@@ -32,6 +33,8 @@ export const actions = {
         description: dept.description,
         manager: manager ? manager : { name: '' },
         showChildren: false,
+        showParents: true,
+        onlyParents: false,
         parent: null,
         children: null,
         onlyShowThisChild: null
@@ -133,7 +136,18 @@ export const actions = {
     }, 500)
   },
   setOnlyShowParents({ commit, state }, value) {
+    commit('removeLines')
     commit('setOnlyShowParents', value)
+    setTimeout(x => {
+      commit('addLine')
+    }, 500)
+  },
+  setHideParents({ commit, state }, value) {
+    commit('removeLines')
+    commit('setHideParents', value)
+    setTimeout(x => {
+      commit('addLine')
+    }, 500)
   }
 }
 
@@ -182,6 +196,10 @@ export const mutations = {
   showEditMenu(state, event) {
     state.showEditMenu = event
   },
+  showViewMenu(state, event) {
+    console.log(event)
+    state.showViewMenu = event
+  },
   showChildren(state, dept) {
     //var index = state.orgArray.findIndex(e => e.id === dept.id)
 
@@ -192,12 +210,17 @@ export const mutations = {
     //state.orgArray.splice(index, 1, dept)
   },
   setActiveDepartment(state, dept) {
+    if (state.chart.parent && !findDept(state.chart, dept)) {
+      state.chart = state.orgArray.find(e => !e.parent)
+    }
     state.activeDepartment = dept
   },
   setShowDepartment(state, dept) {
     var p = dept.parent
     if (p && state.onlyShowParents) {
       p.onlyShowThisChild = dept
+    } else if (p) {
+      p.onlyShowThisChild = null
     }
     dept.onlyShowThisChild = null
     while (p) {
@@ -205,6 +228,8 @@ export const mutations = {
 
       if (state.onlyShowParents && p.parent) {
         p.parent.onlyShowThisChild = p
+      } else if (p.parent) {
+        p.parent.onlyShowThisChild = null
       }
       p = p.parent
     }
@@ -318,6 +343,7 @@ export const mutations = {
   cancelAll(state) {
     state.showEditMenu = null
     state.moveDepartment = null
+    state.showViewMenu = null
   },
   setHideSiblings(state, dept) {
     if (!dept.parent.onlyShowThisChild) {
@@ -328,6 +354,15 @@ export const mutations = {
   },
   setOnlyShowParents(state, val) {
     state.onlyShowParents = val
+    console.log(state.activeDepartment)
+  },
+  setHideParents(state, val) {
+    state.activeDepartment.showParents = !val
+    if (val) {
+      state.chart = state.activeDepartment
+    } else {
+      state.chart = state.orgArray.find(e => !e.parent)
+    }
   }
 }
 
@@ -431,7 +466,6 @@ function findDept(chart, dept) {
     }
     return fnd
   }
-  return null
 }
 function guid() {
   function s4() {
