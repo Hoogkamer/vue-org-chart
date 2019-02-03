@@ -93,6 +93,7 @@ export default {
   /*box-shadow: 0px 0px 25px 3px lightgrey;*/
 
   background-color: white;
+  cursor: grab;
 }
 .chart-container {
   margin: auto;

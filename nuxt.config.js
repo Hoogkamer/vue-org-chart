@@ -42,6 +42,11 @@ module.exports = {
   */
   loading: { color: '#fff' },
 
+  loadingIndicator: {
+    name: 'circle',
+    color: '#05668d',
+    background: 'white'
+  },
   /*
   ** Global CSS
   */
