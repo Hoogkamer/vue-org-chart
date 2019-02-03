@@ -17,9 +17,6 @@ import DrawLines from '~/components/DrawLines.vue'
 import EditMenu from '~/components/EditMenu.vue'
 import ViewMenu from '~/components/ViewMenu.vue'
 
-var VueScrollTo = require('vue-scrollto')
-var panzoom = require('panzoom')
-
 import { mapState, mapActions } from 'vuex'
 
 export default {
@@ -62,12 +59,7 @@ export default {
     ])
   },
   watch: {
-    activeDepartment: function(val) {
-      var that = this
-      setTimeout(x => {
-        //VueScrollTo.scrollTo('#ID_' + val.id, 500, that.scrollOptions)
-      }, 500)
-    }
+    activeDepartment: function(val) {}
   },
   mounted: function() {
     this.initZoom()
@@ -98,7 +90,7 @@ export default {
   min-width: 500px;
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
-  box-shadow: 0px 0px 25px 3px lightgrey;
+  /*box-shadow: 0px 0px 25px 3px lightgrey;*/
 
   background-color: white;
 }

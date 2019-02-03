@@ -35,5 +35,6 @@ export default {
 }
 body {
   background-color: white;
+  overflow: hidden;
 }
 </style>

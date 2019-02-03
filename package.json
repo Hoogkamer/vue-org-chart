@@ -25,7 +25,6 @@
     "pug": "^2.0.3",
     "pug-plain-loader": "^1.0.0",
     "vue-async-computed": "^3.5.2",
-    "vue-scrollto": "^2.13.0",
     "xlsx": "^0.14.1"
   },
   "devDependencies": {

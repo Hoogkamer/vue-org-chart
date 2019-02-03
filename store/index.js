@@ -1,7 +1,6 @@
 var panzoom = require('panzoom')
 import 'array-from-polyfill'
 
-
 export const state = () => ({
   config: CONFIG,
   chart: null,
@@ -49,7 +48,7 @@ export const actions = {
     commit('setPeople', INPUT_DATA.people)
     commit('setAssignments', INPUT_DATA.assignments)
     var that = this
-    window.onresize = function (event) {
+    window.onresize = function(event) {
       commit('removeLines')
       setTimeout(x => {
         commit('addLine')
@@ -61,29 +60,31 @@ export const actions = {
         commit('setActiveDepartment', null)
       }
     })
-
   },
-  initZoom({ commit, state }) {
+  initZoom({ commit, state }, pos) {
     var area = document.querySelector('#chart')
     console.log(area)
+    if (!pos) {
+      pos = { x: 0, y: 0 }
+    }
+    console.log(pos)
 
-    if (state.zoomInstance)
-      state.zoomInstance.dispose()
+    if (state.zoomInstance) state.zoomInstance.dispose()
 
     var instance = panzoom(area, {
       smoothScroll: false,
       maxZoom: 1,
       minZoom: 1
     })
-    instance.zoomAbs(
-      300, // initial x position
-      10, // initial y position
-      1 // initial zoom
-    )
+    //instance.zoomAbs(
+    //  pos.x, // initial x position
+    //  pos.y, // initial y position
+    //  1 // initial zoom
+    //)
+    instance.moveTo(pos.x, pos.y)
 
-
-    instance.on('panend', function (e) {
-      // console.log('Fired when pan ended', e)
+    instance.on('panend', function(e) {
+      console.log('Fired when pan ended', e)
       // var chartpos = document.getElementById('chart').getBoundingClientRect()
       // console.log(chartpos)
       // var chartpos1 = document.getElementById('ID_1').getBoundingClientRect()
@@ -92,12 +93,15 @@ export const actions = {
     commit('setZoomInstance', instance)
     //instance.moveTo(600, 100)
   },
-  setShowDepartment({ commit, state }, dept) {
+  setShowDepartment({ commit, state, dispatch }, dept) {
     commit('setActiveDepartment', null)
     commit('removeLines')
     commit('setShowDepartment', dept)
     setTimeout(x => {
       commit('addLine')
+      var visible = departmentIsVisible(dept)
+      console.log('is visible', visible)
+      dispatch('initZoom', visible.moveTo)
     }, 500)
   },
   updateActiveDepartmentIsStaff({ commit, state }, dept) {
@@ -180,12 +184,11 @@ export const actions = {
     }, 500)
   },
   setHideParents({ commit, state }, value) {
-
     commit('removeLines')
     commit('setHideParents', value)
     setTimeout(x => {
       commit('addLine')
-      var adev = state.activeDepartment;
+      var adev = state.activeDepartment
       commit('setActiveDepartment', null)
       commit('setActiveDepartment', adev)
     }, 500)
@@ -538,4 +541,26 @@ function guid() {
     s4() +
     s4()
   )
+}
+function departmentIsVisible(dept) {
+  var el = document.getElementById('ID_' + dept.id)
+  var pr = document.getElementById('chart')
+  var elb = el.getBoundingClientRect()
+  var prb = pr.getBoundingClientRect()
+  var windim = { w: window.innerWidth - 300, h: window.innerHeight - 100 }
+  var relpos = {
+    y: prb.top - elb.top + 0.5 * windim.h,
+    x: prb.left - elb.left + 0.5 * windim.w
+  }
+  relpos.y = relpos.y > 0 ? 0 : relpos.y
+
+  console.log(elb, prb, relpos, windim)
+  var isVissible = !(
+    elb.bottom < 0 ||
+    elb.right < 300 ||
+    elb.left > window.innerWidth ||
+    elb.top > window.innerHeight
+  )
+
+  return { isVissible: isVissible, moveTo: relpos }
 }
