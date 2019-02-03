@@ -48,7 +48,7 @@ export const actions = {
     commit('setPeople', INPUT_DATA.people)
     commit('setAssignments', INPUT_DATA.assignments)
     var that = this
-    window.onresize = function(event) {
+    window.onresize = function (event) {
       commit('removeLines')
       setTimeout(x => {
         commit('addLine')
@@ -83,7 +83,7 @@ export const actions = {
     //)
     instance.moveTo(pos.x, pos.y)
 
-    instance.on('panend', function(e) {
+    instance.on('panend', function (e) {
       console.log('Fired when pan ended', e)
       // var chartpos = document.getElementById('chart').getBoundingClientRect()
       // console.log(chartpos)
@@ -148,49 +148,58 @@ export const actions = {
       commit('addLine')
     }, 500)
   },
-  setManagerPhotoView({ commit, state }, value) {
+  setManagerPhotoView({ commit, state, dispatch }, value) {
     commit('removeLines')
     commit('setManagerPhotoView', value)
     setTimeout(x => {
       commit('addLine')
+      var visible = departmentIsVisible(state.activeDepartment)
+      dispatch('initZoom', visible.moveTo)
     }, 500)
   },
-  setColumnView_noStaff({ commit, state }, value) {
+  setColumnView_noStaff({ commit, state, dispatch }, value) {
     commit('removeLines')
     commit('setColumnView_noStaff', value)
     setTimeout(x => {
       commit('addLine')
+      var visible = departmentIsVisible(state.activeDepartment)
+      dispatch('initZoom', visible.moveTo)
     }, 500)
   },
-  setColumnView({ commit, state }, value) {
+  setColumnView({ commit, state, dispatch }, value) {
     commit('removeLines')
     commit('setColumnView', value)
     setTimeout(x => {
       commit('addLine')
+      var visible = departmentIsVisible(state.activeDepartment)
+      dispatch('initZoom', visible.moveTo)
     }, 500)
   },
-  setHideSiblings({ commit, state }, dept) {
+  setHideSiblings({ commit, state, dispatch }, dept) {
     commit('removeLines')
     commit('setHideSiblings', dept)
     setTimeout(x => {
       commit('addLine')
+      var visible = departmentIsVisible(state.activeDepartment)
+      dispatch('initZoom', visible.moveTo)
     }, 500)
   },
-  setOnlyShowParents({ commit, state }, value) {
+  setOnlyShowParents({ commit, state, dispatch }, value) {
     commit('removeLines')
     commit('setOnlyShowParents', value)
     setTimeout(x => {
       commit('addLine')
+      var visible = departmentIsVisible(state.activeDepartment)
+      dispatch('initZoom', visible.moveTo)
     }, 500)
   },
-  setHideParents({ commit, state }, value) {
+  setHideParents({ commit, state, dispatch }, value) {
     commit('removeLines')
     commit('setHideParents', value)
     setTimeout(x => {
       commit('addLine')
-      var adev = state.activeDepartment
-      commit('setActiveDepartment', null)
-      commit('setActiveDepartment', adev)
+      var visible = departmentIsVisible(state.activeDepartment)
+      dispatch('initZoom', visible.moveTo)
     }, 500)
   }
 }
