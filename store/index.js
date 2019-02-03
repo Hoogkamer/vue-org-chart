@@ -556,10 +556,10 @@ function departmentIsVisible(dept) {
   var pr = document.getElementById('chart')
   var elb = el.getBoundingClientRect()
   var prb = pr.getBoundingClientRect()
-  var windim = { w: window.innerWidth - 300, h: window.innerHeight - 100 }
+  var windim = { w: window.innerWidth, h: window.innerHeight - 100 }
   var relpos = {
     y: prb.top - elb.top + 0.5 * windim.h,
-    x: prb.left - elb.left + 0.5 * windim.w
+    x: prb.left - elb.left + 0.5 * windim.w - 300
   }
   relpos.y = relpos.y > 0 ? 0 : relpos.y
 
