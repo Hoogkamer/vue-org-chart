@@ -1,5 +1,7 @@
 var panzoom = require('panzoom')
 import 'array-from-polyfill'
+import 'core-js/es6/map'
+import 'core-js/es6/set'
 
 export const state = () => ({
   config: CONFIG,
@@ -48,7 +50,7 @@ export const actions = {
     commit('setPeople', INPUT_DATA.people)
     commit('setAssignments', INPUT_DATA.assignments)
     var that = this
-    window.onresize = function(event) {
+    window.onresize = function (event) {
       commit('removeLines')
       setTimeout(x => {
         commit('addLine')
@@ -83,7 +85,7 @@ export const actions = {
     //)
     instance.moveTo(pos.x, pos.y)
 
-    instance.on('panend', function(e) {
+    instance.on('panend', function (e) {
       console.log('Fired when pan ended', e)
       // var chartpos = document.getElementById('chart').getBoundingClientRect()
       // console.log(chartpos)
