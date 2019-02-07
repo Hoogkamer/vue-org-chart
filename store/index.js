@@ -50,7 +50,7 @@ export const actions = {
     commit('setPeople', INPUT_DATA.people)
     commit('setAssignments', INPUT_DATA.assignments)
     var that = this
-    window.onresize = function (event) {
+    window.onresize = function(event) {
       commit('removeLines')
       setTimeout(x => {
         commit('addLine')
@@ -63,30 +63,35 @@ export const actions = {
       }
     })
   },
-  initZoom({ commit, state }, pos) {
+  initZoom({ commit, state }, dept) {
     var area = document.querySelector('#chart')
-    console.log(area)
-    if (!pos) {
-      pos = { x: 0, y: 0 }
-    }
-    console.log(pos)
-
     if (state.zoomInstance) state.zoomInstance.dispose()
-
     var instance = panzoom(area, {
       smoothScroll: false,
-      maxZoom: 1,
-      minZoom: 1
+      maxZoom: 2,
+      minZoom: 0.2
     })
-    //instance.zoomAbs(
-    //  pos.x, // initial x position
-    //  pos.y, // initial y position
-    //  1 // initial zoom
-    //)
-    instance.moveTo(pos.x, pos.y)
+    //instance.moveTo(0, 0)
+    setTimeout(x => {
+      var pos
+      if (dept) {
+        pos = departmentIsVisible(dept).moveTo
+        console.log(pos)
+      } else {
+        pos = { x: 0, y: 0 }
+      }
 
-    instance.on('panend', function (e) {
+      instance.moveTo(pos.x, pos.y)
+    }, 500)
+
+    //instance.zoomAbs(pos.x * scale, pos.y * scale, scalex)
+
+    instance.on('panend', function(e) {
       console.log('Fired when pan ended', e)
+      var x = document.getElementById('chart')
+      console.log('transform', x.style.transform)
+      var scaleX = x.getBoundingClientRect().width / x.offsetWidth
+      console.log(scaleX)
       // var chartpos = document.getElementById('chart').getBoundingClientRect()
       // console.log(chartpos)
       // var chartpos1 = document.getElementById('ID_1').getBoundingClientRect()
@@ -101,9 +106,7 @@ export const actions = {
     commit('setShowDepartment', dept)
     setTimeout(x => {
       commit('addLine')
-      var visible = departmentIsVisible(dept)
-      console.log('is visible', visible)
-      dispatch('initZoom', visible.moveTo)
+      dispatch('initZoom', dept)
     }, 500)
   },
   updateActiveDepartmentIsStaff({ commit, state }, dept) {
@@ -155,8 +158,8 @@ export const actions = {
     commit('setManagerPhotoView', value)
     setTimeout(x => {
       commit('addLine')
-      var visible = departmentIsVisible(state.activeDepartment)
-      dispatch('initZoom', visible.moveTo)
+
+      dispatch('initZoom', state.activeDepartment)
     }, 500)
   },
   setColumnView_noStaff({ commit, state, dispatch }, value) {
@@ -164,8 +167,7 @@ export const actions = {
     commit('setColumnView_noStaff', value)
     setTimeout(x => {
       commit('addLine')
-      var visible = departmentIsVisible(state.activeDepartment)
-      dispatch('initZoom', visible.moveTo)
+      dispatch('initZoom', state.activeDepartment)
     }, 500)
   },
   setColumnView({ commit, state, dispatch }, value) {
@@ -173,8 +175,7 @@ export const actions = {
     commit('setColumnView', value)
     setTimeout(x => {
       commit('addLine')
-      var visible = departmentIsVisible(state.activeDepartment)
-      dispatch('initZoom', visible.moveTo)
+      dispatch('initZoom', state.activeDepartment)
     }, 500)
   },
   setHideSiblings({ commit, state, dispatch }, dept) {
@@ -182,8 +183,7 @@ export const actions = {
     commit('setHideSiblings', dept)
     setTimeout(x => {
       commit('addLine')
-      var visible = departmentIsVisible(state.activeDepartment)
-      dispatch('initZoom', visible.moveTo)
+      dispatch('initZoom', state.activeDepartment)
     }, 500)
   },
   setOnlyShowParents({ commit, state, dispatch }, value) {
@@ -191,8 +191,7 @@ export const actions = {
     commit('setOnlyShowParents', value)
     setTimeout(x => {
       commit('addLine')
-      var visible = departmentIsVisible(state.activeDepartment)
-      dispatch('initZoom', visible.moveTo)
+      dispatch('initZoom', state.activeDepartment)
     }, 500)
   },
   setHideParents({ commit, state, dispatch }, value) {
@@ -200,8 +199,7 @@ export const actions = {
     commit('setHideParents', value)
     setTimeout(x => {
       commit('addLine')
-      var visible = departmentIsVisible(state.activeDepartment)
-      dispatch('initZoom', visible.moveTo)
+      dispatch('initZoom', state.activeDepartment)
     }, 500)
   }
 }
@@ -436,6 +434,7 @@ function updateLines(dept, lines) {
   var xparent = document.getElementById('chart')
   svg.style.width = xparent.offsetWidth + 'px'
   svg.style.height = xparent.offsetHeight + 'px'
+
   var line
   if (dept.showChildren) {
     dept.children.forEach(child => {
@@ -453,28 +452,31 @@ function getLine(dept) {
   var pos = getPosOfElement(dept)
   if (!pos.parent) return null
   var d
+  var x = document.getElementById('chart')
+  var scale = 1 / (x.getBoundingClientRect().width / x.offsetWidth)
+
   if (dept.isStaff) {
     d =
       'M' +
-      Math.round(pos.parent.x + pos.parent.width / 2) +
+      Math.round(pos.parent.x + pos.parent.width / 2) * scale +
       ' ' +
-      Math.round(pos.parent.y + pos.parent.height) +
+      Math.round(pos.parent.y + pos.parent.height) * scale +
       ' v' +
-      Math.round(pos.element.y - pos.parent.y - pos.parent.height / 2) +
+      Math.round(pos.element.y - pos.parent.y - pos.parent.height / 2) * scale +
       ' H' +
-      Math.round(pos.element.x + pos.parent.width)
+      Math.round(pos.element.x + pos.parent.width) * scale
   } else {
     d =
       'M' +
-      Math.round(pos.parent.x + pos.parent.width / 2) +
+      Math.round(pos.parent.x + pos.parent.width / 2) * scale +
       ' ' +
-      Math.round(pos.parent.y + pos.parent.height) +
+      Math.round(pos.parent.y + pos.parent.height) * scale +
       ' V' +
-      Math.round(pos.element.y - 10) +
+      Math.round(pos.element.y * scale - 10) +
       ' H' +
-      Math.round(pos.element.x + pos.parent.width / 2) +
+      Math.round(pos.element.x + pos.parent.width / 2) * scale +
       ' V' +
-      Math.round(pos.element.y)
+      Math.round(pos.element.y) * scale
   }
 
   return { d: d }
@@ -493,6 +495,7 @@ function getPosOfElement(dept) {
     element: document.getElementById('ID_' + dept.id).getBoundingClientRect()
   }
   var chartpos = document.getElementById('chart').getBoundingClientRect()
+
   if (pos.parent) {
     pos.parent.x = pos.parent.left - chartpos.left
     pos.parent.y = pos.parent.top - chartpos.top
