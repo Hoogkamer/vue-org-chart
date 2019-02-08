@@ -23,15 +23,20 @@ export default {
       if (!this.activeDepartment) {
         return null
       }
-      var type
+      var parents
       if (!this.activeDepartment.showParents) {
-        type = 'hideParents'
+        parents = 'hide'
       } else if (this.onlyShowParents) {
-        type = 'onlyParents'
+        parents = 'only'
       } else {
-        type = 'all'
+        parents = 'all'
       }
-      return { dept: this.activeDepartment.id, type: type }
+      var children = this.activeDepartment.showChildren ? 'show' : 'hide'
+      return {
+        dept: this.activeDepartment.id,
+        parents: parents,
+        children: children
+      }
     }
   },
   watch: {
@@ -48,22 +53,24 @@ export default {
       'initStore',
       'setActiveDepartmentById',
       'setHideParents',
-      'setOnlyShowParents'
+      'setOnlyShowParents',
+      'showChildren'
     ]),
     setUrl: function(qry) {
       this.$router.push({ path: this.$route.path, query: qry })
     },
     getUrl: function(qry) {
       if (qry && qry.dept) {
-        if (qry.type == 'hideParents') {
-          this.setActiveDepartmentById(qry.dept)
+        this.setActiveDepartmentById(qry.dept)
+        if (qry.parents == 'hide') {
           this.setHideParents(true)
-        } else if (qry.type == 'onlyParents') {
+        } else if (qry.parents == 'only') {
           this.setOnlyShowParents(true)
           this.setActiveDepartmentById(qry.dept)
-        } else {
-          this.setActiveDepartmentById(qry.dept)
         }
+      }
+      if (this.activeDepartment && qry.children == 'show') {
+        this.showChildren(this.activeDepartment)
       }
       if (!this.activeDepartment) {
         this.$router.push({ path: this.$route.path, query: null })

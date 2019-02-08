@@ -8,6 +8,9 @@
   .menu
     file-menu(v-if='editMode')
     options-menu
+    .home1
+      a(href="/")
+        i.material-icons.home(v-on:click="capture" title='Home') home
     .screenshot1(v-if='config.enableScreenCapture')
       i.material-icons.screenshot(v-on:click="capture" title='Save as image') photo_camera
 </template>
@@ -92,16 +95,28 @@ function saveAs(uri, filename) {
   top: 10px;
   left: 70px;
 }
-.screenshot {
+.screenshot,
+.home {
   cursor: pointer;
 }
-.screenshot:hover {
+.home1 a {
+  color: white;
+}
+.home1 {
+  display: inline-block;
+  box-sizing: content-box;
+  position: absolute;
+  top: 10px;
+  left: -50px;
+}
+.screenshot:hover,
+.home:hover {
   border: 1px solid white;
 }
 .menu {
   position: absolute;
   top: 5px;
-  left: 40px;
+  left: 60px;
   font-size: 16px;
   width: 200px;
   text-align: left;
