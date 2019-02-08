@@ -12,7 +12,7 @@
             i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
             i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="view options") visibility
-            i.material-icons.hidden_parents1(v-if="hiddenParents") more_vert
+            i.material-icons.hidden_parents1(v-if="hiddenParents" v-on:click="setHideParents(false)") more_vert
             div.hidden_dept(v-if='departmentData.children.length' title='Nr of subdepartments') {{departmentData.children.length}}
         template(v-else)
           .department.manager_photo(:id="'ID_'+ departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
@@ -28,7 +28,7 @@
             i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
             i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
             i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="view options") visibility
-            i.material-icons.hidden_parents(v-if="hiddenParents") more_vert
+            i.material-icons.hidden_parents(v-if="hiddenParents" v-on:click="setHideParents(false)") more_vert
             div.hidden_dept(v-if='departmentData.children.length' title='Nr of subdepartments') {{departmentData.children.length}}
       template(v-if="!departmentData")
           .department.invisible(v-if='!managerPhotoView' :class="[type]")
@@ -83,7 +83,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['showChildren', 'hideChildren', 'setHideSiblings']),
+    ...mapActions([
+      'showChildren',
+      'hideChildren',
+      'setHideSiblings',
+      'setHideParents'
+    ]),
+
     doShowChildren(down) {
       var department =
         this.departmentData.parent &&
