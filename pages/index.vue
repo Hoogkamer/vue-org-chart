@@ -18,13 +18,57 @@ export default {
     SideScreen
   },
   computed: {
-    ...mapState(['chart'])
+    ...mapState(['chart', 'activeDepartment', 'onlyShowParents']),
+    urlParam: function() {
+      if (!this.activeDepartment) {
+        return null
+      }
+      var type
+      if (!this.activeDepartment.showParents) {
+        type = 'hideParents'
+      } else if (this.onlyShowParents) {
+        type = 'onlyParents'
+      } else {
+        type = 'all'
+      }
+      return { dept: this.activeDepartment.id, type: type }
+    }
+  },
+  watch: {
+    urlParam(qry) {
+      this.setUrl(qry)
+    }
   },
   mounted: function() {
     this.initStore()
+    this.getUrl(this.$route.query)
   },
   methods: {
-    ...mapActions(['initStore'])
+    ...mapActions([
+      'initStore',
+      'setActiveDepartmentById',
+      'setHideParents',
+      'setOnlyShowParents'
+    ]),
+    setUrl: function(qry) {
+      this.$router.push({ path: this.$route.path, query: qry })
+    },
+    getUrl: function(qry) {
+      if (qry && qry.dept) {
+        if (qry.type == 'hideParents') {
+          this.setActiveDepartmentById(qry.dept)
+          this.setHideParents(true)
+        } else if (qry.type == 'onlyParents') {
+          this.setOnlyShowParents(true)
+          this.setActiveDepartmentById(qry.dept)
+        } else {
+          this.setActiveDepartmentById(qry.dept)
+        }
+      }
+      if (!this.activeDepartment) {
+        this.$router.push({ path: this.$route.path, query: null })
+      }
+    }
   }
 }
 </script>

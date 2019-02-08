@@ -201,6 +201,11 @@ export const actions = {
       commit('addLine')
       dispatch('initZoom', state.activeDepartment)
     }, 500)
+  },
+  setActiveDepartmentById({ commit, state, dispatch }, deptId) {
+    var dept = state.orgArray.find(e => e.id == deptId)
+    if (!dept) dept = null
+    dispatch('setShowDepartment', dept)
   }
 }
 
@@ -268,7 +273,9 @@ export const mutations = {
     }
     state.activeDepartment = dept
   },
+
   setShowDepartment(state, dept) {
+    state.chart = state.orgArray.find(e => !e.parent)
     var p = dept.parent
     if (p && state.onlyShowParents) {
       p.onlyShowThisChild = dept
@@ -407,7 +414,7 @@ export const mutations = {
   },
   setOnlyShowParents(state, val) {
     state.onlyShowParents = val
-    console.log(state.activeDepartment)
+    console.log('ccc', val, state.activeDepartment)
   },
   setHideParents(state, val) {
     state.activeDepartment.showParents = !val
