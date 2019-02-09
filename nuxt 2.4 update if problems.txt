@@ -1,0 +1,9 @@
+rm -rf node_modules package-lock.json
+# you may or may not need to do a full npm cache clean - I did in my case
+npm cache clean --force
+npm install webpack@4.28.4 --save-dev --save-exact
+npm install acorn-dynamic-import@4.0.0 --save-dev
+npm install acorn@6.0.5 --save-dev
+npm i
+npm update acorn --depth 20
+npm dedupe

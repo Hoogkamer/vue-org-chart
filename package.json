@@ -19,7 +19,7 @@
     "eventsource": "^1.0.7",
     "file-saver": "^2.0.0",
     "html2canvas": "^1.0.0-alpha.12",
-    "nuxt": "^2.0.0",
+    "nuxt": "^2.4.3",
     "nuxt-material-design-icons": "^1.0.4",
     "panzoom": "^7.1.2",
     "pug": "^2.0.3",
@@ -28,14 +28,17 @@
     "xlsx": "^0.14.1"
   },
   "devDependencies": {
+    "acorn": "^6.1.0",
+    "acorn-dynamic-import": "^4.0.0",
     "babel-eslint": "^8.2.1",
     "cross-env": "^5.2.0",
-    "eslint": "^5.0.1",
-    "eslint-config-prettier": "^3.1.0",
-    "eslint-loader": "^2.0.0",
+    "eslint": "^5.13.0",
+    "eslint-config-prettier": "^3.6.0",
+    "eslint-loader": "^2.1.2",
     "eslint-plugin-prettier": "2.6.2",
     "eslint-plugin-vue": "^4.0.0",
-    "nodemon": "^1.11.0",
-    "prettier": "1.14.3"
+    "nodemon": "^1.18.10",
+    "prettier": "1.14.3",
+    "webpack": "4.28.4"
   }
 }
