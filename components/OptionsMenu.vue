@@ -1,27 +1,28 @@
 <template lang='pug'>
+  div
     .file(v-on:click='editMenuOpen = !editMenuOpen') 
       i.material-icons.settings(v-on:click="" title='Set options') settings
-      .file_menu(v-if='editMenuOpen')
-          ul
-            li
-                input(type="checkbox" id="checkbox" v-model="columnView")
-                label(for="checkbox") Column view
-            li
-              span &nbsp &nbsp
-              input(type="checkbox" id="checkbox3" v-model="columnView_noStaff")
-              label(for="checkbox3") Exclude staff dept
-            li
-                input(type="checkbox" id="checkbox1" v-model="managerNameView")
-                label(for="checkbox1") Show manager name
-            li
-                input(type="checkbox" id="checkbox4" v-model="managerPhotoView")
-                label(for="checkbox4") Show manager photo
-            li(v-if="false")
-                input(type="checkbox" id="checkbox5" v-model="onlyShowParents")
-                label(for="checkbox5") Only parent hierarchy
-            li(v-if="false")
-                input(type="checkbox" id="checkbox2" v-model="editMode")
-                label(for="checkbox2") Edit Mode
+    .file_menu(v-if='editMenuOpen')
+        ul
+          li
+            input(type="checkbox" id="checkbox" v-model="columnView" )
+            label(for="checkbox") Column view
+          li
+            span &nbsp &nbsp
+            input(type="checkbox" id="checkbox3" v-model="columnView_noStaff")
+            label(for="checkbox3") Exclude staff dept
+          li
+              input(type="checkbox" id="checkbox1" v-model="managerNameView")
+              label(for="checkbox1") Show manager name
+          li
+              input(type="checkbox" id="checkbox4" v-model="managerPhotoView")
+              label(for="checkbox4") Show manager photo
+          li(v-if="false")
+              input(type="checkbox" id="checkbox5" v-model="onlyShowParents")
+              label(for="checkbox5") Only parent hierarchy
+          li(v-if="false")
+              input(type="checkbox" id="checkbox2" v-model="editMode")
+              label(for="checkbox2") Edit Mode
 </template>
 
 <script>
@@ -42,6 +43,7 @@ export default {
       },
       set(value) {
         this.setColumnView(value)
+        console.log('jaaa')
         this.$store.commit('cancelAll')
       }
     },
@@ -127,7 +129,7 @@ export default {
   display: inline-block;
   position: absolute;
   left: 0px;
-  top: 35px;
+  top: 45px;
   width: 170px;
   border: 1px solid grey;
   border-top: 1px solid white;
