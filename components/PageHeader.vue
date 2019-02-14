@@ -31,7 +31,7 @@ export default {
   components: { SearchBox, FileMenu, OptionsMenu },
   data: function() {
     return {
-      infoOpen: true
+      infoOpen: false
     }
   },
   computed: {
