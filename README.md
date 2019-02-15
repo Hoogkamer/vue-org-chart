@@ -1,17 +1,30 @@
 # vueOrgChart
 
-> Organization chart
-Static website (no webserver required) to generate an interactive organisation chart
+> Organization chart:
+A complete solution to generate and publish an orgchart without the need of a webserver and database
 (c) Michael Hoogkamer
 
 [Demo](https://hoogkamer.github.io/vue-org-chart/)
 
 ![Screenshot](/assets/img/Screenshot1.PNG?raw=true "Screenshot")
 
+## Features
+
+- Just runs everywhere, no install, no webserver, no database needed!
+- Edit in excel (bulk updates, external source)
+- Edit in the webpage
+- Supports multiple 1000's departments
+- Panzoom and interactive expansion of subdepartments
+- Deeplinks to departments
+- Save as image
+- Search for departments and managers
+- Add employees to departments
+- Use photo's from api (not included), or local folder
+- Click on employee to link to api (not included) or local folder
+
 ## Use as static website
 
-You can use it as-is as a static website: no install, no webserver needed!
-
+To use this website as-is:
 1. Copy content of \docs folder to any location, like a folder on your computer, AWS S3 bucket or webserver
 2. Open index.html in the browser. When you use Internet Explorer it will not work if you placed the files on a folder (Chrome does work). S3 or webserverer will work for both browsers
 
@@ -44,10 +57,10 @@ var CONFIG = {
 
 ```
 
-The config file is in /config.js or if you want to build yourself in /static/config.js
+The config file is in /config.js
 
 - You can set the header color and title, and the colors of each level in the orgchart
--  The position where to get the photo's  
+- The position where to get the photo's  
 For these locations it is fetched from "prefix" + photo + "suffix". So if you have photo P0001, it will be fetched from "photos/P0001.png". If you have an api or other locations which delivers photo's based on the photo field you can change that here.
 
 - The linkUrl  
@@ -92,12 +105,16 @@ Anyone can edit, but as stated above, it will be only available for that person.
 - __How do I change the order of the departments under a parent?__  
 This is not directly supported. There are 2 possibilities however. First switch to editmode. 1) export to excel, then change the order in the sheet, and then read the excel in again 2) cut the department, and paste it under the same parent again. It will be placed last.
 
+- __Why does running from a local folder not work in Internet Exporer (IE11)?__  
+I do not know, but who uses it anyways :) It does work in Chrome however, and running from a webserver or S3 bucket works for both browsers
 
-- __Why does running from a local folder not work in Internet Exporer?__  
-I do not know, it has something to do with routing. I could use some help with that :) It does work in Chrome however, and running from a webserver or S3 bucket works for both browsers
-
+- __How can I use this in my own code__  
+This is not meant to be a plugin/library, but it is a complete solution. If you want to use this as a part of your own application I recommend to search for a real orgchart plugin.
 
 ## Build Setup
+This is only needed if you want to build/change your own version. If you want to use it without modification, see: _use as static website_
+
+_The config.js, data.js and photos folder used for development are in the \static folder_
 
 ``` bash
 # install dependencies
@@ -105,6 +122,7 @@ $ npm install
 
 # serve with hot reload at localhost:3000
 $ npm run dev
+
 
 # build for production and launch server
 $ npm run build
