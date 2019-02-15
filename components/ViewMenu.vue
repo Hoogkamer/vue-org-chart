@@ -3,7 +3,8 @@
     ul
         li(v-if="activeDepartment.showParents" v-on:click="hideParents(true)") Hide parents
         li(v-else v-on:click="hideParents(false)") Show parents
-        li( v-on:click="hideSiblings()") Toggle siblings
+        // disable hide siblings options, because too confusing
+        li( v-if="false" v-on:click="hideSiblings()") Toggle siblings 
         li(v-on:click="onlyParents()") Toggle only parents
 </template>
 
