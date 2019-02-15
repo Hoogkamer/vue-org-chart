@@ -50,7 +50,7 @@ export const actions = {
     commit('setPeople', INPUT_DATA.people)
     commit('setAssignments', INPUT_DATA.assignments)
     var that = this
-    window.onresize = function(event) {
+    window.onresize = function (event) {
       commit('removeLines')
       setTimeout(x => {
         commit('addLine')
@@ -86,7 +86,7 @@ export const actions = {
 
     //instance.zoomAbs(pos.x * scale, pos.y * scale, scalex)
 
-    instance.on('panend', function(e) {
+    instance.on('panend', function (e) {
       console.log('Fired when pan ended', e)
       var x = document.getElementById('chart')
       console.log('transform', x.style.transform)
@@ -404,6 +404,7 @@ export const mutations = {
     state.showEditMenu = null
     state.moveDepartment = null
     state.showViewMenu = null
+    state.editMenuOpen = false
   },
   setHideSiblings(state, dept) {
     if (!dept.parent.onlyShowThisChild) {

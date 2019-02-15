@@ -13,6 +13,11 @@
         i.material-icons.home(v-on:click="capture" title='Home') home
     .screenshot1(v-if='config.enableScreenCapture')
       i.material-icons.screenshot(v-on:click="capture" title='Save as image') photo_camera
+  .info(v-if="config.information")
+    i.material-icons.info_icon(v-on:click="infoOpen=!infoOpen") info
+    .info-text(v-if="infoOpen")
+      i.material-icons.info-close(v-on:click="infoOpen=false") close
+      div(v-html="config.information")
 </template>
 
 <script>
@@ -24,6 +29,11 @@ import { mapState, mapActions } from 'vuex'
 var panzoom = require('panzoom')
 export default {
   components: { SearchBox, FileMenu, OptionsMenu },
+  data: function() {
+    return {
+      infoOpen: false
+    }
+  },
   computed: {
     ...mapState(['chart', 'editMode', 'config'])
   },
@@ -110,7 +120,8 @@ function saveAs(uri, filename) {
   left: -50px;
 }
 .screenshot:hover,
-.home:hover {
+.home:hover,
+.info_icon:hover {
   border: 1px solid white;
 }
 .menu {
@@ -128,6 +139,20 @@ function saveAs(uri, filename) {
   right: 10px;
   width: 40px;
 }
+.info_icon {
+  cursor: pointer;
+}
+.info {
+  position: absolute;
+  top: 0px;
+  right: 60px;
+}
+.info-text {
+  font-size: 14px;
+  color: grey;
+  width: 400px;
+  padding: 20px;
+}
 .edit_indicator {
   position: absolute;
   top: 50px;
@@ -136,5 +161,21 @@ function saveAs(uri, filename) {
   background-color: red;
   padding: 5px;
   cursor: pointer;
+}
+.info-text {
+  width: 300px;
+  background-color: white;
+  border: 1px solid lightgrey;
+  position: absolute;
+  top: 40px;
+  right: 20px;
+  box-shadow: 2px 2px 2px grey;
+}
+.info-close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+  font-size: 14px;
 }
 </style>

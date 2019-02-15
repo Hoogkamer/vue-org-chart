@@ -184,7 +184,7 @@ export default {
 .department {
   width: 120px;
   height: 60px;
-  border: 1px solid lightgrey;
+  border: 1px solid rgb(180, 180, 180);
   margin: 30px 0px 5px 0px;
   text-align: center;
   font-size: 11px;
@@ -201,7 +201,7 @@ export default {
   margin-right: auto;
   padding: 2px 2px;
   position: relative;
-  box-shadow: 3px 3px 3px lightgrey;
+  /*box-shadow: 3px 3px 3px lightgrey;*/
 }
 .manager_photo {
   width: 180px;
