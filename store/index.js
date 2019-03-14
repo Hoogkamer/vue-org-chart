@@ -5,6 +5,7 @@ import 'core-js/es6/set'
 
 export const state = () => ({
   config: CONFIG,
+  updatedOn: UPDATED_ON,
   chart: null,
   people: [],
   assignments: [],
@@ -28,9 +29,23 @@ export const state = () => ({
 export const actions = {
   initStore({ commit, state }, dept) {
     commit('setConfig')
+    console.log(CONFIG)
     var data = []
     INPUT_DATA.chart.forEach(dept => {
       var manager = INPUT_DATA.people.find(p => p.id == dept.manager_id)
+      var dataFields = []
+      if (dept.dataFields && dept.dataFields.length) {
+        dataFields = dept.dataFields
+      }
+      CONFIG.dataFields.forEach(f => {
+        var df = dataFields.find(x => x.name === f.name)
+        if (!df) {
+          dataFields.push({ ...f, value: "" })
+        } else {
+          df.type = f.type
+        }
+      })
+
       data.push({
         id: dept.id,
         parentId: dept.parent_id,
@@ -43,9 +58,11 @@ export const actions = {
         onlyParents: false,
         parent: null,
         children: null,
-        onlyShowThisChild: null
+        onlyShowThisChild: null,
+        dataFields: dataFields
       })
     })
+    console.log(data)
     commit('createTree', data)
     commit('setPeople', INPUT_DATA.people)
     commit('setAssignments', INPUT_DATA.assignments)
@@ -211,6 +228,8 @@ export const actions = {
 
 export const mutations = {
   setConfig(state) {
+    if (!state.config.editCommand)
+      state.config.editCommand = "_edit"
     state.columnView = state.config.startView.columnview
     state.columnView_noStaff = !state.config.startView.staffColumnview
     state.managerNameView = state.config.startView.names

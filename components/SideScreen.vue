@@ -25,6 +25,15 @@
             br 
             textarea.description(v-if='editMode' v-model="activeDepartment_description")
             span(v-else).text {{activeDepartment_description}}
+
+          .property(v-for="field in activeDepartment.dataFields" v-if="field.value")
+            span.label {{field.name}}
+            br
+            template(v-if='field.type==="url"')
+              a(:href="field.value" target="_blank") Link
+            template(v-else)
+              span.text {{field.value}}
+
           .property
             template(v-if='!editMode')
               span.label Department type

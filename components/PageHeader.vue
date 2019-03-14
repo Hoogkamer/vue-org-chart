@@ -1,5 +1,7 @@
 <template lang='pug'>
 .header(:style='{backgroundColor:config.title.color}') {{config.title.text}}
+
+  .updated_info Updated on: {{updatedOn}}
   
   .edit_indicator(v-if="editMode" v-on:click="$store.commit('setEditMode', false)") Click to leave editmode
   a(href='https://github.com/Hoogkamer/vue-org-chart' target='_blank')
@@ -35,7 +37,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['chart', 'editMode', 'config'])
+    ...mapState(['chart', 'editMode', 'config', 'updatedOn'])
   },
   methods: {
     ...mapActions(['initZoom']),
@@ -161,6 +163,15 @@ function saveAs(uri, filename) {
   background-color: red;
   padding: 5px;
   cursor: pointer;
+}
+
+.updated_info {
+  position: absolute;
+  top: 50px;
+  right: 0px;
+  font-size: 16px;
+  color: grey;
+  padding: 5px;
 }
 .info-text {
   width: 300px;

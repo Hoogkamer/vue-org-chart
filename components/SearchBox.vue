@@ -37,7 +37,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['chart', 'editMode', 'orgArray']),
+    ...mapState(['chart', 'editMode', 'orgArray', 'config']),
     searchresults1: function() {
       var res
       if (this.searchField.length < 2) {
@@ -54,7 +54,7 @@ export default {
   },
   watch: {
     searchField: function(val) {
-      if (val === '_edit') {
+      if (val === this.config.editCommand) {
         this.$store.commit('setEditMode', !this.editMode)
         this.searchField = ''
       }
