@@ -29,10 +29,13 @@
           .property(v-for="field in activeDepartment.dataFields" v-if="field.value")
             span.label {{field.name}}
             br
-            template(v-if='field.type==="url"')
-              a(:href="field.value" target="_blank") Link
-            template(v-else)
-              span.text {{field.value}}
+            template(v-if='editMode')
+              // todo edit extra properties
+            templage(v-else)
+              template(v-if='field.type==="url"')
+                a(:href="field.value" target="_blank") Link
+              template(v-else)
+                span.text {{field.value}}
 
           .property
             template(v-if='!editMode')

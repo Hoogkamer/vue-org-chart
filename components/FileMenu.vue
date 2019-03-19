@@ -146,7 +146,7 @@ export default {
         id: chart.id,
         name: chart.name,
         description: chart.description,
-        parent_id: chart.parentId,
+        parent_id: chart.parent ? chart.parent.id : '',
         staff_department: chart.isStaff ? 'Y' : 'N',
         manager_id: chart.manager.id,
         ...dataFields
@@ -160,7 +160,7 @@ export default {
         id: chart.id,
         name: chart.name,
         description: chart.description,
-        parent_id: chart.parentId,
+        parent_id: chart.parent ? chart.parent.id : '',
         staff_department: chart.isStaff ? 'Y' : 'N',
         manager_id: chart.manager.id,
         dataFields: chart.dataFields
