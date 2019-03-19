@@ -20,5 +20,9 @@ var CONFIG = {
     staffColumnview: false
   },
   enableScreenCapture: true,
-  levelColors: ['#0c058d', '#05668d', '#8d6e05', '#8d2305', '#cfb303']
+  levelColors: ['#0c058d', '#05668d', '#8d6e05', '#8d2305', '#cfb303'],
+  editCommand: "_edit", //the command to type in the searchbar to switch to edit mode
+  dataFields: [
+    { name: "Location", type: "text" }
+  ]
 }
