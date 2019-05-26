@@ -40,7 +40,7 @@ export const actions = {
       CONFIG.dataFields.forEach(f => {
         var df = dataFields.find(x => x.name === f.name)
         if (!df) {
-          dataFields.push({ ...f, value: "" })
+          dataFields.push({ ...f, value: '' })
         } else {
           df.type = f.type
         }
@@ -228,8 +228,9 @@ export const actions = {
 
 export const mutations = {
   setConfig(state) {
-    if (!state.config.editCommand)
-      state.config.editCommand = "_edit"
+    if (!state.config.editCommand) {
+      state.config.editCommand = '_edit'
+    }
     state.columnView = state.config.startView.columnview
     state.columnView_noStaff = !state.config.startView.staffColumnview
     state.managerNameView = state.config.startView.names
