@@ -1,7 +1,7 @@
 <template lang='pug'>
     #chart(v-on:mousemove.selve="onMouseMove")
       .chart_container   
-        show-dept(v-if="chart" :parent="chart" :level=1)
+        show-dept(v-if="chart" :parent="chart" :level="1")
         draw-lines(v-if="chart")
         edit-menu(v-if="showEditMenu")
         view-menu(v-if="showViewMenu")
@@ -62,8 +62,8 @@ export default {
     activeDepartment: function(val) {}
   },
   mounted: function() {
-    this.initZoom()
     setTimeout(x => {
+      this.initZoom()
       this.$store.commit('addLine')
     }, 500)
   },
