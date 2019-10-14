@@ -136,11 +136,14 @@ export default {
       XLSX.writeFile(wb, 'chart_data.xlsx')
     },
     tree2array(chart, array) {
-      var dataFields = chart.dataFields.reduce(function(acc, cur, i) {
-        var name = 'DATA_' + cur.name.replace(/ /g, '_')
-        acc[name] = cur.value
-        return acc
-      }, {})
+      var dataFields = {}
+      if (chart.dataFields) {
+        dataFields = chart.dataFields.reduce(function(acc, cur, i) {
+          var name = 'DATA_' + cur.name.replace(/ /g, '_')
+          acc[name] = cur.value
+          return acc
+        }, {})
+      }
       console.log(chart.dataFields, dataFields)
       array.push({
         id: chart.id,
