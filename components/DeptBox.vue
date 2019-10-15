@@ -9,11 +9,18 @@
               .name_manager(v-if="managerNameView") {{departmentData.manager.name}}
             template(v-else)
               .name2(v-html="departmentData.name")
-            i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
-            i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
+            template(v-if="departmentData.children.length")
+              i.material-icons.arrow.down(v-if='!departmentData.showChildren' v-on:click="doShowChildren(true)") arrow_drop_down
+              i.material-icons.arrow.up(v-if='departmentData.showChildren' v-on:click="doShowChildren(false)") arrow_drop_up
+              template(v-if="showNrDepartments")
+                div.hidden_dept.down(v-if='!departmentData.showChildren' v-on:click="doShowChildren(true)" title='Nr of subdepartments') {{departmentData.children.length}}
+                div.hidden_dept.up(v-if='departmentData.showChildren' v-on:click="doShowChildren(false)" title='Nr of subdepartments') {{departmentData.children.length}}
+            template(v-if="showNrPeople")
+              div.ppl_count(v-if='count_department_people(departmentData)' title='Nr of people in department') {{count_department_people(departmentData)}}
+            
             i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="view options") visibility
             i.material-icons.hidden_parents1(v-if="hiddenParents" v-on:click="setHideParents(false)") more_vert
-            div.hidden_dept(v-if='departmentData.children.length' title='Nr of subdepartments') {{departmentData.children.length}}
+            
         template(v-else)
           .department.manager_photo(:id="'ID_'+ departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
             .level_indicator(:style="{backgroundColor:config.levelColors[level-1]||'#FFFFFF'}")
@@ -25,11 +32,17 @@
                   div.textdiv
                     .name(v-html="departmentData.name")
                     .name_manager(v-if="managerNameView") {{departmentData.manager.name}}
-            i.material-icons.arrow.down(v-if='!departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(true)") arrow_drop_down
-            i.material-icons.arrow.up(v-if='departmentData.showChildren && departmentData.children.length' v-on:click="doShowChildren(false)") arrow_drop_up
+            template(v-if="departmentData.children.length")
+              i.material-icons.arrow.down(v-if='!departmentData.showChildren' v-on:click="doShowChildren(true)") arrow_drop_down
+              i.material-icons.arrow.up(v-if='departmentData.showChildren' v-on:click="doShowChildren(false)") arrow_drop_up
+              template(v-if="showNrDepartments")
+                div.hidden_dept.down(v-if='!departmentData.showChildren' v-on:click="doShowChildren(true)" title='Nr of subdepartments') {{departmentData.children.length}}
+                div.hidden_dept.up(v-if='departmentData.showChildren' v-on:click="doShowChildren(false)" title='Nr of subdepartments') {{departmentData.children.length}}
+            template(v-if="showNrPeople")
+              div.ppl_count(v-if='count_department_people(departmentData)' title='Nr of people in department') {{count_department_people(departmentData)}}
+            
             i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="view options") visibility
-            i.material-icons.hidden_parents(v-if="hiddenParents" v-on:click="setHideParents(false)") more_vert
-            div.hidden_dept(v-if='departmentData.children.length' title='Nr of subdepartments') {{departmentData.children.length}}
+            i.material-icons.hidden_parents(v-if="hiddenParents" v-on:click="setHideParents(false)") more_vert   
       template(v-if="!departmentData")
           .department.invisible(v-if='!managerPhotoView' :class="[type]")
           .department.manager_photo.invisible(v-else :class="[type]")
@@ -71,7 +84,10 @@ export default {
       'editMode',
       'moveDepartment',
       'config',
-      'chart'
+      'chart',
+      'assignments',
+      'showNrPeople',
+      'showNrDepartments'
     ]),
     active: function() {
       return this.departmentData === this.activeDepartment
@@ -103,7 +119,6 @@ export default {
         this.hideChildren(department)
       }
     },
-
     setActiveDepartment(department, event) {
       this.$store.commit('setActiveDepartment', department)
     },
@@ -139,6 +154,10 @@ export default {
     },
     hideSiblings() {
       this.setHideSiblings(this.departmentData)
+    },
+    count_department_people: function(dept) {
+      var person_ids = this.assignments.filter(a => a.department_id == dept.id)
+      return person_ids.length
     }
   }
 }
@@ -255,14 +274,25 @@ export default {
 .name_manager {
   overflow-wrap: break-word;
   min-width: 1%;
-  width: 114px;
+  width: 100px;
   display: inline-block;
   position: absolute;
-  left: 0px;
+  left: 5px;
   bottom: 5px;
   color: grey;
 }
 .hidden_dept {
+  position: absolute;
+  bottom: 10px;
+  right: 1px;
+  width: 14px;
+  background-color: white;
+  color: grey;
+  font-size: 12px;
+  padding: 0px 2px;
+  border-radius: 4px;
+}
+.ppl_count {
   position: absolute;
   bottom: 1px;
   left: 1px;

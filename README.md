@@ -13,7 +13,7 @@ A complete solution to generate and publish an orgchart without the need of a we
 - Just runs everywhere, no install, no webserver, no database needed!
 - Edit in excel (bulk updates, external source)
 - Edit in the webpage
-- Supports multiple 1000's departments
+- Supports 100's of departments(*)
 - Panzoom and interactive expansion of subdepartments
 - Deeplinks to departments
 - Save as image
@@ -21,6 +21,8 @@ A complete solution to generate and publish an orgchart without the need of a we
 - Add employees to departments
 - Use photo's from api (not included), or local folder
 - Click on employee to link to api (not included) or local folder
+
+(*) TODO: Support 1000's of departments, but code needs to be refactored to improve performance of initial load time
 
 ## Use as static website
 
@@ -48,7 +50,9 @@ var CONFIG = {
     photos: true,
     names: true,
     columnview: true,
-    staffColumnview: false
+    staffColumnview: false,
+    showNrDepartments: true,
+    showNrPeople: true
   },
   enableScreenCapture: true,
   levelColors: ['#0c058d', '#05668d', '#8d6e05', '#8d2305', '#cfb303']
@@ -59,15 +63,19 @@ var CONFIG = {
 
 The config file is in /config.js
 
-- You can set the header color and title, and the colors of each level in the orgchart
-- The position where to get the photo's  
+- title  
+You can set the header color and title, and the colors of each level in the orgchart
+- photoUrl  
+The position where to get the photo's  
 For these locations it is fetched from "prefix" + photo + "suffix". So if you have photo P0001, it will be fetched from "photos/P0001.png". If you have an api or other locations which delivers photo's based on the photo field you can change that here.
 
-- The linkUrl  
+- linkUrl  
 It will open a new tab to navigate to that page when clicked in the sidescreen on a person. In this example it will just fetch the photo in a new tab, but if you have an api which shows a user profile page you can enter the location here.
-startView sets the inital options (the user can change them in the menu bar)
 
-- Enable screen capture  
+- startView  
+Sets the inital options (the user can change them in the menu bar)
+
+- enableScreenCapture  
 This shows the icon to make an image of the graph to save. This does not work when you are on a local folder, so disable this option then
 
 ## User manual for website

@@ -17,12 +17,14 @@
           li
               input(type="checkbox" id="checkbox4" v-model="managerPhotoView")
               label(for="checkbox4") Show manager photo
-          li(v-if="false")
-              input(type="checkbox" id="checkbox5" v-model="onlyShowParents")
-              label(for="checkbox5") Only parent hierarchy
-          li(v-if="false")
-              input(type="checkbox" id="checkbox2" v-model="editMode")
-              label(for="checkbox2") Edit Mode
+          li
+              input(type="checkbox" id="checkbox5" v-model="showNrDepartments")
+              label(for="checkbox5") Show nr of subdepartments
+          li
+              input(type="checkbox" id="checkbox6" v-model="showNrPeople")
+              label(for="checkbox6") Show nr of people in dept.
+          
+            
 </template>
 
 <script>
@@ -37,6 +39,22 @@ export default {
   },
   computed: {
     ...mapState(['chart', 'editMode']),
+    showNrDepartments: {
+      get() {
+        return this.$store.state.showNrDepartments
+      },
+      set(value) {
+        this.setShowNrDepartments(value)
+      }
+    },
+    showNrPeople: {
+      get() {
+        return this.$store.state.showNrPeople
+      },
+      set(value) {
+        this.setShowNrPeople(value)
+      }
+    },
     columnView: {
       get() {
         return this.$store.state.columnView
@@ -98,7 +116,9 @@ export default {
       'setManagerPhotoView',
       'setColumnView_noStaff',
       'setColumnView',
-      'setOnlyShowParents'
+      'setOnlyShowParents',
+      'setShowNrDepartments',
+      'setShowNrPeople'
     ])
   }
 }
@@ -130,7 +150,7 @@ export default {
   position: absolute;
   left: 0px;
   top: 45px;
-  width: 170px;
+  width: 220px;
   border: 1px solid grey;
   border-top: 1px solid white;
 }

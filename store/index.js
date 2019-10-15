@@ -23,7 +23,9 @@ export const state = () => ({
   showViewMenu: null,
   selectedPerson: null,
   onlyShowParents: false,
-  zoomInstance: null
+  zoomInstance: null,
+  showNrDepartments: null,
+  showNrPeople: null
 })
 
 export const actions = {
@@ -68,10 +70,7 @@ export const actions = {
     commit('setAssignments', INPUT_DATA.assignments)
     var that = this
     window.onresize = function(event) {
-      commit('removeLines')
-      setTimeout(x => {
-        commit('addLine')
-      }, 500)
+      refreshLines(that)
     }
     document.body.addEventListener('keyup', e => {
       if (e.keyCode === 27) {
@@ -117,107 +116,65 @@ export const actions = {
     commit('setZoomInstance', instance)
     //instance.moveTo(600, 100)
   },
+  setShowNrDepartments({ commit, state, dispatch }, dept) {
+    commit('setShowNrDepartments', dept)
+  },
+  setShowNrPeople({ commit, state, dispatch }, dept) {
+    commit('setShowNrPeople', dept)
+  },
   setShowDepartment({ commit, state, dispatch }, dept) {
     commit('setActiveDepartment', null)
-    commit('removeLines')
     commit('setShowDepartment', dept)
-    setTimeout(x => {
-      commit('addLine')
-      dispatch('initZoom', dept)
-    }, 500)
+    refreshLines(this, dept)
   },
   updateActiveDepartmentIsStaff({ commit, state }, dept) {
-    commit('removeLines')
     commit('updateActiveDepartmentIsStaff', dept)
-    setTimeout(x => {
-      commit('addLine')
-    }, 500)
+    refreshLines(this)
   },
   showChildren({ commit, state }, dept) {
-    commit('removeLines')
     commit('setActiveDepartment', null)
     commit('showChildren', dept)
-    setTimeout(x => {
-      commit('addLine')
-      commit('setActiveDepartment', dept)
-    }, 500)
+    commit('setActiveDepartment', dept)
+    refreshLines(this)
   },
   hideChildren({ commit, state }, dept) {
-    commit('removeLines')
     commit('hideChildren', dept)
-    setTimeout(x => {
-      commit('addLine')
-    }, 500)
+    refreshLines(this)
   },
   deleteDepartment({ commit, state }, dept) {
-    commit('removeLines')
     commit('deleteDepartment', dept)
-    setTimeout(x => {
-      commit('addLine')
-    }, 500)
+    refreshLines(this)
   },
   addDepartment({ commit, state }, dept) {
-    commit('removeLines')
     commit('addDepartment', dept)
-    setTimeout(x => {
-      commit('addLine')
-    }, 500)
+    refreshLines(this)
   },
   doMoveDepartment({ commit, state }) {
-    commit('removeLines')
     commit('doMoveDepartment')
-    setTimeout(x => {
-      commit('addLine')
-    }, 500)
   },
   setManagerPhotoView({ commit, state, dispatch }, value) {
-    commit('removeLines')
     commit('setManagerPhotoView', value)
-    setTimeout(x => {
-      commit('addLine')
-
-      dispatch('initZoom', state.activeDepartment)
-    }, 500)
+    refreshLines(this)
   },
   setColumnView_noStaff({ commit, state, dispatch }, value) {
-    commit('removeLines')
     commit('setColumnView_noStaff', value)
-    setTimeout(x => {
-      commit('addLine')
-      dispatch('initZoom', state.activeDepartment)
-    }, 500)
+    refreshLines(this, state.activeDepartment)
   },
   setColumnView({ commit, state, dispatch }, value) {
-    commit('removeLines')
     commit('setColumnView', value)
-    setTimeout(x => {
-      commit('addLine')
-      dispatch('initZoom', state.activeDepartment)
-    }, 500)
+    refreshLines(this, state.activeDepartment)
   },
   setHideSiblings({ commit, state, dispatch }, dept) {
-    commit('removeLines')
     commit('setHideSiblings', dept)
-    setTimeout(x => {
-      commit('addLine')
-      dispatch('initZoom', state.activeDepartment)
-    }, 500)
+    refreshLines(this, state.activeDepartment)
   },
   setOnlyShowParents({ commit, state, dispatch }, value) {
-    commit('removeLines')
     commit('setOnlyShowParents', value)
-    setTimeout(x => {
-      commit('addLine')
-      dispatch('initZoom', state.activeDepartment)
-    }, 500)
+    refreshLines(this, state.activeDepartment)
   },
   setHideParents({ commit, state, dispatch }, value) {
-    commit('removeLines')
     commit('setHideParents', value)
-    setTimeout(x => {
-      commit('addLine')
-      dispatch('initZoom', state.activeDepartment)
-    }, 500)
+    refreshLines(this, state.activeDepartment)
   },
   setActiveDepartmentById({ commit, state, dispatch }, deptId) {
     var dept = state.orgArray.find(e => e.id == deptId)
@@ -235,6 +192,8 @@ export const mutations = {
     state.columnView_noStaff = !state.config.startView.staffColumnview
     state.managerNameView = state.config.startView.names
     state.managerPhotoView = state.config.startView.photos
+    state.showNrDepartments = state.config.startView.showNrDepartments
+    state.showNrPeople = state.config.startView.showNrPeople
   },
   createTree(state, datas) {
     state.orgArray = datas
@@ -249,6 +208,12 @@ export const mutations = {
       d.id = guid()
     })
     state.assignments = datas
+  },
+  setShowNrDepartments(state, val) {
+    state.showNrDepartments = val
+  },
+  setShowNrPeople(state, val) {
+    state.showNrPeople = val
   },
   setSelectedPerson(state, person) {
     state.selectedPerson = person
@@ -605,4 +570,14 @@ function departmentIsVisible(dept) {
   )
 
   return { isVissible: isVissible, moveTo: relpos }
+}
+
+function refreshLines(that, dept) {
+  that.commit('removeLines')
+  setTimeout(x => {
+    that.commit('addLine')
+    if (dept) {
+      that.dispatch('initZoom', dept)
+    }
+  }, 0)
 }
