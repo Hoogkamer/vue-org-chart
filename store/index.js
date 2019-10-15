@@ -23,7 +23,9 @@ export const state = () => ({
   showViewMenu: null,
   selectedPerson: null,
   onlyShowParents: false,
-  zoomInstance: null
+  zoomInstance: null,
+  showNrDepartments: null,
+  showNrPeople: null
 })
 
 export const actions = {
@@ -114,6 +116,12 @@ export const actions = {
     commit('setZoomInstance', instance)
     //instance.moveTo(600, 100)
   },
+  setShowNrDepartments({ commit, state, dispatch }, dept) {
+    commit('setShowNrDepartments', dept)
+  },
+  setShowNrPeople({ commit, state, dispatch }, dept) {
+    commit('setShowNrPeople', dept)
+  },
   setShowDepartment({ commit, state, dispatch }, dept) {
     commit('setActiveDepartment', null)
     commit('setShowDepartment', dept)
@@ -184,6 +192,8 @@ export const mutations = {
     state.columnView_noStaff = !state.config.startView.staffColumnview
     state.managerNameView = state.config.startView.names
     state.managerPhotoView = state.config.startView.photos
+    state.showNrDepartments = state.config.startView.showNrDepartments
+    state.showNrPeople = state.config.startView.showNrPeople
   },
   createTree(state, datas) {
     state.orgArray = datas
@@ -198,6 +208,12 @@ export const mutations = {
       d.id = guid()
     })
     state.assignments = datas
+  },
+  setShowNrDepartments(state, val) {
+    state.showNrDepartments = val
+  },
+  setShowNrPeople(state, val) {
+    state.showNrPeople = val
   },
   setSelectedPerson(state, person) {
     state.selectedPerson = person
