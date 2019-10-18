@@ -1,6 +1,7 @@
 <template lang='pug'>
     div(v-on:mouseenter="mouseOverBox(true)" v-on:mouseleave="mouseOverBox(false)")
       template(v-if="departmentData")
+        // layout of department box WITHOUT manager photo
         template(v-if="!managerPhotoView")
           .department( :id="'ID_'+ departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
             .level_indicator(:style="{backgroundColor:config.levelColors[level-1]||'#FFFFFF'}")
@@ -20,7 +21,8 @@
             
             i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="view options") visibility
             i.material-icons.hidden_parents1(v-if="hiddenParents" v-on:click="setHideParents(false)") more_vert
-            
+        
+        // layout of department box WITH manager photo    
         template(v-else)
           .department.manager_photo(:id="'ID_'+ departmentData.id" :class="[type, active]" v-on:click="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
             .level_indicator(:style="{backgroundColor:config.levelColors[level-1]||'#FFFFFF'}")
@@ -77,12 +79,10 @@ export default {
   },
   computed: {
     ...mapState([
-      'columnView',
       'managerNameView',
       'managerPhotoView',
       'activeDepartment',
       'editMode',
-      'moveDepartment',
       'config',
       'chart',
       'assignments',
