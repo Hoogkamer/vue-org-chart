@@ -2,6 +2,7 @@ var panzoom = require('panzoom')
 import 'array-from-polyfill'
 import 'core-js/es6/map'
 import 'core-js/es6/set'
+var _ = require('lodash')
 
 export const state = () => ({
   config: CONFIG,
@@ -151,6 +152,7 @@ export const actions = {
   },
   doMoveDepartment({ commit, state }) {
     commit('doMoveDepartment')
+    refreshLines(this)
   },
   setManagerPhotoView({ commit, state, dispatch }, value) {
     commit('setManagerPhotoView', value)
@@ -197,7 +199,7 @@ export const mutations = {
   },
   createTree(state, datas) {
     state.orgArray = datas
-    state.chart = createTree(datas)[0]
+    state.chart = createTree(_.clone(datas))[0]
     state.chart.showChildren = true
   },
   setPeople(state, datas) {
@@ -502,7 +504,9 @@ function getPosOfElement(dept) {
 function createTree(array, parent, nextparent, tree) {
   tree = typeof tree !== 'undefined' ? tree : []
   parent = typeof parent !== 'undefined' ? parent : { id: '' }
-  var children = array.filter(child => child.parentId === parent.id)
+  //var children = array.filter(child => child.parentId === parent.id)
+  var children = _.remove(array, child => child.parentId === parent.id)
+
   if (!parent.id) {
     tree = children
   } else {

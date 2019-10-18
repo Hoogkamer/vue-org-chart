@@ -19,6 +19,7 @@
     "eventsource": "^1.0.7",
     "file-saver": "^2.0.0",
     "html2canvas": "^1.0.0-alpha.12",
+    "lodash": "^4.17.15",
     "nuxt": "^2.7.1",
     "nuxt-material-design-icons": "^1.0.4",
     "panzoom": "^7.1.2",
