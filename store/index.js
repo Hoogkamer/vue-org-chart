@@ -19,7 +19,7 @@ export const state = () => ({
   managerPhotoView: true,
   activeDepartment: null,
   moveDepartment: null,
-  editMode: false,
+  editMode: true,
   showEditMenu: null,
   showViewMenu: null,
   selectedPerson: null,
@@ -33,40 +33,22 @@ export const actions = {
   initStore({ commit, state }, dept) {
     commit('setConfig')
     console.log(CONFIG)
-    var data = []
-    INPUT_DATA.chart.forEach(dept => {
-      var manager = INPUT_DATA.people.find(p => p.id == dept.manager_id)
-      var dataFields = []
-      if (dept.dataFields && dept.dataFields.length) {
-        dataFields = dept.dataFields
-      }
-      CONFIG.dataFields.forEach(f => {
-        var df = dataFields.find(x => x.name === f.name)
-        if (!df) {
-          dataFields.push({ ...f, value: '' })
-        } else {
-          df.type = f.type
-        }
-      })
+    var data
 
-      data.push({
-        id: dept.id,
-        parentId: dept.parent_id,
-        isStaff: dept.staff_department == 'Y',
-        name: dept.name,
-        description: dept.description,
-        manager: manager ? manager : { name: '' },
-        showChildren: false,
-        showParents: true,
-        onlyParents: false,
-        parent: null,
-        children: null,
-        onlyShowThisChild: null,
-        dataFields: dataFields
-      })
-    })
-    console.log(data)
-    commit('createTree', data)
+    // check if the data is saved in old format (array) or new format (tree)
+    // new format has much faster load time
+    if (!INPUT_DATA.api_version) {
+      data = processData()
+      commit('createTree', data)
+      console.log('Loading OLD input data format')
+    } else if (INPUT_DATA.api_version === '1.0') {
+      data = processDataNew(INPUT_DATA.chart, [])
+      commit('createTree1', data)
+      console.log('Loading NEW input data format')
+    } else {
+      alert('wrong version input file')
+    }
+
     commit('setPeople', INPUT_DATA.people)
     commit('setAssignments', INPUT_DATA.assignments)
     var that = this
@@ -202,6 +184,12 @@ export const mutations = {
     state.chart = createTree(_.clone(datas))[0]
     state.chart.showChildren = true
   },
+  createTree1(state, datas) {
+    state.orgArray = []
+    datas.orgArray.forEach(d => state.orgArray.push(d))
+    state.chart = datas.dept
+    state.chart.showChildren = true
+  },
   setPeople(state, datas) {
     state.people = datas
   },
@@ -248,6 +236,7 @@ export const mutations = {
   showChildren(state, dept) {
     //var index = state.orgArray.findIndex(e => e.id === dept.id)
 
+    console.log('showchildren called', dept)
     dept.showChildren = true
     if (dept.parent && state.onlyShowParents) {
       dept.parent.onlyShowThisChild = dept
@@ -584,4 +573,68 @@ function refreshLines(that, dept) {
       that.dispatch('initZoom', dept)
     }
   }, 0)
+}
+function processDataNew(dept, orgArray) {
+  orgArray.push(dept)
+  var manager = INPUT_DATA.people.find(p => p.id == dept.manager_id)
+  var dataFields = []
+
+  if (dept.dataFields && dept.dataFields.length) {
+    dataFields = dept.dataFields
+  }
+  CONFIG.dataFields.forEach(f => {
+    var df = dataFields.find(x => x.name === f.name)
+    if (!df) {
+      dataFields.push({ ...f, value: '' })
+    } else {
+      df.type = f.type
+    }
+  })
+  dept.manager = manager ? manager : { name: '' }
+  dept.dataFields = dept.dataFields
+  dept.showChildren = false
+  dept.isStaff = dept.staff_department == 'Y'
+  dept.showParents = true
+  dept.onlyParents = false
+  dept.onlyShowThisChild = null
+  dept.children.forEach(c => {
+    c.parent = dept
+    processDataNew(c, orgArray)
+  })
+  return { dept: dept, orgArray: orgArray }
+}
+function processData() {
+  var data = []
+  INPUT_DATA.chart.forEach(dept => {
+    var manager = INPUT_DATA.people.find(p => p.id == dept.manager_id)
+    var dataFields = []
+    if (dept.dataFields && dept.dataFields.length) {
+      dataFields = dept.dataFields
+    }
+    CONFIG.dataFields.forEach(f => {
+      var df = dataFields.find(x => x.name === f.name)
+      if (!df) {
+        dataFields.push({ ...f, value: '' })
+      } else {
+        df.type = f.type
+      }
+    })
+
+    data.push({
+      id: dept.id,
+      parentId: dept.parent_id,
+      isStaff: dept.staff_department == 'Y',
+      name: dept.name,
+      description: dept.description,
+      manager: manager ? manager : { name: '' },
+      showChildren: false,
+      showParents: true,
+      onlyParents: false,
+      parent: null,
+      children: null,
+      onlyShowThisChild: null,
+      dataFields: dataFields
+    })
+  })
+  return data
 }
