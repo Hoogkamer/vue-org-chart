@@ -3,7 +3,7 @@
       i.material-icons.screenshot(v-on:click="" title='Load/Save') save
       .file_menu(v-if='editMenuOpen')
           ul
-            li 
+            li
               label.file_select(v-on:click="editMenuOpen=!editMenuOpen") Import excel
                 input(type="file" v-on:change="importData")
             li(v-on:click="doExportXls") Export excel
@@ -34,7 +34,8 @@ export default {
   },
   methods: {
     generateInputFile: function() {
-      var chartTable = this.tree2arrayJSON(this.chart, [])
+      //var chartTable = this.tree2arrayJSON(this.chart, [])
+      var chartTable = this.tree2JSON(this.chart)
       var today = new Date()
       var dd = today.getDate()
       var mm = today.getMonth() + 1 //January is 0!
@@ -52,6 +53,7 @@ export default {
       var json =
         'var INPUT_DATA=' +
         JSON.stringify({
+          api_version: '1.0',
           chart: chartTable,
           people: this.people,
           assignments: this.assignments
@@ -157,7 +159,25 @@ export default {
       chart.children.forEach(child => this.tree2array(child, array))
       return array
     },
+    tree2JSON(chart) {
+      var children = []
+      chart.children.forEach(child => {
+        children.push(this.tree2JSON(child))
+      })
 
+      var result = {
+        id: chart.id,
+        name: chart.name,
+        description: chart.description,
+        parent_id: chart.parent ? chart.parent.id : '',
+        staff_department: chart.isStaff ? 'Y' : 'N',
+        manager_id: chart.manager.id,
+        dataFields: chart.dataFields,
+        children: children,
+        showChildren: chart.showChildren
+      }
+      return result
+    },
     tree2arrayJSON(chart, array) {
       array.push({
         id: chart.id,
