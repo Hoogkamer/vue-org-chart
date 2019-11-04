@@ -13,7 +13,7 @@ A complete solution to generate and publish an orgchart without the need of a we
 - Just runs everywhere, no install, no webserver, no database needed!
 - Edit in excel (bulk updates, external source)
 - Edit in the webpage
-- Supports 100's of departments(*)
+- Supports 1000's of departments
 - Panzoom and interactive expansion of subdepartments
 - Deeplinks to departments
 - Save as image
@@ -22,7 +22,6 @@ A complete solution to generate and publish an orgchart without the need of a we
 - Use photo's from api (not included), or local folder
 - Click on employee to link to api (not included) or local folder
 
-(*) TODO: Support 1000's of departments, but code needs to be refactored to improve performance of initial load time
 
 ## Use as static website
 

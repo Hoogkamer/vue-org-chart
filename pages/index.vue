@@ -1,8 +1,13 @@
 <template lang='pug'>
-  .p-container
+  .p-container(v-on:mousemove.selve="onMouseMove")
     page-header
     .container1(id='xparent')
       org-chart(v-if="chart")
+
+    edit-menu(v-if="showEditMenu")
+    #move_dept(v-if="moveDepartment" :style="{ left: page.left + 'px', top: page.top + 'px' }")
+      div {{moveDepartment.name}}
+      i.material-icons.arrow.down(v-if='moveDepartment.children.length') arrow_drop_down
     side-screen(v-if='chart')
 </template>
 
@@ -10,15 +15,28 @@
 import PageHeader from '~/components/PageHeader.vue'
 import OrgChart from '~/components/OrgChart.vue'
 import SideScreen from '~/components/SideScreen.vue'
+import EditMenu from '~/components/EditMenu.vue'
 import { mapState, mapActions } from 'vuex'
 export default {
   components: {
     OrgChart,
     PageHeader,
-    SideScreen
+    SideScreen,
+    EditMenu
+  },
+  data: function() {
+    return {
+      page: { left: 0, top: 0 }
+    }
   },
   computed: {
-    ...mapState(['chart', 'activeDepartment', 'onlyShowParents']),
+    ...mapState([
+      'chart',
+      'activeDepartment',
+      'onlyShowParents',
+      'showEditMenu',
+      'moveDepartment'
+    ]),
     urlParam: function() {
       if (!this.activeDepartment) {
         return null
@@ -56,6 +74,12 @@ export default {
       'setOnlyShowParents',
       'showChildren'
     ]),
+    onMouseMove(e) {
+      var chartpos = document.getElementById('chart').getBoundingClientRect()
+
+      this.page.left = e.clientX - 0 * chartpos.left + 10
+      this.page.top = e.clientY - 0 * chartpos.top + 10
+    },
     setUrl: function(qry) {
       this.$router.push({ path: this.$route.path, query: qry })
     },
@@ -87,5 +111,29 @@ export default {
 body {
   background-color: white;
   overflow: hidden;
+}
+#move_dept {
+  position: absolute;
+  width: 114px;
+  height: 50px;
+  margin: 4px 10px;
+  text-align: center;
+  font-size: 11px;
+  vertical-align: middle;
+  display: flex;
+  border-radius: 3px;
+  align-items: center; /* align vertical */
+
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  background-color: white;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 2px 2px;
+  box-sizing: border-box;
+  top: 0px;
+  left: 0px;
+  border: 1px dashed #006696;
 }
 </style>

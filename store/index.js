@@ -330,6 +330,20 @@ export const mutations = {
     state.moveDepartment = null
   },
   doMoveDepartment(state) {
+    //check that the department is not pasted under one of its children
+    var d = state.activeDepartment
+    var ok = d !== state.moveDepartment
+    while (d.parent) {
+      d = d.parent
+      console.log(d)
+      if (d === state.moveDepartment) ok = false
+    }
+
+    if (!ok) {
+      alert('cannot paste under itself (or children)')
+      return
+    }
+
     state.moveDepartment.parent.children = state.moveDepartment.parent.children.filter(
       d => d !== state.moveDepartment
     )
