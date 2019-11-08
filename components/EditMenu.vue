@@ -1,11 +1,15 @@
 <template lang='pug'>
    #edit_menu
+    div.bold {{activeDepartment.name}}
+    div.noclick ---------------------------------------
      ul(v-if='moveDepartment')
         li(v-on:click="doMoveTo()") Paste (move under here)
         li(v-on:click="cancelMoveTo()") Cancel move
      ul(v-else)
         li(v-on:click="addDept()") Add department
         li(v-on:click="moveTo()") Cut (move to...)
+        li.noclick ---------------------------------------
+        li(v-on:click="cancel()") Cancel
         li.noclick ---------------------------------------
         li.delete(v-on:click="removeDept()") Delete
 </template>
@@ -19,9 +23,14 @@ export default {
   mounted: function() {
     var d = document.getElementById('edit_menu')
     var chartpos = document.getElementById('chart').getBoundingClientRect()
+    var x = document.getElementById('chart')
+    var scalex = 1 / (x.getBoundingClientRect().width / x.offsetWidth)
+
     d.style.display = 'inline-block'
-    d.style.left = this.showEditMenu.clientX - chartpos.left + 'px'
-    d.style.top = this.showEditMenu.clientY + -chartpos.top + 'px'
+    d.style.left = this.showEditMenu.clientX - 0 * chartpos.left + 'px'
+    d.style.top = this.showEditMenu.clientY - 0 * chartpos.top + 'px'
+
+    console.log(scalex, this.showEditMenu.clientX, chartpos.left)
   },
   methods: {
     ...mapActions(['deleteDepartment', 'addDepartment', 'doMoveDepartment']),
@@ -39,6 +48,9 @@ export default {
     },
     addDept: function() {
       this.addDepartment()
+    },
+    cancel: function() {
+      this.$store.commit('showEditMenu', null)
     },
     moveTo: function() {
       this.$store.commit('setMoveDepartment')
@@ -69,6 +81,9 @@ export default {
   text-align: left;
   border-radius: 2px;
   font-size: 14px;
+}
+.bold {
+  font-weight: 600;
 }
 
 ul {

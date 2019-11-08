@@ -1,13 +1,13 @@
 <template lang='pug'>
-    #chart(v-on:mousemove.selve="onMouseMove")
-      .chart_container   
+    #chart
+      .chart_container
         show-dept(v-if="chart" :parent="chart" :level="1")
         draw-lines(v-if="chart")
-        edit-menu(v-if="showEditMenu")
+        //edit-menu(v-if="showEditMenu")
         view-menu(v-if="showViewMenu")
-        #move_dept(v-if="moveDepartment" :style="{ left: page.left + 'px', top: page.top + 'px' }")
-          div {{moveDepartment.name}}
-          i.material-icons.arrow.down(v-if='moveDepartment.children.length') arrow_drop_down
+        //#move_dept(v-if="moveDepartment" :style="{ left: page.left + 'px', top: page.top + 'px' }")
+        //  div {{moveDepartment.name}}
+        //  i.material-icons.arrow.down(v-if='moveDepartment.children.length') arrow_drop_down
 </template>
 
 <script>
@@ -24,7 +24,7 @@ export default {
   data: function() {
     return {
       tree: null,
-      page: { left: 0, top: 0 },
+
       cancelScroll: null,
       scrollOptions: {
         container: 'body',
@@ -68,13 +68,7 @@ export default {
     }, 500)
   },
   methods: {
-    ...mapActions(['initZoom']),
-    onMouseMove(e) {
-      var chartpos = document.getElementById('chart').getBoundingClientRect()
-
-      this.page.left = e.clientX - chartpos.left + 10
-      this.page.top = e.clientY - chartpos.top + 10
-    }
+    ...mapActions(['initZoom'])
   }
 }
 </script>
@@ -98,30 +92,6 @@ export default {
 .chart-container {
   margin: auto;
   display: inline-block;
-}
-#move_dept {
-  position: absolute;
-  width: 114px;
-  height: 50px;
-  margin: 4px 10px;
-  text-align: center;
-  font-size: 11px;
-  vertical-align: middle;
-  display: flex;
-  border-radius: 3px;
-  align-items: center; /* align vertical */
-
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  background-color: white;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 2px 2px;
-  box-sizing: border-box;
-  top: 0px;
-  left: 0px;
-  border: 1px dashed #006696;
 }
 .arrow {
   font-size: 30px;
