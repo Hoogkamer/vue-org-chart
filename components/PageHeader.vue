@@ -98,7 +98,6 @@ function saveAs(uri, filename) {
   left: 0px;
   top: 0px;
   z-index: 2;
-  box-shadow: 5px 2px 5px grey;
 }
 .screenshot1 {
   display: inline-block;

@@ -114,7 +114,7 @@ export default {
 <style scoped>
 #search_div {
   position: absolute;
-  top: -10px;
+  top: -7px;
   right: 94px;
   width: 200px;
 }
@@ -122,8 +122,7 @@ export default {
   width: 100%;
   border-radius: 3px;
   border: none;
-  box-shadow: inset 0px 2px 5px grey;
-  padding: 3px 10px 1px 10px;
+  padding: 5px 10px 3px 10px;
   font-size: 14px;
 }
 .search_input:focus {
