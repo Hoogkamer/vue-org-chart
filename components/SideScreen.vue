@@ -47,7 +47,7 @@
               span.label Staff department:
               input.isstaff(type='checkbox' v-model="activeDepartment_isStaff" :disabled="!editMode")
           .property
-            span.label Hiearchy
+            span.label Hierarchy
             ul
               li.clickable(v-for='(parent, pnr) in parents' v-on:click="setActiveDepartment(parent)") 
                 span(v-for="n in pnr") &nbsp
@@ -236,8 +236,6 @@ export default {
   margin: 4px auto;
   position: relative;
   border: 1px solid lightgrey;
-  box-shadow: 3px 3px 3px lightgrey;
-  border-radius: 5px;
   background-color: white;
   cursor: pointer;
 }
@@ -337,10 +335,9 @@ ul {
   top: 50px;
   width: 300px;
   height: 100vh;
-  border: 1px solid lightgrey;
-  background-color: rgb(245, 250, 255);
+  border-right: 0px solid lightgrey;
+  background-color: #f9f5f5;
   padding: 5px;
-  box-shadow: 3px 3px 3px lightgrey;
   overflow: auto;
   padding-bottom: 80px;
 }
@@ -350,10 +347,8 @@ ul {
   top: 50px;
   width: 25px;
   height: 45px;
-
-  border: 1px solid lightgray;
-  background-color: rgb(245, 250, 255);
-  box-shadow: 3px 3px 3px lightgrey;
+  border: 0px solid lightgray;
+  background-color: #f9f5f5;
   z-index: 9;
 }
 
