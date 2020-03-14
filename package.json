@@ -29,7 +29,7 @@
     "xlsx": "^0.14.1"
   },
   "devDependencies": {
-    "acorn": "^6.1.0",
+    "acorn": "^6.4.1",
     "acorn-dynamic-import": "^4.0.0",
     "babel-eslint": "^8.2.1",
     "cross-env": "^5.2.0",
