@@ -37,9 +37,9 @@
     "eslint-config-prettier": "^3.6.0",
     "eslint-loader": "^2.1.2",
     "eslint-plugin-prettier": "2.6.2",
-    "eslint-plugin-vue": "^4.0.0",
+    "eslint-plugin-vue": "^6.2.2",
     "nodemon": "^1.18.10",
     "prettier": "1.14.3",
-    "webpack": "4.28.4"
+    "webpack": "^4.42.1"
   }
 }
