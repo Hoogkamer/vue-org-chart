@@ -9,7 +9,7 @@
     br
 
     .addnew
-      button.select(v-if='selectedPerson' v-on:click='$store.commit("setSelectedPerson", null)') Unselect
+      button.select(v-if='selectedPerson' v-on:click='$store.commit("setSelectedPerson", null); assignManager(null)') Unselect
 
       table
           tr

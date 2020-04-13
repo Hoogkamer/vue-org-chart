@@ -61,6 +61,7 @@ export const actions = {
         commit('setActiveDepartment', null)
       }
     })
+    //commit('setEditMode', true)
   },
   initZoom({ commit, state }, dept) {
     var area = document.querySelector('#chart')
@@ -308,7 +309,12 @@ export const mutations = {
     state.activeDepartment.name = name
   },
   updateActiveDepartmentManager(state, person) {
-    state.activeDepartment.manager = person
+    state.activeDepartment.manager = person || {
+      name: '',
+      function: '',
+      id: '',
+      photo: ''
+    }
   },
   updateActiveDepartmentDescription(state, description) {
     state.activeDepartment.description = description
