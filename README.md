@@ -8,7 +8,8 @@
 
 ![Screenshot](/assets/img/Screenshot1.PNG?raw=true 'Screenshot')
 
-You can also try out a different way for example for Agile teams: [Teamviewer](https://github.com/Hoogkamer/TeamViewer)
+\
+**Do you want to show your (Agile) teams instead of an orgchart? Try: [Teamviewer](https://github.com/Hoogkamer/TeamViewer) open source.**
 
 ## Features
 
