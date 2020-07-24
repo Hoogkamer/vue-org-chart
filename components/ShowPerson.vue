@@ -8,17 +8,50 @@
           img.im(v-if="photoUrl" :src='photoUrl' @error="markPhotoNotFound(person)")
           i(v-else).material-icons.nophoto account_box
         .details
-         
-          .section Contact information
           table.tab
-            tr(v-for="(value, propertyName) in details")
-              td.prop {{propertyName}}:
-              td.val {{value}}
+            tr
+              td.prop Name
+              td.val(v-if='!editMode') {{employeeName}}
+              td.val(v-else)
+                input.val1(v-model='employeeName')
+            tr
+              td.prop Email
+              td(v-if='!editMode') {{employeeEmail}}
+              td(v-else)
+                input.val1(v-model='employeeEmail')
+            tr
+              td.prop Phone
+              td(v-if='!editMode') {{employeePhone}}
+              td(v-else)
+                input.val1(v-model='employeePhone')
+            tr
+              td.prop Homepage
+              td(v-if='!editMode') 
+                a(:href="employeeHomePage" target="_blank") {{employeeHomePage}}
+              td(v-else)
+                input.val1(v-model='employeeHomePage')
+            tr
+              td.prop Country
+              td(v-if='!editMode') {{employeeCountry}}
+              td(v-else)
+                input.val1(v-model='employeeCountry')
+            tr
+              td.prop City
+              td(v-if='!editMode') {{employeeCity}}
+              td(v-else)
+                input.val1(v-model='employeeCity')
+            tr
+              td.prop Street
+              td(v-if='!editMode') {{employeeStreet}}
+              td(v-else)
+                input.val1(v-model='employeeStreet')
         .company
           table.tab
             tr
               td.prop Function:
-              td.val {{companyDetails.Function}}
+              td.val(v-if='!editMode') {{employeeFunction}}
+              td.val(v-else)
+                input.val1(v-model='employeeFunction')
             tr
               td.prop Departments:
               td
@@ -40,8 +73,73 @@ export default {
       'people',
       'assignments',
       'chart',
-      'orgArray'
+      'orgArray',
+      'editMode'
     ]),
+    employeeName: {
+      get() {
+        return this.$store.state.showPerson.name
+      },
+      set(value) {
+        this.$store.commit('setShowPersonName', value)
+      }
+    },
+    employeeCountry: {
+      get() {
+        return this.$store.state.showPerson.country
+      },
+      set(value) {
+        this.$store.commit('setShowPersonCountry', value)
+      }
+    },
+    employeeCity: {
+      get() {
+        return this.$store.state.showPerson.city
+      },
+      set(value) {
+        this.$store.commit('setShowPersonCity', value)
+      }
+    },
+    employeeStreet: {
+      get() {
+        return this.$store.state.showPerson.street
+      },
+      set(value) {
+        this.$store.commit('setShowPersonStreet', value)
+      }
+    },
+    employeeEmail: {
+      get() {
+        return this.$store.state.showPerson.email
+      },
+      set(value) {
+        this.$store.commit('setShowPersonEmail', value)
+      }
+    },
+    employeePhone: {
+      get() {
+        return this.$store.state.showPerson.phone
+      },
+      set(value) {
+        this.$store.commit('setShowPersonPhone', value)
+      }
+    },
+    employeeFunction: {
+      get() {
+        return this.$store.state.showPerson.function
+      },
+      set(value) {
+        this.$store.commit('setShowPersonFunction', value)
+      }
+    },
+    employeeHomePage: {
+      get() {
+        return this.$store.state.showPerson.homepage
+      },
+      set(value) {
+        this.$store.commit('setShowPersonHomePage', value)
+      }
+    },
     photoUrl: function() {
       return (
         this.config.photoUrl.prefix +
@@ -205,6 +303,7 @@ export default {
 }
 .tab {
   margin-bottom: 10px;
+  width: 400px;
 }
 .tab .prop {
   width: 100px;
@@ -214,6 +313,10 @@ export default {
 .tab .val {
   color: black;
   text-align: left;
+  width: 400px;
+}
+.tab .val1 {
+  width: 250px;
 }
 .section {
   color: grey;

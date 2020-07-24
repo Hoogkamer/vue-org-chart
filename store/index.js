@@ -181,6 +181,30 @@ export const mutations = {
     state.showNrDepartments = state.config.startView.showNrDepartments
     state.showNrPeople = state.config.startView.showNrPeople
   },
+  setShowPersonName(state, val) {
+    state.showPerson.name = val
+  },
+  setShowPersonEmail(state, val) {
+    state.showPerson.email = val
+  },
+  setShowPersonPhone(state, val) {
+    state.showPerson.phone = val
+  },
+  setShowPersonCountry(state, val) {
+    state.showPerson.country = val
+  },
+  setShowPersonCity(state, val) {
+    state.showPerson.city = val
+  },
+  setShowPersonStreet(state, val) {
+    state.showPerson.street = val
+  },
+  setShowPersonFunction(state, val) {
+    state.showPerson.function = val
+  },
+  setShowPersonHomePage(state, val) {
+    state.showPerson.homepage = val
+  },
   setShowPerson(state, person) {
     console.log('setshowperson', person)
     state.showPerson = person

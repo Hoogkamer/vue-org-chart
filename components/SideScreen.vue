@@ -71,10 +71,11 @@
                 td
                   .name 
                     span {{person.person.name}}
-                  .role(v-if='!editMode') {{person.assignment.role}}
+                  .role(v-if="person.assignment == 'Manager'") Manager
+                  .role(v-else-if='!editMode') {{person.assignment.role}}
                   .role(v-else) 
                     input(:value="person.assignment.role" @input="updateRole(person, $event)")
-            template(v-if='editMode')
+            template(v-if='editMode && person.assignment != "Manager"')
               i.material-icons.delete(title='remove from department' v-on:click='removeFromDepartment(person)') delete
           button(v-if='editMode' v-on:click='personPicker="person"') Add person   
         person-picker(v-if='personPicker' :type='personPicker' v-on:close='personPicker=null') 
@@ -135,19 +136,19 @@ export default {
         a => a.department_id == this.activeDepartment.id
       )
       var people = []
-      if (!this.editMode) {
-        people.push({
-          person: {
-            name: this.activeDepartment.manager.name,
-            id: this.activeDepartment.manager.id
-          },
-          assignment: { role: 'Manager' },
-          photoURL:
-            this.config.photoUrl.prefix +
-            this.activeDepartment.manager.id +
-            this.config.photoUrl.suffix
-        })
-      }
+      //if (!this.editMode) {
+      let person = this.people.find(
+        p => p.id == this.activeDepartment.manager.id
+      )
+      people.push({
+        person: person,
+        assignment: 'Manager',
+        photoURL:
+          this.config.photoUrl.prefix +
+          this.activeDepartment.manager.id +
+          this.config.photoUrl.suffix
+      })
+      //}
 
       person_ids.forEach(pid => {
         var person = this.people.find(p => p.id == pid.person_id)
@@ -203,7 +204,7 @@ export default {
     },
     visitProfile(person) {
       console.log(person)
-      if (this.editMode) return
+      // if (this.editMode) return
       if (!this.config.linkUrl) return
       this.setShowPerson(person)
       var url =
