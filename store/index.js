@@ -26,7 +26,8 @@ export const state = () => ({
   onlyShowParents: false,
   zoomInstance: null,
   showNrDepartments: null,
-  showNrPeople: null
+  showNrPeople: null,
+  showPerson: null
 })
 
 export const actions = {
@@ -179,6 +180,10 @@ export const mutations = {
     state.managerPhotoView = state.config.startView.photos
     state.showNrDepartments = state.config.startView.showNrDepartments
     state.showNrPeople = state.config.startView.showNrPeople
+  },
+  setShowPerson(state, person) {
+    console.log('setshowperson', person)
+    state.showPerson = person
   },
   createTree(state, datas) {
     state.orgArray = datas
@@ -466,7 +471,10 @@ function getLine(dept) {
       ' ' +
       Math.round(pos.parent.y + pos.parent.height) * scale +
       ' v' +
-      Math.round(pos.element.y - pos.parent.y - pos.parent.height / 2) * scale +
+      Math.round(
+        pos.element.y - pos.parent.y - pos.parent.height / 2
+      ) *
+        scale +
       ' H' +
       Math.round(pos.element.x + pos.parent.width) * scale
   } else {
@@ -494,11 +502,17 @@ function getPosOfElement(dept) {
   }
   var pos = {
     parent: dept.parent
-      ? document.getElementById('ID_' + dept.parent.id).getBoundingClientRect()
+      ? document
+          .getElementById('ID_' + dept.parent.id)
+          .getBoundingClientRect()
       : null,
-    element: document.getElementById('ID_' + dept.id).getBoundingClientRect()
+    element: document
+      .getElementById('ID_' + dept.id)
+      .getBoundingClientRect()
   }
-  var chartpos = document.getElementById('chart').getBoundingClientRect()
+  var chartpos = document
+    .getElementById('chart')
+    .getBoundingClientRect()
 
   if (pos.parent) {
     pos.parent.x = pos.parent.left - chartpos.left
@@ -514,7 +528,10 @@ function createTree(array, parent, nextparent, tree) {
   tree = typeof tree !== 'undefined' ? tree : []
   parent = typeof parent !== 'undefined' ? parent : { id: '' }
   //var children = array.filter(child => child.parentId === parent.id)
-  var children = _.remove(array, child => child.parentId === parent.id)
+  var children = _.remove(
+    array,
+    child => child.parentId === parent.id
+  )
 
   if (!parent.id) {
     tree = children

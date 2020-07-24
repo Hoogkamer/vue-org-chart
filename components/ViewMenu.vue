@@ -22,7 +22,9 @@ export default {
   },
   mounted: function() {
     var d = document.getElementById('view_menu')
-    var chartpos = document.getElementById('chart').getBoundingClientRect()
+    var chartpos = document
+      .getElementById('chart')
+      .getBoundingClientRect()
     d.style.display = 'inline-block'
     d.style.left = this.showViewMenu.clientX - chartpos.left + 'px'
     d.style.top = this.showViewMenu.clientY + -chartpos.top + 'px'

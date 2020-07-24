@@ -157,7 +157,9 @@ export default {
       this.setHideSiblings(this.departmentData)
     },
     count_department_people: function(dept) {
-      var person_ids = this.assignments.filter(a => a.department_id == dept.id)
+      var person_ids = this.assignments.filter(
+        a => a.department_id == dept.id
+      )
       return person_ids.length
     }
   }

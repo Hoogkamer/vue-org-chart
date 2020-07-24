@@ -57,14 +57,22 @@ export default {
     }
   },
   computed: {
-    ...mapState(['people', 'editMode', 'selectedPerson', 'activeDepartment']),
+    ...mapState([
+      'people',
+      'editMode',
+      'selectedPerson',
+      'activeDepartment'
+    ]),
     searchresults: function() {
       var res
       if (this.searchField.length < 3) {
         res = [{ name: 'Type at least 3 characters' }]
       } else {
         res = this.people.filter(
-          p => p.name.toLowerCase().indexOf(this.searchField.toLowerCase()) > -1
+          p =>
+            p.name
+              .toLowerCase()
+              .indexOf(this.searchField.toLowerCase()) > -1
         )
         if (!res.length) {
           res = [{ name: 'No matches' }]
@@ -120,8 +128,14 @@ export default {
   watch: {},
   mounted: function() {
     console.log('ppl', this.people)
-    if (this.type === 'manager' && this.activeDepartment.manager.name.length) {
-      this.$store.commit('setSelectedPerson', this.activeDepartment.manager)
+    if (
+      this.type === 'manager' &&
+      this.activeDepartment.manager.name.length
+    ) {
+      this.$store.commit(
+        'setSelectedPerson',
+        this.activeDepartment.manager
+      )
     }
   },
   methods: {
@@ -157,7 +171,10 @@ export default {
         if (this.type === 'manager') {
           this.$store.commit('updateActiveDepartmentManager', person)
         } else {
-          this.$store.commit('addAssignmentToActiveDepartment', person)
+          this.$store.commit(
+            'addAssignmentToActiveDepartment',
+            person
+          )
         }
         this.$emit('close')
       }

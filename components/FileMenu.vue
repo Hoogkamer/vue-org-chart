@@ -23,7 +23,13 @@ export default {
     }
   },
   computed: {
-    ...mapState(['chart', 'people', 'assignments', 'editMode', 'config'])
+    ...mapState([
+      'chart',
+      'people',
+      'assignments',
+      'editMode',
+      'config'
+    ])
   },
   watch: {
     editMode: function(val) {
@@ -60,7 +66,9 @@ export default {
         }) +
         ';var UPDATED_ON=' +
         updated
-      var blob = new Blob([json], { type: 'text/plain;charset=utf-8' })
+      var blob = new Blob([json], {
+        type: 'text/plain;charset=utf-8'
+      })
       FileSaver.saveAs(blob, 'data.js')
     },
     importData: function(infile) {
@@ -70,12 +78,18 @@ export default {
       reader.onload = function(e) {
         var data = e.target.result
         var workbook = XLSX.read(data, { type: 'binary' })
-        var chartdata = XLSX.utils.sheet_to_json(workbook.Sheets['chart'], {
-          defval: ''
-        })
-        var people = XLSX.utils.sheet_to_json(workbook.Sheets['people'], {
-          defval: ''
-        })
+        var chartdata = XLSX.utils.sheet_to_json(
+          workbook.Sheets['chart'],
+          {
+            defval: ''
+          }
+        )
+        var people = XLSX.utils.sheet_to_json(
+          workbook.Sheets['people'],
+          {
+            defval: ''
+          }
+        )
         var assignments = XLSX.utils.sheet_to_json(
           workbook.Sheets['assignment'],
           {
@@ -91,9 +105,15 @@ export default {
             if (x.hasOwnProperty(property)) {
               if (property.indexOf('DATA_') === 0) {
                 var name = property.substring(5).replace(/_/g, ' ')
-                var fnd = that.config.dataFields.find(d => d.name === name)
+                var fnd = that.config.dataFields.find(
+                  d => d.name === name
+                )
                 var type = fnd ? fnd.type : ''
-                dataFields.push({ name: name, value: x[property], type })
+                dataFields.push({
+                  name: name,
+                  value: x[property],
+                  type
+                })
               }
             }
           }
@@ -188,7 +208,9 @@ export default {
         manager_id: chart.manager.id,
         dataFields: chart.dataFields
       })
-      chart.children.forEach(child => this.tree2arrayJSON(child, array))
+      chart.children.forEach(child =>
+        this.tree2arrayJSON(child, array)
+      )
       return array
     }
   }

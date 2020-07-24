@@ -70,7 +70,10 @@ export default {
     searchDept: function(search) {
       var result = []
       this.orgArray.forEach(e => {
-        if (e.manager.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+        if (
+          e.manager.name.toLowerCase().indexOf(search.toLowerCase()) >
+          -1
+        ) {
           result.push({
             dept: e,
             name: e.manager.name,
@@ -89,14 +92,20 @@ export default {
     },
 
     searchDept1: function(dept, search, matches) {
-      if (dept.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+      if (
+        dept.name.toLowerCase().indexOf(search.toLowerCase()) > -1
+      ) {
         matches.push({
           dept: dept,
           name: dept.name,
           context: dept.parent ? dept.parent.name : ''
         })
       }
-      if (dept.manager.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+      if (
+        dept.manager.name
+          .toLowerCase()
+          .indexOf(search.toLowerCase()) > -1
+      ) {
         matches.push({
           dept: dept,
           name: dept.manager.name,

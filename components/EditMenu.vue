@@ -18,22 +18,34 @@
 import { mapState, mapActions } from 'vuex'
 export default {
   computed: {
-    ...mapState(['chart', 'showEditMenu', 'activeDepartment', 'moveDepartment'])
+    ...mapState([
+      'chart',
+      'showEditMenu',
+      'activeDepartment',
+      'moveDepartment'
+    ])
   },
   mounted: function() {
     var d = document.getElementById('edit_menu')
-    var chartpos = document.getElementById('chart').getBoundingClientRect()
+    var chartpos = document
+      .getElementById('chart')
+      .getBoundingClientRect()
     var x = document.getElementById('chart')
     var scalex = 1 / (x.getBoundingClientRect().width / x.offsetWidth)
 
     d.style.display = 'inline-block'
-    d.style.left = this.showEditMenu.clientX - 0 * chartpos.left + 'px'
+    d.style.left =
+      this.showEditMenu.clientX - 0 * chartpos.left + 'px'
     d.style.top = this.showEditMenu.clientY - 0 * chartpos.top + 'px'
 
     console.log(scalex, this.showEditMenu.clientX, chartpos.left)
   },
   methods: {
-    ...mapActions(['deleteDepartment', 'addDepartment', 'doMoveDepartment']),
+    ...mapActions([
+      'deleteDepartment',
+      'addDepartment',
+      'doMoveDepartment'
+    ]),
     removeDept: function() {
       var confirmed = true
       if (this.activeDepartment.children.length) {

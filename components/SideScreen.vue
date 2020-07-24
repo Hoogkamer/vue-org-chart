@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import PersonPicker from '~/components/PersonPicker.vue'
 
 export default {
@@ -179,7 +179,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setShowDepartment', 'updateActiveDepartmentIsStaff']),
+    ...mapActions([
+      'setShowDepartment',
+      'updateActiveDepartmentIsStaff'
+    ]),
+    ...mapMutations(['setShowPerson']),
     markPhotoNotFound(person) {
       if (!this.noPhotos.find(p => p === person)) {
         this.noPhotos.push(person)
@@ -201,9 +205,12 @@ export default {
       console.log(person)
       if (this.editMode) return
       if (!this.config.linkUrl) return
+      this.setShowPerson(person)
       var url =
-        this.config.linkUrl.prefix + person.id + this.config.linkUrl.suffix
-      window.open(url, '_blank')
+        this.config.linkUrl.prefix +
+        person.id +
+        this.config.linkUrl.suffix
+      // window.open(url, '_blank')
     }
   }
 }
