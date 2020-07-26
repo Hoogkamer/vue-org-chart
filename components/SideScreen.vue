@@ -150,6 +150,8 @@ export default {
       })
       //}
 
+      //console.log(this.activeDepartment.employees)
+
       person_ids.forEach(pid => {
         var person = this.people.find(p => p.id == pid.person_id)
         if (person) {

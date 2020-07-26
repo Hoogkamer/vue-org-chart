@@ -50,6 +50,11 @@ export const actions = {
       alert('wrong version input file')
     }
 
+    commit('processAssignments', {
+      departments: data.orgArray,
+      people: INPUT_DATA.people,
+      assignments: INPUT_DATA.assignments
+    })
     commit('setPeople', INPUT_DATA.people)
     commit('setAssignments', INPUT_DATA.assignments)
     var that = this
@@ -245,6 +250,42 @@ export const mutations = {
   },
   setPeople(state, datas) {
     state.people = datas
+  },
+  processAssignments(state, { departments, people, assignments }) {
+    console.log(
+      'departments, people, assignments',
+      departments,
+      people,
+      assignments
+    )
+
+    departments.forEach(dept => {
+      if (!dept.manager.departments) {
+        dept.manager.departments = [
+          { role: 'Manager', department: dept }
+        ]
+      } else {
+        dept.manager.departments.push({
+          role: 'Manager',
+          department: dept
+        })
+      }
+      let assign = assignments.filter(
+        ass => dept.id === ass.department_id
+      )
+      let assignmentstotal = []
+      assign.forEach(ass => {
+        let p = people.find(p => p.id === ass.person_id)
+        if (!p.departments) {
+          p.departments = [{ role: ass.role, department: dept }]
+        } else {
+          p.departments.push({ role: ass.role, department: dept })
+        }
+        assignmentstotal.push({ person: p, role: ass.role })
+      })
+      dept.employees = assignmentstotal
+      console.log(dept, people)
+    })
   },
   setAssignments(state, datas) {
     datas.forEach((d, i) => {
