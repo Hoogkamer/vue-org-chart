@@ -67,9 +67,9 @@
             tr(v-if="!showPerson.new")
               td.prop Departments
               td.val
-                .dep(v-for='department in companyDetails.Departments' @click='goto(department)') 
-                  span {{department.deptName}}  
-                  span.role {{department.role}}
+                .dep(v-for='assignment in personAssignments' @click='goto(assignment.department)') 
+                  span {{assignment.department.name}}  
+                  span.role {{assignment.role}}
         div
           button.btn1(v-if="showPerson.new" @click='addEmployee(showPerson)' :disabled='!employeeID || !employeeName') ADD
    
@@ -175,85 +175,12 @@ export default {
         this.config.photoUrl.suffix
       )
     },
-    companyDetails: function() {
-      let hisAssignmentsList = []
-      let depts = []
-
-      let hisAssignments = this.assignments.filter(
-        a => a.person_id == this.showPerson.id
+    personAssignments: function() {
+      let assignments = this.showPerson.departments
+      assignments.sort((a, b) =>
+        a.department.name.localeCompare(b.department.name)
       )
-      hisAssignments.forEach(x =>
-        hisAssignmentsList.push(x.department_id)
-      )
-      let hisDepartments = this.orgArray.filter(
-        a =>
-          a.manager.id === this.showPerson.id ||
-          hisAssignmentsList.includes(a.id)
-      )
-      hisDepartments.forEach(d => {
-        if (d.manager.id == this.showPerson.id) {
-          depts.push({
-            deptId: d.id,
-            deptName: d.name,
-            role: 'Manager',
-            orgDepartment: d
-          })
-        }
-        if (hisAssignmentsList.includes(d.id)) {
-          hisAssignments
-            .filter(ha => ha.department_id == d.id)
-            .forEach(hha => {
-              depts.push({
-                deptId: d.id,
-                deptName: d.name,
-                role: hha.role,
-                orgDepartment: d
-              })
-            })
-        }
-      })
-
-      console.log(hisAssignments, hisDepartments)
-
-      /*
-      hisAssignments.forEach(x =>
-        assignmentsList.push(x.department_id)
-      )
-      let depts = []
-      let traverse = chartpart => {
-        chartpart.forEach(d => {
-          if (d.manager_id == this.showPerson.id) {
-            depts.push({
-              deptId: d.id,
-              deptName: d.name,
-              role: 'Manager',
-              orgDepartment: d
-            })
-          }
-          if (assignmentsList.includes(d.id)) {
-            hisAssignments
-              .filter(ha => ha.department_id == d.id)
-              .forEach(hha => {
-                depts.push({
-                  deptId: d.id,
-                  deptName: d.name,
-                  role: hha.role,
-                  orgDepartment: d
-                })
-              })
-          }
-
-          if (d.children) traverse(d.children)
-        })
-      }
-      traverse([this.chart])
-      */
-      depts.sort((a, b) => a.deptName.localeCompare(b.deptName))
-
-      return {
-        Function: 'function',
-        Departments: depts
-      }
+      return assignments
     }
   },
   mounted: function() {
@@ -270,7 +197,7 @@ export default {
     goto(d) {
       console.log(d)
       this.setShowPerson(null)
-      this.setShowDepartment(d.orgDepartment)
+      this.setShowDepartment(d)
     },
     gotoExtProfile(person) {
       var url =

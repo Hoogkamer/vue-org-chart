@@ -28,12 +28,7 @@ export default {
     }
   },
   computed: {
-    ...mapState([
-      'people',
-      'editMode',
-      'selectedPerson',
-      'activeDepartment'
-    ]),
+    ...mapState(['people', 'selectedPerson', 'activeDepartment']),
     searchresults: function() {
       var res
       if (this.searchField.length < 3) {
@@ -53,38 +48,25 @@ export default {
     }
   },
   watch: {},
-  mounted: function() {
-    console.log('ppl', this.people)
-    if (
-      this.type === 'manager' &&
-      this.activeDepartment.manager.name.length
-    ) {
-      this.$store.commit(
-        'setSelectedPerson',
-        this.activeDepartment.manager
-      )
-    }
-  },
+  mounted: function() {},
   methods: {
-    ...mapMutations(['setShowPerson']),
+    ...mapMutations(['setShowPerson', 'addAssignment', 'addManager']),
     selectPerson: function(person) {
       if (this.type === 'manager') {
-        this.$store.commit('updateActiveDepartmentManager', person)
+        this.addManager({
+          department: this.activeDepartment,
+          person: person
+        })
       } else {
-        this.$store.commit('addAssignmentToActiveDepartment', person)
+        this.addAssignment({
+          department: this.activeDepartment,
+          person: person,
+          role: ''
+        })
       }
       this.searchField = ''
     },
     close: function() {
-      this.$store.commit('setSelectedPerson', null)
-      this.$emit('close')
-    },
-    assignManager: function(person) {
-      if (this.type === 'manager') {
-        this.$store.commit('updateActiveDepartmentManager', person)
-      } else {
-        this.$store.commit('addAssignmentToActiveDepartment', person)
-      }
       this.$store.commit('setSelectedPerson', null)
       this.$emit('close')
     },
@@ -94,27 +76,6 @@ export default {
         new: true,
         manager: this.type === 'manager'
       })
-    },
-    createPerson: function(person) {
-      var x = this.people.filter(
-        e => e.id == person.id || e.name == person.name
-      )
-      if (x.length) {
-        alert(
-          'This name or id already exists, use the search box in stead of entering in the name/id fields'
-        )
-      } else {
-        this.$store.commit('addPerson', person)
-        if (this.type === 'manager') {
-          this.$store.commit('updateActiveDepartmentManager', person)
-        } else {
-          this.$store.commit(
-            'addAssignmentToActiveDepartment',
-            person
-          )
-        }
-        this.$emit('close')
-      }
     }
   }
 }

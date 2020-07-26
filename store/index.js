@@ -231,7 +231,8 @@ export const mutations = {
         city: '',
         street: '',
         functionName: '',
-        homepage: ''
+        homepage: '',
+        departments: []
       }
     } else {
       state.showPerson = person
@@ -378,6 +379,7 @@ export const mutations = {
   addDepartment(state) {
     var newdept = {
       children: [],
+      employees: [],
       description: '',
       id: guid(),
       isStaff: false,
@@ -398,6 +400,7 @@ export const mutations = {
     //TODO: check for duplicates
     person.new = false
     delete person.new
+    delete person.manager
     state.people.push(person)
   },
   updateActiveDepartmentName(state, name) {
@@ -465,6 +468,29 @@ export const mutations = {
     )
     assignment.role = inp.role
   },
+  addAssignment(state, { department, role, person }) {
+    console.log('adding assignment', department, role, person)
+    department.employees.push({ person: person, role: role })
+  },
+  updateRole(state, { department, index, role, person }) {
+    let saveRole = department.employees[index - 1].role
+    department.employees[index - 1].role = role
+    person.departments.find(
+      a => a.department == department && a.role == saveRole
+    ).role = role
+  },
+  removeAssignment(state, { department, role, person }) {
+    person.departments = person.departments.filter(
+      a => !(a.department == department && a.role == role)
+    )
+    department.employees = department.employees.filter(
+      a => !(a.person == person && a.role == role)
+    )
+  },
+  addManager(state, { department, person }) {
+    department.manager = person
+  },
+  //todo: remove
   addAssignmentToActiveDepartment(state, inp) {
     state.assignments.push({
       department_id: state.activeDepartment.id,
@@ -702,6 +728,9 @@ function refreshLines(that, dept) {
   }, 0)
 }
 function processDataNew(dept, orgArray) {
+  if (!dept.employees) {
+    dept.employees = []
+  }
   orgArray.push(dept)
   var manager = INPUT_DATA.people.find(p => p.id == dept.manager_id)
   var dataFields = []

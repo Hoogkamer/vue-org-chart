@@ -62,7 +62,7 @@
                 span {{child.name}}
           img.profile(:src='config.photoUrl.prefix+activeDepartment.manager.photo+config.photoUrl.suffix' v-on:click='visitProfile(activeDepartment.manager)' v-if="activeDepartment.manager.photo")
         template(v-if='activeTab===2')
-          .assignment(v-for='person in department_people' v-on:click='visitProfile(person.person)')
+          .assignment(v-for='(person, p_idx) in department_people' v-on:click='visitProfile(person.person)')
             table
               tr
                 td
@@ -71,12 +71,11 @@
                 td
                   .name 
                     span {{person.person.name}}
-                  .role(v-if="person.assignment == 'Manager'") Manager
-                  .role(v-else-if='!editMode') {{person.assignment.role}}
+                  .role(v-if='!editMode') {{person.assignment}}
                   .role(v-else) 
-                    input(:value="person.assignment.role" @input="updateRole(person, $event)")
+                    input(:value="person.assignment" @input="updateThisRole(person, p_idx, $event)")
             template(v-if='editMode && person.assignment != "Manager"')
-              i.material-icons.delete(title='remove from department' v-on:click.stop='removeFromDepartment(person)') delete
+              i.material-icons.delete(title='remove from department' v-on:click.stop='removeDeptAssignment(person)') delete
           button.btn(v-if='editMode' v-on:click='personPicker="person"') Add person   
         person-picker(v-if='personPicker' :type='personPicker' v-on:close='personPicker=null') 
         
@@ -132,40 +131,25 @@ export default {
       }
     },
     department_people: function() {
-      var person_ids = this.assignments.filter(
-        a => a.department_id == this.activeDepartment.id
-      )
-      var people = []
-      //if (!this.editMode) {
-      let person = this.people.find(
-        p => p.id == this.activeDepartment.manager.id
-      )
+      let people = []
       people.push({
-        person: person,
+        person: this.activeDepartment.manager,
         assignment: 'Manager',
         photoURL:
           this.config.photoUrl.prefix +
           this.activeDepartment.manager.photo +
           this.config.photoUrl.suffix
       })
-      //}
-
-      //console.log(this.activeDepartment.employees)
-
-      person_ids.forEach(pid => {
-        var person = this.people.find(p => p.id == pid.person_id)
-        if (person) {
-          people.push({
-            person: person,
-            assignment: pid,
-            photoURL:
-              this.config.photoUrl.prefix +
-              person.photo +
-              this.config.photoUrl.suffix
-          })
-        }
+      this.activeDepartment.employees.forEach(person => {
+        people.push({
+          person: person.person,
+          assignment: person.role,
+          photoURL:
+            this.config.photoUrl.prefix +
+            person.person.photo +
+            this.config.photoUrl.suffix
+        })
       })
-
       return people
     },
     parents: function() {
@@ -186,7 +170,11 @@ export default {
       'setShowDepartment',
       'updateActiveDepartmentIsStaff'
     ]),
-    ...mapMutations(['setShowPerson']),
+    ...mapMutations([
+      'setShowPerson',
+      'removeAssignment',
+      'updateRole'
+    ]),
     markPhotoNotFound(person) {
       if (!this.noPhotos.find(p => p === person)) {
         this.noPhotos.push(person)
@@ -195,14 +183,25 @@ export default {
     setActiveDepartment(department) {
       this.setShowDepartment(department)
     },
-    removeFromDepartment(person) {
-      this.$store.commit('removePersonFromActiveDepartment', person)
-    },
-    updateRole(person, e) {
-      this.$store.commit('updateActiveDepartmentPersonRole', {
-        person: person,
-        role: e.target.value
+    removeDeptAssignment(assignment) {
+      this.removeAssignment({
+        department: this.activeDepartment,
+        person: assignment.person,
+        role: assignment.assignment
       })
+    },
+    updateThisRole(person, idx, e) {
+      console.log(person, idx, e)
+      this.updateRole({
+        department: this.activeDepartment,
+        index: idx,
+        role: e.target.value,
+        person: person.person
+      })
+      // this.$store.commit('updateActiveDepartmentPersonRole', {
+      //   person: person,
+      //   role: e.target.value
+      //  })
     },
     visitProfile(person) {
       this.setShowPerson(person)
