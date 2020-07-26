@@ -2,63 +2,76 @@
    #person_details_container
     #person_details
       i.material-icons.close(@click='setShowPerson(null)') close
-      .personname {{showPerson.name}}
+      .personname(v-if="showPerson.name") {{showPerson.name}}
+      .personname(v-else) Add new employee
       .content
         .photo
-          img.im(v-if="photoUrl" :src='photoUrl' @error="markPhotoNotFound(person)")
+          img.im(v-if="photoUrl" :src='photoUrl' @error="markPhotoNotFound(showPerson)")
           i(v-else).material-icons.nophoto account_box
+          template(v-if='editMode')
+            span.prop Photo id
+            input.val1(v-model='employeePhoto')
         .details
           table.tab
-            tr
-              td.prop Name
-              td.val(v-if='!editMode') {{employeeName}}
-              td.val(v-else)
-                input.val1(v-model='employeeName')
-            tr
-              td.prop Email
-              td(v-if='!editMode') {{employeeEmail}}
-              td(v-else)
-                input.val1(v-model='employeeEmail')
-            tr
-              td.prop Phone
-              td(v-if='!editMode') {{employeePhone}}
-              td(v-else)
-                input.val1(v-model='employeePhone')
-            tr
-              td.prop Homepage
-              td(v-if='!editMode') 
-                a(:href="employeeHomePage" target="_blank") {{employeeHomePage}}
-              td(v-else)
-                input.val1(v-model='employeeHomePage')
-            tr
-              td.prop Country
-              td(v-if='!editMode') {{employeeCountry}}
-              td(v-else)
-                input.val1(v-model='employeeCountry')
-            tr
-              td.prop City
-              td(v-if='!editMode') {{employeeCity}}
-              td(v-else)
-                input.val1(v-model='employeeCity')
-            tr
-              td.prop Street
-              td(v-if='!editMode') {{employeeStreet}}
-              td(v-else)
-                input.val1(v-model='employeeStreet')
-            tr
-              td.prop Function
-              td.val(v-if='!editMode') {{employeeFunctionName}}
-              td.val(v-else)
-                input.val1(v-model='employeeFunctionName')
-            tr
+            template(v-if='config.linkUrl')
+              tr
+                td(colspan="2").btn
+                  button(@click='gotoExtProfile(showPerson)') Open profile information
+            template(v-else)
+              tr
+                td.prop Name*
+                td.val(v-if='!editMode') {{employeeName}}
+                td.val(v-else)
+                  input.val1(v-model='employeeName')
+              tr
+                td.prop Email
+                td(v-if='!editMode') {{employeeEmail}}
+                td(v-else)
+                  input.val1(v-model='employeeEmail')
+              tr
+                td.prop Phone
+                td(v-if='!editMode') {{employeePhone}}
+                td(v-else)
+                  input.val1(v-model='employeePhone')
+              tr
+                td.prop Homepage
+                td(v-if='!editMode') 
+                  a(:href="employeeHomePage" target="_blank") {{employeeHomePage}}
+                td(v-else)
+                  input.val1(v-model='employeeHomePage')
+              tr
+                td.prop Country
+                td(v-if='!editMode') {{employeeCountry}}
+                td(v-else)
+                  input.val1(v-model='employeeCountry')
+              tr
+                td.prop City
+                td(v-if='!editMode') {{employeeCity}}
+                td(v-else)
+                  input.val1(v-model='employeeCity')
+              tr
+                td.prop Street
+                td(v-if='!editMode') {{employeeStreet}}
+                td(v-else)
+                  input.val1(v-model='employeeStreet')
+              tr
+                td.prop Function
+                td.val(v-if='!editMode') {{employeeFunctionName}}
+                td.val(v-else)
+                  input.val1(v-model='employeeFunctionName') 
+              tr
+                td.prop Employee ID*
+                td.val(v-if='!editMode') {{employeeID}}
+                td.val(v-else)
+                  input.val1(v-model='employeeID')
+            tr(v-if="!showPerson.new")
               td.prop Departments
               td.val
                 .dep(v-for='department in companyDetails.Departments' @click='goto(department)') 
                   span {{department.deptName}}  
                   span.role {{department.role}}
-        .extra
-          button test      
-           
+        div
+          button.btn1(v-if="showPerson.new" @click='addEmployee(showPerson)' :disabled='!employeeID || !employeeName') ADD
    
 </template>
 
@@ -75,6 +88,22 @@ export default {
       'orgArray',
       'editMode'
     ]),
+    employeeID: {
+      get() {
+        return this.$store.state.showPerson.id
+      },
+      set(value) {
+        this.$store.commit('setShowPersonID', value)
+      }
+    },
+    employeePhoto: {
+      get() {
+        return this.$store.state.showPerson.photo
+      },
+      set(value) {
+        this.$store.commit('setShowPersonPhoto', value)
+      }
+    },
     employeeName: {
       get() {
         return this.$store.state.showPerson.name
@@ -142,7 +171,7 @@ export default {
     photoUrl: function() {
       return (
         this.config.photoUrl.prefix +
-        this.showPerson.id +
+        this.showPerson.photo +
         this.config.photoUrl.suffix
       )
     },
@@ -158,11 +187,11 @@ export default {
       )
       let hisDepartments = this.orgArray.filter(
         a =>
-          a.manager_id === this.showPerson.id ||
+          a.manager.id === this.showPerson.id ||
           hisAssignmentsList.includes(a.id)
       )
       hisDepartments.forEach(d => {
-        if (d.manager_id == this.showPerson.id) {
+        if (d.manager.id == this.showPerson.id) {
           depts.push({
             deptId: d.id,
             deptName: d.name,
@@ -229,7 +258,12 @@ export default {
   },
   mounted: function() {},
   methods: {
-    ...mapMutations(['setShowPerson']),
+    ...mapMutations([
+      'setShowPerson',
+      'addPerson',
+      'addAssignmentToActiveDepartment',
+      'updateActiveDepartmentManager'
+    ]),
     ...mapActions(['setShowDepartment']),
     goto(d) {
       console.log(d)
@@ -238,14 +272,29 @@ export default {
     },
     gotoExtProfile(person) {
       var url =
-        state.config.linkUrl.prefix +
+        this.config.linkUrl.prefix +
         person.id +
-        state.config.linkUrl.suffix
+        this.config.linkUrl.suffix
       window.open(url, '_blank')
+    },
+    markPhotoNotFound(person) {
+      console.log('person photo not found', person)
+    },
+    addEmployee(person) {
+      console.log('adding', person)
+      if (this.people.find(p => p.id == person.id)) {
+        alert('A person with this id already exists')
+      } else {
+        let ismanager = person.manager
+        this.addPerson(person)
+        this.setShowPerson(null)
+        if (ismanager) {
+          this.updateActiveDepartmentManager(person)
+        } else {
+          this.addAssignmentToActiveDepartment(person)
+        }
+      }
     }
-  },
-  markPhotoNotFound(person) {
-    console.log('person photo not found', person)
   }
 }
 </script>
@@ -303,7 +352,7 @@ export default {
   width: 400px;
 }
 .prop {
-  width: 100px;
+  width: 120px;
   color: grey;
   text-align: left;
 }
@@ -343,5 +392,28 @@ table td * {
 }
 .dep:hover {
   background-color: lightblue;
+}
+.btn {
+  text-align: center;
+  column-span: 2;
+}
+.btn button {
+  padding: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.btn1 {
+  padding: 10px 20px;
+  border: 2px solid green;
+  border-radius: 5px;
+  color: white;
+  background-color: green;
+  cursor: pointer;
+}
+.btn1:disabled {
+  color: grey;
+  border: 2px solid lightgrey;
+  background-color: lightgrey;
+  cursor: not-allowed;
 }
 </style>

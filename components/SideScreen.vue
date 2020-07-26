@@ -76,8 +76,8 @@
                   .role(v-else) 
                     input(:value="person.assignment.role" @input="updateRole(person, $event)")
             template(v-if='editMode && person.assignment != "Manager"')
-              i.material-icons.delete(title='remove from department' v-on:click='removeFromDepartment(person)') delete
-          button(v-if='editMode' v-on:click='personPicker="person"') Add person   
+              i.material-icons.delete(title='remove from department' v-on:click.stop='removeFromDepartment(person)') delete
+          button.btn(v-if='editMode' v-on:click='personPicker="person"') Add person   
         person-picker(v-if='personPicker' :type='personPicker' v-on:close='personPicker=null') 
         
     .noside-screen(v-else)
@@ -145,7 +145,7 @@ export default {
         assignment: 'Manager',
         photoURL:
           this.config.photoUrl.prefix +
-          this.activeDepartment.manager.id +
+          this.activeDepartment.manager.photo +
           this.config.photoUrl.suffix
       })
       //}
@@ -158,7 +158,7 @@ export default {
             assignment: pid,
             photoURL:
               this.config.photoUrl.prefix +
-              person.id +
+              person.photo +
               this.config.photoUrl.suffix
           })
         }
@@ -203,15 +203,7 @@ export default {
       })
     },
     visitProfile(person) {
-      console.log(person)
-      // if (this.editMode) return
-      if (!this.config.linkUrl) return
       this.setShowPerson(person)
-      var url =
-        this.config.linkUrl.prefix +
-        person.id +
-        this.config.linkUrl.suffix
-      // window.open(url, '_blank')
     }
   }
 }
@@ -377,6 +369,9 @@ ul {
 }
 .material-icons.edit {
   font-size: 16px;
+  cursor: pointer;
+}
+.btn {
   cursor: pointer;
 }
 </style>

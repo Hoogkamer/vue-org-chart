@@ -1,6 +1,6 @@
 <template lang='pug'>
   #search_div
-    input.search_input(v-model='searchField' placeholder='Search department or manager...')
+    input.search_input(v-model='searchField' placeholder='Search department or person...')
     #search_results(v-if="searchField.length")
       ul
         li(v-if="searchresults.length" v-for="result in searchresults" v-on:click="findDept(result)") 

@@ -181,6 +181,12 @@ export const mutations = {
     state.showNrDepartments = state.config.startView.showNrDepartments
     state.showNrPeople = state.config.startView.showNrPeople
   },
+  setShowPersonID(state, val) {
+    state.showPerson.id = val
+  },
+  setShowPersonPhoto(state, val) {
+    state.showPerson.photo = val
+  },
   setShowPersonName(state, val) {
     state.showPerson.name = val
   },
@@ -207,8 +213,24 @@ export const mutations = {
   },
   setShowPerson(state, person) {
     console.log('setshowperson', person)
-    state.showPerson = person
-    if (!person) return
+    if (person && person.new) {
+      state.showPerson = {
+        name: '',
+        id: '',
+        new: true,
+        manager: person.manager,
+        photo: '',
+        email: '',
+        phone: '',
+        country: '',
+        city: '',
+        street: '',
+        functionName: '',
+        homepage: ''
+      }
+    } else {
+      state.showPerson = person
+    }
   },
   createTree(state, datas) {
     state.orgArray = datas
@@ -333,6 +355,8 @@ export const mutations = {
   },
   addPerson(state, person) {
     //TODO: check for duplicates
+    person.new = false
+    delete person.new
     state.people.push(person)
   },
   updateActiveDepartmentName(state, name) {

@@ -11,10 +11,11 @@ var CONFIG = {
     prefix: 'photos/',
     suffix: '.png'
   },
-  linkUrl: {
-    prefix: 'photos/',
-    suffix: '.png'
-  },
+  // uncomment if you have an external profile inormation page
+  //linkUrl: {
+  //  prefix: 'photos/',
+  //  suffix: '.png'
+  //},
   startView: {
     photos: true,
     names: true,
