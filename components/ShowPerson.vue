@@ -45,20 +45,19 @@
               td(v-if='!editMode') {{employeeStreet}}
               td(v-else)
                 input.val1(v-model='employeeStreet')
-        .company
-          table.tab
             tr
-              td.prop Function:
-              td.val(v-if='!editMode') {{employeeFunction}}
+              td.prop Function
+              td.val(v-if='!editMode') {{employeeFunctionName}}
               td.val(v-else)
-                input.val1(v-model='employeeFunction')
+                input.val1(v-model='employeeFunctionName')
             tr
-              td.prop Departments:
-              td
+              td.prop Departments
+              td.val
                 .dep(v-for='department in companyDetails.Departments' @click='goto(department)') 
                   span {{department.deptName}}  
                   span.role {{department.role}}
-              
+        .extra
+          button test      
            
    
 </template>
@@ -124,12 +123,12 @@ export default {
         this.$store.commit('setShowPersonPhone', value)
       }
     },
-    employeeFunction: {
+    employeeFunctionName: {
       get() {
-        return this.$store.state.showPerson.function
+        return this.$store.state.showPerson.functionName
       },
       set(value) {
-        this.$store.commit('setShowPersonFunction', value)
+        this.$store.commit('setShowPersonFunctionName', value)
       }
     },
     employeeHomePage: {
@@ -146,16 +145,6 @@ export default {
         this.showPerson.id +
         this.config.photoUrl.suffix
       )
-    },
-    details: function() {
-      return {
-        Name: this.showPerson.name,
-        'E-Mail': 'www@asdflkj.fom',
-        Phone: '000-005550505',
-        Country: 'Netherlands',
-        City: 'Amsterdam',
-        Street: 'Baarsjes 10'
-      }
     },
     companyDetails: function() {
       let hisAssignmentsList = []
@@ -246,6 +235,13 @@ export default {
       console.log(d)
       this.setShowPerson(null)
       this.setShowDepartment(d.orgDepartment)
+    },
+    gotoExtProfile(person) {
+      var url =
+        state.config.linkUrl.prefix +
+        person.id +
+        state.config.linkUrl.suffix
+      window.open(url, '_blank')
     }
   },
   markPhotoNotFound(person) {
@@ -292,6 +288,7 @@ export default {
 }
 .photo {
   width: 200px;
+  height: 200px;
   display: inline-block;
   margin: 0px 10px;
 }
@@ -305,7 +302,7 @@ export default {
   margin-bottom: 10px;
   width: 400px;
 }
-.tab .prop {
+.prop {
   width: 100px;
   color: grey;
   text-align: left;

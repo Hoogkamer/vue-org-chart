@@ -199,8 +199,8 @@ export const mutations = {
   setShowPersonStreet(state, val) {
     state.showPerson.street = val
   },
-  setShowPersonFunction(state, val) {
-    state.showPerson.function = val
+  setShowPersonFunctionName(state, val) {
+    state.showPerson.functionName = val
   },
   setShowPersonHomePage(state, val) {
     state.showPerson.homepage = val
@@ -208,6 +208,7 @@ export const mutations = {
   setShowPerson(state, person) {
     console.log('setshowperson', person)
     state.showPerson = person
+    if (!person) return
   },
   createTree(state, datas) {
     state.orgArray = datas
