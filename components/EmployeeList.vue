@@ -1,18 +1,17 @@
 <template lang='pug'>
   div
-    .assignment(v-for='(person, p_idx) in department_people' v-on:click='visitProfile(person.person)')
+    .assignment(v-for='(person, p_idx) in activeDepartment.employees' v-on:click='visitProfile(person.person)' title='Goto profile')
       table
         tr
           td
-            img.photo(v-if="person.photoURL" :src='person.photoURL' @error="markPhotoNotFound(person)")
-            i(v-else).material-icons.nophoto account_box
+            img.photo(:src='photoURL(person)' @error="markPhotoNotFound(person)")
           td
             .name 
               span {{person.person.name}}
-            .role(v-if='!editMode || person.assignment ==="Manager"') {{person.assignment}}
+            .role(v-if='!editMode') {{person.role}}
             .role(v-else) 
-              input(:value="person.assignment" @input="updateThisRole(person, p_idx, $event)")
-      template(v-if='editMode && person.assignment != "Manager"')
+              input(:value="person.role" @input="updateThisRole(person, $event)" v-on:click.stop title='Edit role')
+      template(v-if='editMode')
         i.material-icons.delete(title='remove from department' v-on:click.stop='removeDeptAssignment(person)') delete
     button.btn(v-if='editMode' v-on:click='personPicker="person"') Add person   
     person-picker(v-if='personPicker' :type='personPicker' v-on:close='personPicker=null') 
@@ -31,29 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeDepartment', 'editMode', 'people', 'config']),
-    department_people: function() {
-      let people = []
-      people.push({
-        person: this.activeDepartment.manager,
-        assignment: 'Manager',
-        photoURL:
-          this.config.photoUrl.prefix +
-          this.activeDepartment.manager.photo +
-          this.config.photoUrl.suffix
-      })
-      this.activeDepartment.employees.forEach(person => {
-        people.push({
-          person: person.person,
-          assignment: person.role,
-          photoURL:
-            this.config.photoUrl.prefix +
-            person.person.photo +
-            this.config.photoUrl.suffix
-        })
-      })
-      return people
-    }
+    ...mapState(['activeDepartment', 'editMode', 'people', 'config'])
   },
   methods: {
     ...mapActions(['setShowDepartment']),
@@ -67,26 +44,26 @@ export default {
         this.noPhotos.push(person)
       }
     },
+    photoURL(person) {
+      return (
+        this.config.photoUrl.prefix +
+        person.person.photo +
+        this.config.photoUrl.suffix
+      )
+    },
 
     removeDeptAssignment(assignment) {
       this.removeAssignment({
         department: this.activeDepartment,
-        person: assignment.person,
-        role: assignment.assignment
+        assignment: assignment
       })
     },
-    updateThisRole(person, idx, e) {
-      console.log(person, idx, e)
+    updateThisRole(person, e) {
       this.updateRole({
+        assignment: person,
         department: this.activeDepartment,
-        index: idx,
-        role: e.target.value,
-        person: person.person
+        role: e.target.value
       })
-      // this.$store.commit('updateActiveDepartmentPersonRole', {
-      //   person: person,
-      //   role: e.target.value
-      //  })
     },
     visitProfile(person) {
       this.setShowPerson(person)

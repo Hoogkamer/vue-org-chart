@@ -471,20 +471,25 @@ export const mutations = {
   addAssignment(state, { department, role, person }) {
     console.log('adding assignment', department, role, person)
     department.employees.push({ person: person, role: role })
+    person.departments.push({ role: role, department: department })
   },
-  updateRole(state, { department, index, role, person }) {
-    let saveRole = department.employees[index - 1].role
-    department.employees[index - 1].role = role
-    person.departments.find(
+  updateRole(state, { assignment, department, role }) {
+    let saveRole = assignment.role
+    assignment.role = role
+    assignment.person.departments.find(
       a => a.department == department && a.role == saveRole
     ).role = role
   },
-  removeAssignment(state, { department, role, person }) {
+
+  removeAssignment(state, { assignment, department }) {
+    let person = assignment.person
+    let role = assignment.role
+    console.log(person, role)
     person.departments = person.departments.filter(
       a => !(a.department == department && a.role == role)
     )
     department.employees = department.employees.filter(
-      a => !(a.person == person && a.role == role)
+      a => a !== assignment
     )
   },
   addManager(state, { department, person }) {

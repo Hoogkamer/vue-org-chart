@@ -86,7 +86,8 @@ export default {
       'assignments',
       'chart',
       'orgArray',
-      'editMode'
+      'editMode',
+      'activeDepartment'
     ]),
     employeeID: {
       get() {
@@ -177,9 +178,9 @@ export default {
     },
     personAssignments: function() {
       let assignments = this.showPerson.departments
-      assignments.sort((a, b) =>
-        a.department.name.localeCompare(b.department.name)
-      )
+      //assignments.sort((a, b) =>
+      //   a.department.name.localeCompare(b.department.name)
+      // )
       return assignments
     }
   },
@@ -191,7 +192,8 @@ export default {
       'setShowPerson',
       'addPerson',
       'addAssignmentToActiveDepartment',
-      'updateActiveDepartmentManager'
+      'updateActiveDepartmentManager',
+      'addAssignment'
     ]),
     ...mapActions(['setShowDepartment']),
     goto(d) {
@@ -220,7 +222,12 @@ export default {
         if (ismanager) {
           this.updateActiveDepartmentManager(person)
         } else {
-          this.addAssignmentToActiveDepartment(person)
+          // this.addAssignmentToActiveDepartment(person)
+          this.addAssignment({
+            department: this.activeDepartment,
+            person: person,
+            role: ''
+          })
         }
       }
     }

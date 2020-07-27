@@ -52,7 +52,7 @@
         li.clickable(v-for='child in activeDepartment.children' v-on:click="setActiveDepartment(child)") 
           span(v-for="n in parents.length+5") &nbsp
           span {{child.name}}
-    img.profile(:src='config.photoUrl.prefix+activeDepartment.manager.photo+config.photoUrl.suffix' v-on:click='visitProfile(activeDepartment.manager)' v-if="activeDepartment.manager.photo")
+    img.profile(:src='config.photoUrl.prefix+activeDepartment.manager.photo+config.photoUrl.suffix' v-on:click='visitProfile(activeDepartment.manager)' title='Goto profile')
     person-picker(v-if='personPicker' type='manager' v-on:close='personPicker=null') 
 </template>
 
@@ -138,6 +138,7 @@ export default {
 .profile {
   width: 80px;
   max-height: 80px;
+  min-height: 60px;
   position: absolute;
   right: 16px;
   top: 154px;

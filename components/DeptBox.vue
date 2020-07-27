@@ -17,7 +17,7 @@
                 div.hidden_dept.down(v-if='!departmentData.showChildren' v-on:click="doShowChildren(true)" title='Nr of subdepartments') {{departmentData.children.length}}
                 div.hidden_dept.up(v-if='departmentData.showChildren' v-on:click="doShowChildren(false)" title='Nr of subdepartments') {{departmentData.children.length}}
             template(v-if="showNrPeople")
-              div.ppl_count(v-if='count_department_people(departmentData)' title='Nr of people in department') {{count_department_people(departmentData)}}
+              div.ppl_count(v-if='departmentData.employees.length' title='Nr of people in department') {{departmentData.employees.length}}
             
             i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="view options") visibility
             i.material-icons.hidden_parents1(v-if="hiddenParents" v-on:click="setHideParents(false)") more_vert
@@ -42,7 +42,7 @@
                 div.hidden_dept.down(v-if='!departmentData.showChildren' v-on:click="doShowChildren(true)" title='Nr of subdepartments') {{departmentData.children.length}}
                 div.hidden_dept.up(v-if='departmentData.showChildren' v-on:click="doShowChildren(false)" title='Nr of subdepartments') {{departmentData.children.length}}
             template(v-if="showNrPeople")
-              div.ppl_count(v-if='count_department_people(departmentData)' title='Nr of people in department') {{count_department_people(departmentData)}}
+              div.ppl_count(v-if='departmentData.employees.length' title='Nr of people in department') {{departmentData.employees.length}}
             
             i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="view options") visibility
             i.material-icons.hidden_parents(v-if="hiddenParents" v-on:click="setHideParents(false)") more_vert   
@@ -155,12 +155,6 @@ export default {
     },
     hideSiblings() {
       this.setHideSiblings(this.departmentData)
-    },
-    count_department_people: function(dept) {
-      var person_ids = this.assignments.filter(
-        a => a.department_id == dept.id
-      )
-      return person_ids.length
     }
   }
 }
