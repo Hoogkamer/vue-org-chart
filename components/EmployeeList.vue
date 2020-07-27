@@ -9,7 +9,7 @@
           td
             .name 
               span {{person.person.name}}
-            .role(v-if='!editMode') {{person.assignment}}
+            .role(v-if='!editMode || person.assignment ==="Manager"') {{person.assignment}}
             .role(v-else) 
               input(:value="person.assignment" @input="updateThisRole(person, p_idx, $event)")
       template(v-if='editMode && person.assignment != "Manager"')

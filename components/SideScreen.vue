@@ -21,7 +21,7 @@ import EmployeeList from '~/components/EmployeeList.vue'
 import DepartmentDetails from '~/components/DepartmentDetails.vue'
 
 export default {
-  components: { PersonPicker, EmployeeList, DepartmentDetails },
+  components: { EmployeeList, DepartmentDetails },
   data: function() {
     return {
       personPicker: null,

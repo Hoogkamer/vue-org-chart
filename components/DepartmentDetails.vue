@@ -53,6 +53,7 @@
           span(v-for="n in parents.length+5") &nbsp
           span {{child.name}}
     img.profile(:src='config.photoUrl.prefix+activeDepartment.manager.photo+config.photoUrl.suffix' v-on:click='visitProfile(activeDepartment.manager)' v-if="activeDepartment.manager.photo")
+    person-picker(v-if='personPicker' type='manager' v-on:close='personPicker=null') 
 </template>
 
 <script>
@@ -165,7 +166,7 @@ textarea.description {
   height: 80px;
 }
 .clickable:hover {
-  background-color: grey;
+  background-color: lightblue;
 }
 .noclickable {
   cursor: default;
