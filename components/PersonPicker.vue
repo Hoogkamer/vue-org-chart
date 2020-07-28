@@ -65,6 +65,8 @@ export default {
         })
       }
       this.searchField = ''
+      this.$store.commit('setSelectedPerson', null)
+      this.$emit('close')
     },
     close: function() {
       this.$store.commit('setSelectedPerson', null)
@@ -76,6 +78,8 @@ export default {
         new: true,
         manager: this.type === 'manager'
       })
+      this.$store.commit('setSelectedPerson', null)
+      this.$emit('close')
     }
   }
 }

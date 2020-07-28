@@ -86,7 +86,6 @@ export default {
       'editMode',
       'config',
       'chart',
-      'assignments',
       'showNrPeople',
       'showNrDepartments'
     ]),

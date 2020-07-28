@@ -83,7 +83,6 @@ export default {
       'showPerson',
       'config',
       'people',
-      'assignments',
       'chart',
       'orgArray',
       'editMode',
@@ -191,7 +190,6 @@ export default {
     ...mapMutations([
       'setShowPerson',
       'addPerson',
-      'addAssignmentToActiveDepartment',
       'updateActiveDepartmentManager',
       'addAssignment'
     ]),
@@ -222,7 +220,6 @@ export default {
         if (ismanager) {
           this.updateActiveDepartmentManager(person)
         } else {
-          // this.addAssignmentToActiveDepartment(person)
           this.addAssignment({
             department: this.activeDepartment,
             person: person,
@@ -236,10 +233,12 @@ export default {
 </script>
 <style scoped>
 #person_details_container {
+  top: 50px;
+  padding: 50px;
   width: 100%;
   position: absolute;
-  height: 0px;
-  top: 150px;
+  height: 100%;
+  background: rgba(200, 200, 200, 0.8);
   z-index: 2;
   text-align: center;
 }

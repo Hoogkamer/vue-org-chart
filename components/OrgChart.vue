@@ -3,11 +3,7 @@
       .chart_container
         show-dept(v-if="chart" :parent="chart" :level="1")
         draw-lines(v-if="chart")
-        //edit-menu(v-if="showEditMenu")
         view-menu(v-if="showViewMenu")
-        //#move_dept(v-if="moveDepartment" :style="{ left: page.left + 'px', top: page.top + 'px' }")
-        //  div {{moveDepartment.name}}
-        //  i.material-icons.arrow.down(v-if='moveDepartment.children.length') arrow_drop_down
 </template>
 
 <script>

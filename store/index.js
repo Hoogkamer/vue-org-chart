@@ -2,6 +2,8 @@ var panzoom = require('panzoom')
 import 'array-from-polyfill'
 import 'core-js/es6/map'
 import 'core-js/es6/set'
+import Vue from 'vue'
+
 var _ = require('lodash')
 
 export const state = () => ({
@@ -253,13 +255,6 @@ export const mutations = {
     state.people = datas
   },
   processAssignments(state, { departments, people, assignments }) {
-    console.log(
-      'departments, people, assignments',
-      departments,
-      people,
-      assignments
-    )
-
     departments.forEach(dept => {
       if (!dept.manager.departments) {
         dept.manager.departments = [
@@ -285,8 +280,17 @@ export const mutations = {
         assignmentstotal.push({ person: p, role: ass.role })
       })
       dept.employees = assignmentstotal
-      console.log(dept, people)
+
+      dept.employees.sort(
+        (a, b) =>
+          a.person.name > b.person.name
+            ? 1
+            : b.person.name > a.person.name
+              ? -1
+              : 0
+      )
     })
+    //departments.sort((a, b) => )
   },
   setAssignments(state, datas) {
     datas.forEach((d, i) => {
@@ -329,14 +333,11 @@ export const mutations = {
     state.showViewMenu = event
   },
   showChildren(state, dept) {
-    //var index = state.orgArray.findIndex(e => e.id === dept.id)
-
     console.log('showchildren called', dept)
     dept.showChildren = true
     if (dept.parent && state.onlyShowParents) {
       dept.parent.onlyShowThisChild = dept
     }
-    //state.orgArray.splice(index, 1, dept)
   },
   setActiveDepartment(state, dept) {
     if (state.chart.parent && dept && !findDept(state.chart, dept)) {
@@ -457,21 +458,27 @@ export const mutations = {
     state.moveDepartment = null
     state.showEditMenu = null
   },
-  removePersonFromActiveDepartment(state, person) {
-    state.assignments = state.assignments.filter(
-      a => a.id !== person.assignment.id
-    )
-  },
-  updateActiveDepartmentPersonRole(state, inp) {
-    var assignment = state.assignments.find(
-      a => a.id === inp.person.assignment.id
-    )
-    assignment.role = inp.role
-  },
+
   addAssignment(state, { department, role, person }) {
     console.log('adding assignment', department, role, person)
     department.employees.push({ person: person, role: role })
+    department.employees.sort(
+      (a, b) =>
+        a.person.name > b.person.name
+          ? 1
+          : b.person.name > a.person.name
+            ? -1
+            : 0
+    )
     person.departments.push({ role: role, department: department })
+    person.departments.sort(
+      (a, b) =>
+        a.department.name > b.department.name
+          ? 1
+          : b.department.name > a.department.name
+            ? -1
+            : 0
+    )
   },
   updateRole(state, { assignment, department, role }) {
     let saveRole = assignment.role
@@ -491,18 +498,10 @@ export const mutations = {
     department.employees = department.employees.filter(
       a => a !== assignment
     )
+    console.log(department.employees)
   },
   addManager(state, { department, person }) {
     department.manager = person
-  },
-  //todo: remove
-  addAssignmentToActiveDepartment(state, inp) {
-    state.assignments.push({
-      department_id: state.activeDepartment.id,
-      id: guid(),
-      person_id: inp.id,
-      role: ''
-    })
   },
   addLine(state) {
     state.lines = updateLines(state.chart, [])
@@ -734,7 +733,8 @@ function refreshLines(that, dept) {
 }
 function processDataNew(dept, orgArray) {
   if (!dept.employees) {
-    dept.employees = []
+    //dept.employees = []
+    Vue.set(dept, 'employees', [])
   }
   orgArray.push(dept)
   var manager = INPUT_DATA.people.find(p => p.id == dept.manager_id)

@@ -75,7 +75,6 @@ export default {
       'activeDepartment',
       'editMode',
       'people',
-      'assignments',
       'config'
     ]),
     activeDepartment_name: {
