@@ -51,11 +51,19 @@ export default {
         console.log(svgContainer)
         html2canvas(x, {
           onclone: element => {
-            const svgElements = element.body.getElementsByTagName('svg')
+            const svgElements = element.body.getElementsByTagName(
+              'svg'
+            )
             Array.from(svgElements).forEach(svgElement => {
               const bBox = svgElement.getBBox()
-              svgElement.setAttribute('width', svgContainer.offsetWidth)
-              svgElement.setAttribute('height', svgContainer.offsetHeight)
+              svgElement.setAttribute(
+                'width',
+                svgContainer.offsetWidth
+              )
+              svgElement.setAttribute(
+                'height',
+                svgContainer.offsetHeight
+              )
             })
           }
         }).then(canvas => {

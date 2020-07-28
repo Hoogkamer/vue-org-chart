@@ -2,6 +2,8 @@ var panzoom = require('panzoom')
 import 'array-from-polyfill'
 import 'core-js/es6/map'
 import 'core-js/es6/set'
+import Vue from 'vue'
+
 var _ = require('lodash')
 
 export const state = () => ({
@@ -26,7 +28,8 @@ export const state = () => ({
   onlyShowParents: false,
   zoomInstance: null,
   showNrDepartments: null,
-  showNrPeople: null
+  showNrPeople: null,
+  showPerson: null
 })
 
 export const actions = {
@@ -49,6 +52,11 @@ export const actions = {
       alert('wrong version input file')
     }
 
+    commit('processAssignments', {
+      departments: data.orgArray,
+      people: INPUT_DATA.people,
+      assignments: INPUT_DATA.assignments
+    })
     commit('setPeople', INPUT_DATA.people)
     commit('setAssignments', INPUT_DATA.assignments)
     var that = this
@@ -180,6 +188,58 @@ export const mutations = {
     state.showNrDepartments = state.config.startView.showNrDepartments
     state.showNrPeople = state.config.startView.showNrPeople
   },
+  setShowPersonID(state, val) {
+    state.showPerson.id = val
+  },
+  setShowPersonPhoto(state, val) {
+    state.showPerson.photo = val
+  },
+  setShowPersonName(state, val) {
+    state.showPerson.name = val
+  },
+  setShowPersonEmail(state, val) {
+    state.showPerson.email = val
+  },
+  setShowPersonPhone(state, val) {
+    state.showPerson.phone = val
+  },
+  setShowPersonCountry(state, val) {
+    state.showPerson.country = val
+  },
+  setShowPersonCity(state, val) {
+    state.showPerson.city = val
+  },
+  setShowPersonStreet(state, val) {
+    state.showPerson.street = val
+  },
+  setShowPersonFunctionName(state, val) {
+    state.showPerson.functionName = val
+  },
+  setShowPersonHomePage(state, val) {
+    state.showPerson.homepage = val
+  },
+  setShowPerson(state, person) {
+    console.log('setshowperson', person)
+    if (person && person.new) {
+      state.showPerson = {
+        name: '',
+        id: '',
+        new: true,
+        manager: person.manager,
+        photo: '',
+        email: '',
+        phone: '',
+        country: '',
+        city: '',
+        street: '',
+        functionName: '',
+        homepage: '',
+        departments: []
+      }
+    } else {
+      state.showPerson = person
+    }
+  },
   createTree(state, datas) {
     state.orgArray = datas
     state.chart = createTree(_.clone(datas))[0]
@@ -193,6 +253,44 @@ export const mutations = {
   },
   setPeople(state, datas) {
     state.people = datas
+  },
+  processAssignments(state, { departments, people, assignments }) {
+    departments.forEach(dept => {
+      if (!dept.manager.departments) {
+        dept.manager.departments = [
+          { role: 'Manager', department: dept }
+        ]
+      } else {
+        dept.manager.departments.push({
+          role: 'Manager',
+          department: dept
+        })
+      }
+      let assign = assignments.filter(
+        ass => dept.id === ass.department_id
+      )
+      let assignmentstotal = []
+      assign.forEach(ass => {
+        let p = people.find(p => p.id === ass.person_id)
+        if (!p.departments) {
+          p.departments = [{ role: ass.role, department: dept }]
+        } else {
+          p.departments.push({ role: ass.role, department: dept })
+        }
+        assignmentstotal.push({ person: p, role: ass.role })
+      })
+      dept.employees = assignmentstotal
+
+      dept.employees.sort(
+        (a, b) =>
+          a.person.name > b.person.name
+            ? 1
+            : b.person.name > a.person.name
+              ? -1
+              : 0
+      )
+    })
+    //departments.sort((a, b) => )
   },
   setAssignments(state, datas) {
     datas.forEach((d, i) => {
@@ -235,14 +333,11 @@ export const mutations = {
     state.showViewMenu = event
   },
   showChildren(state, dept) {
-    //var index = state.orgArray.findIndex(e => e.id === dept.id)
-
     console.log('showchildren called', dept)
     dept.showChildren = true
     if (dept.parent && state.onlyShowParents) {
       dept.parent.onlyShowThisChild = dept
     }
-    //state.orgArray.splice(index, 1, dept)
   },
   setActiveDepartment(state, dept) {
     if (state.chart.parent && dept && !findDept(state.chart, dept)) {
@@ -285,6 +380,7 @@ export const mutations = {
   addDepartment(state) {
     var newdept = {
       children: [],
+      employees: [],
       description: '',
       id: guid(),
       isStaff: false,
@@ -303,6 +399,9 @@ export const mutations = {
   },
   addPerson(state, person) {
     //TODO: check for duplicates
+    person.new = false
+    delete person.new
+    delete person.manager
     state.people.push(person)
   },
   updateActiveDepartmentName(state, name) {
@@ -359,24 +458,50 @@ export const mutations = {
     state.moveDepartment = null
     state.showEditMenu = null
   },
-  removePersonFromActiveDepartment(state, person) {
-    state.assignments = state.assignments.filter(
-      a => a.id !== person.assignment.id
+
+  addAssignment(state, { department, role, person }) {
+    console.log('adding assignment', department, role, person)
+    department.employees.push({ person: person, role: role })
+    department.employees.sort(
+      (a, b) =>
+        a.person.name > b.person.name
+          ? 1
+          : b.person.name > a.person.name
+            ? -1
+            : 0
+    )
+    person.departments.push({ role: role, department: department })
+    person.departments.sort(
+      (a, b) =>
+        a.department.name > b.department.name
+          ? 1
+          : b.department.name > a.department.name
+            ? -1
+            : 0
     )
   },
-  updateActiveDepartmentPersonRole(state, inp) {
-    var assignment = state.assignments.find(
-      a => a.id === inp.person.assignment.id
-    )
-    assignment.role = inp.role
+  updateRole(state, { assignment, department, role }) {
+    let saveRole = assignment.role
+    assignment.role = role
+    assignment.person.departments.find(
+      a => a.department == department && a.role == saveRole
+    ).role = role
   },
-  addAssignmentToActiveDepartment(state, inp) {
-    state.assignments.push({
-      department_id: state.activeDepartment.id,
-      id: guid(),
-      person_id: inp.id,
-      role: ''
-    })
+
+  removeAssignment(state, { assignment, department }) {
+    let person = assignment.person
+    let role = assignment.role
+    console.log(person, role)
+    person.departments = person.departments.filter(
+      a => !(a.department == department && a.role == role)
+    )
+    department.employees = department.employees.filter(
+      a => a !== assignment
+    )
+    console.log(department.employees)
+  },
+  addManager(state, { department, person }) {
+    department.manager = person
   },
   addLine(state) {
     state.lines = updateLines(state.chart, [])
@@ -466,7 +591,10 @@ function getLine(dept) {
       ' ' +
       Math.round(pos.parent.y + pos.parent.height) * scale +
       ' v' +
-      Math.round(pos.element.y - pos.parent.y - pos.parent.height / 2) * scale +
+      Math.round(
+        pos.element.y - pos.parent.y - pos.parent.height / 2
+      ) *
+        scale +
       ' H' +
       Math.round(pos.element.x + pos.parent.width) * scale
   } else {
@@ -494,11 +622,17 @@ function getPosOfElement(dept) {
   }
   var pos = {
     parent: dept.parent
-      ? document.getElementById('ID_' + dept.parent.id).getBoundingClientRect()
+      ? document
+          .getElementById('ID_' + dept.parent.id)
+          .getBoundingClientRect()
       : null,
-    element: document.getElementById('ID_' + dept.id).getBoundingClientRect()
+    element: document
+      .getElementById('ID_' + dept.id)
+      .getBoundingClientRect()
   }
-  var chartpos = document.getElementById('chart').getBoundingClientRect()
+  var chartpos = document
+    .getElementById('chart')
+    .getBoundingClientRect()
 
   if (pos.parent) {
     pos.parent.x = pos.parent.left - chartpos.left
@@ -514,7 +648,10 @@ function createTree(array, parent, nextparent, tree) {
   tree = typeof tree !== 'undefined' ? tree : []
   parent = typeof parent !== 'undefined' ? parent : { id: '' }
   //var children = array.filter(child => child.parentId === parent.id)
-  var children = _.remove(array, child => child.parentId === parent.id)
+  var children = _.remove(
+    array,
+    child => child.parentId === parent.id
+  )
 
   if (!parent.id) {
     tree = children
@@ -595,6 +732,10 @@ function refreshLines(that, dept) {
   }, 0)
 }
 function processDataNew(dept, orgArray) {
+  if (!dept.employees) {
+    //dept.employees = []
+    Vue.set(dept, 'employees', [])
+  }
   orgArray.push(dept)
   var manager = INPUT_DATA.people.find(p => p.id == dept.manager_id)
   var dataFields = []

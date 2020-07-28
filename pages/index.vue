@@ -9,6 +9,7 @@
       div {{moveDepartment.name}}
       i.material-icons.arrow.down(v-if='moveDepartment.children.length') arrow_drop_down
     side-screen(v-if='chart')
+    show-person(v-if='showPerson')
 </template>
 
 <script>
@@ -16,13 +17,15 @@ import PageHeader from '~/components/PageHeader.vue'
 import OrgChart from '~/components/OrgChart.vue'
 import SideScreen from '~/components/SideScreen.vue'
 import EditMenu from '~/components/EditMenu.vue'
+import ShowPerson from '~/components/ShowPerson.vue'
 import { mapState, mapActions } from 'vuex'
 export default {
   components: {
     OrgChart,
     PageHeader,
     SideScreen,
-    EditMenu
+    EditMenu,
+    ShowPerson
   },
   data: function() {
     return {
@@ -35,7 +38,8 @@ export default {
       'activeDepartment',
       'onlyShowParents',
       'showEditMenu',
-      'moveDepartment'
+      'moveDepartment',
+      'showPerson'
     ]),
     urlParam: function() {
       if (!this.activeDepartment) {
@@ -49,7 +53,9 @@ export default {
       } else {
         parents = 'all'
       }
-      var children = this.activeDepartment.showChildren ? 'show' : 'hide'
+      var children = this.activeDepartment.showChildren
+        ? 'show'
+        : 'hide'
       return {
         dept: this.activeDepartment.id,
         parents: parents,
@@ -75,7 +81,9 @@ export default {
       'showChildren'
     ]),
     onMouseMove(e) {
-      var chartpos = document.getElementById('chart').getBoundingClientRect()
+      var chartpos = document
+        .getElementById('chart')
+        .getBoundingClientRect()
 
       this.page.left = e.clientX - 0 * chartpos.left + 10
       this.page.top = e.clientY - 0 * chartpos.top + 10

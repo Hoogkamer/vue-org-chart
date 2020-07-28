@@ -1,15 +1,15 @@
 <template lang='pug'>
   #search_div
-    input.search_input(v-model='searchField' placeholder='Search department or manager...')
+    input.search_input(v-model='searchField' placeholder='Search department or person...')
     #search_results(v-if="searchField.length")
       ul
-        li(v-if="searchresults.length" v-for="result in searchresults" v-on:click="findDept(result.dept)") 
+        li(v-if="searchresults.length" v-for="result in searchresults" v-on:click="findDept(result)") 
           .name {{result.name}}
           .parent(v-if="result.context") {{result.context}}
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   data: function() {
@@ -37,20 +37,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['chart', 'editMode', 'orgArray', 'config']),
-    searchresults1: function() {
-      var res
-      if (this.searchField.length < 2) {
-        res = [{ name: 'Type at least 2 characters' }]
-      } else {
-        //res = this.searchDept(this.chart, this.searchField, [])
-        res = this.searchDept(this.searchField)
-        if (!res.length) {
-          res = [{ name: 'No matches' }]
-        }
-      }
-      return res
-    }
+    ...mapState(['chart', 'editMode', 'orgArray', 'config', 'people'])
   },
   watch: {
     searchField: function(val) {
@@ -62,21 +49,19 @@ export default {
   },
   methods: {
     ...mapActions(['setShowDepartment']),
-    findDept: function(dept) {
+    ...mapMutations(['setShowPerson']),
+    findDept: function(result) {
       this.searchField = ''
-      this.setShowDepartment(dept)
+      console.log('selected: ', result)
+      if (result.employee) {
+        this.setShowPerson(result.employee)
+      } else {
+        this.setShowDepartment(result.dept)
+      }
     },
-
     searchDept: function(search) {
       var result = []
       this.orgArray.forEach(e => {
-        if (e.manager.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
-          result.push({
-            dept: e,
-            name: e.manager.name,
-            context: 'Manager of:' + e.name
-          })
-        }
         if (e.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
           result.push({
             dept: e,
@@ -85,28 +70,16 @@ export default {
           })
         }
       })
-      return result
-    },
-
-    searchDept1: function(dept, search, matches) {
-      if (dept.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
-        matches.push({
-          dept: dept,
-          name: dept.name,
-          context: dept.parent ? dept.parent.name : ''
-        })
-      }
-      if (dept.manager.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
-        matches.push({
-          dept: dept,
-          name: dept.manager.name,
-          context: 'Manager of: ' + dept.name
-        })
-      }
-      dept.children.forEach(child => {
-        this.searchDept(child, search, matches)
+      this.people.forEach(e => {
+        if (e.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+          result.push({
+            employee: e,
+            name: e.name,
+            context: 'Employee'
+          })
+        }
       })
-      return matches
+      return result
     }
   }
 }

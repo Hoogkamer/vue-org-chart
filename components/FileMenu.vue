@@ -23,7 +23,13 @@ export default {
     }
   },
   computed: {
-    ...mapState(['chart', 'people', 'assignments', 'editMode', 'config'])
+    ...mapState([
+      'chart',
+      'people',
+      'assignments',
+      'editMode',
+      'config'
+    ])
   },
   watch: {
     editMode: function(val) {
@@ -34,7 +40,6 @@ export default {
   },
   methods: {
     generateInputFile: function() {
-      //var chartTable = this.tree2arrayJSON(this.chart, [])
       var chartTable = this.tree2JSON(this.chart)
       var today = new Date()
       var dd = today.getDate()
@@ -50,17 +55,38 @@ export default {
       }
       var updated = '"' + dd + '-' + mm + '-' + yyyy + '"'
 
+      let people = []
+      let assignments = []
+      this.people.forEach((p, i) => {
+        let person = Object.assign({}, p)
+        delete person.departments
+        people.push(person)
+        if (p.departments) {
+          p.departments.forEach(d => {
+            if (d.role !== 'Manager') {
+              assignments.push({
+                department_id: d.department.id,
+                id: i,
+                person_id: p.id,
+                role: d.role
+              })
+            }
+          })
+        }
+      })
       var json =
         'var INPUT_DATA=' +
         JSON.stringify({
           api_version: '1.0',
           chart: chartTable,
-          people: this.people,
-          assignments: this.assignments
+          people: people,
+          assignments: assignments
         }) +
         ';var UPDATED_ON=' +
         updated
-      var blob = new Blob([json], { type: 'text/plain;charset=utf-8' })
+      var blob = new Blob([json], {
+        type: 'text/plain;charset=utf-8'
+      })
       FileSaver.saveAs(blob, 'data.js')
     },
     importData: function(infile) {
@@ -70,12 +96,18 @@ export default {
       reader.onload = function(e) {
         var data = e.target.result
         var workbook = XLSX.read(data, { type: 'binary' })
-        var chartdata = XLSX.utils.sheet_to_json(workbook.Sheets['chart'], {
-          defval: ''
-        })
-        var people = XLSX.utils.sheet_to_json(workbook.Sheets['people'], {
-          defval: ''
-        })
+        var chartdata = XLSX.utils.sheet_to_json(
+          workbook.Sheets['chart'],
+          {
+            defval: ''
+          }
+        )
+        var people = XLSX.utils.sheet_to_json(
+          workbook.Sheets['people'],
+          {
+            defval: ''
+          }
+        )
         var assignments = XLSX.utils.sheet_to_json(
           workbook.Sheets['assignment'],
           {
@@ -91,14 +123,21 @@ export default {
             if (x.hasOwnProperty(property)) {
               if (property.indexOf('DATA_') === 0) {
                 var name = property.substring(5).replace(/_/g, ' ')
-                var fnd = that.config.dataFields.find(d => d.name === name)
+                var fnd = that.config.dataFields.find(
+                  d => d.name === name
+                )
                 var type = fnd ? fnd.type : ''
-                dataFields.push({ name: name, value: x[property], type })
+                dataFields.push({
+                  name: name,
+                  value: x[property],
+                  type
+                })
               }
             }
           }
           newchart.push({
             showChildren: false,
+            employees: [],
             parent: null,
             parentId: x.parent_id,
             children: null,
@@ -111,13 +150,40 @@ export default {
           })
         })
         that.$store.commit('createTree', newchart)
+        that.$store.commit('processAssignments', {
+          departments: newchart,
+          people: people,
+          assignments: assignments
+        })
+
         that.$store.commit('setPeople', people)
         that.$store.commit('setAssignments', assignments)
+        that.$store.commit('setActiveDepartment', null)
         alert('Data is imported')
       }
       reader.readAsBinaryString(f)
     },
     doExportXls: function(a) {
+      let people = []
+      let assignments = []
+      this.people.forEach((p, i) => {
+        let person = Object.assign({}, p)
+        delete person.departments
+        people.push(person)
+        if (p.departments) {
+          p.departments.forEach(d => {
+            if (d.role !== 'Manager') {
+              assignments.push({
+                department_id: d.department.id,
+                id: i,
+                person_id: p.id,
+                role: d.role
+              })
+            }
+          })
+        }
+      })
+
       var chartTable = this.tree2array(this.chart, [])
       var wb = XLSX.utils.book_new()
       XLSX.utils.book_append_sheet(
@@ -127,12 +193,12 @@ export default {
       )
       XLSX.utils.book_append_sheet(
         wb,
-        XLSX.utils.json_to_sheet(this.people),
+        XLSX.utils.json_to_sheet(people),
         'people'
       )
       XLSX.utils.book_append_sheet(
         wb,
-        XLSX.utils.json_to_sheet(this.assignments),
+        XLSX.utils.json_to_sheet(assignments),
         'assignment'
       )
       XLSX.writeFile(wb, 'chart_data.xlsx')
@@ -188,7 +254,9 @@ export default {
         manager_id: chart.manager.id,
         dataFields: chart.dataFields
       })
-      chart.children.forEach(child => this.tree2arrayJSON(child, array))
+      chart.children.forEach(child =>
+        this.tree2arrayJSON(child, array)
+      )
       return array
     }
   }

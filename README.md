@@ -6,7 +6,8 @@
 
 [Demo](https://hoogkamer.github.io/vue-org-chart/)
 
-![Screenshot](/assets/img/Screenshot1.PNG?raw=true 'Screenshot')
+![Chart](/assets/img/Screenshot1.PNG?raw=true 'chart')
+![Profile](/assets/img/profile.png?raw=true 'profile')
 
 \
 **Do you want to show your (Agile) teams instead of an orgchart? Try: [Teamviewer](https://github.com/Hoogkamer/TeamViewer) open source.**
@@ -20,10 +21,10 @@
 - Panzoom and interactive expansion of subdepartments
 - Deeplinks to departments
 - Save as image
-- Search for departments and managers
+- Search for departments and people
 - Add employees to departments
 - Use photo's from api (not included), or local folder
-- Click on employee to link to api (not included) or local folder
+- Click on employee to link to api (not included) or show profile information (**new**)
 
 ## Use as static website
 
@@ -70,7 +71,8 @@ The config file is in /config.js
   For these locations it is fetched from "prefix" + photo + "suffix". So if you have photo P0001, it will be fetched from "photos/P0001.png". If you have an api or other locations which delivers photo's based on the photo field you can change that here.
 
 - linkUrl  
-  It will open a new tab to navigate to that page when clicked in the sidescreen on a person. In this example it will just fetch the photo in a new tab, but if you have an api which shows a user profile page you can enter the location here.
+  It will open a new tab to navigate to that page when clicked in the sidescreen on a person. If you have an api which shows a user profile page you can enter the location here.
+  Don't specify this object if you want to see the profile information from this application (default)
 
 - startView  
   Sets the inital options (the user can change them in the menu bar)
