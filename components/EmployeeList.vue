@@ -1,10 +1,13 @@
 <template lang='pug'>
   div
-    .assignment(v-for='(person, p_idx) in activeDepartment.employees' v-on:click='visitProfile(person.person)' title='Goto profile')
+    .nopeople(v-if='activeDepartment.employees.length ===0')
+      span No employees
+    .assignment(v-else v-for='(person, p_idx) in activeDepartment.employees' v-on:click='visitProfile(person.person)' title='Goto profile')
       table
         tr
           td
-            img.photo(:src='photoURL(person)' @error="markPhotoNotFound(person)")
+            img.photo(v-if='photoURL(person)' :src='photoURL(person)' @error="markPhotoNotFound(person)")
+            .material-icons.nophoto(v-else) face
           td
             .name 
               span {{person.person.name}}
@@ -45,6 +48,7 @@ export default {
       }
     },
     photoURL(person) {
+      if (!person.person.photo) return null
       return (
         this.config.photoUrl.prefix +
         person.person.photo +
@@ -127,5 +131,14 @@ ul {
 
 .btn {
   cursor: pointer;
+}
+.nopeople {
+  width: 100%;
+  text-align: center;
+  font-style: italic;
+}
+.nophoto {
+  font-size: 52px;
+  color: lightgrey;
 }
 </style>

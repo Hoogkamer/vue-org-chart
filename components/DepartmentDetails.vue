@@ -52,7 +52,8 @@
         li.clickable(v-for='child in activeDepartment.children' v-on:click="setActiveDepartment(child)") 
           span(v-for="n in parents.length+5") &nbsp
           span {{child.name}}
-    img.profile(:src='config.photoUrl.prefix+activeDepartment.manager.photo+config.photoUrl.suffix' v-on:click='visitProfile(activeDepartment.manager)' title='Goto profile')
+    img.profile(v-if='activeDepartment.manager.photo' :src='config.photoUrl.prefix+activeDepartment.manager.photo+config.photoUrl.suffix' v-on:click='visitProfile(activeDepartment.manager)' title='Goto profile')
+    .material-icons.profile.nophoto(v-else v-on:click='visitProfile(activeDepartment.manager)' title='Goto profile') face
     person-picker(v-if='personPicker' type='manager' v-on:close='personPicker=null') 
 </template>
 
@@ -199,5 +200,9 @@ ul {
 .material-icons.edit {
   font-size: 16px;
   cursor: pointer;
+}
+.nophoto {
+  font-size: 80px;
+  color: lightgrey;
 }
 </style>
