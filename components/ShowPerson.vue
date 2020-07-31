@@ -7,7 +7,7 @@
       .content
         .photo
           img.im(v-if="photoUrl" :src='photoUrl' @error="markPhotoNotFound(showPerson)")
-          i(v-else).material-icons.nophoto account_box
+          .material-icons.nophoto(v-else) face
           template(v-if='editMode')
             span.prop Photo id
             input.val1(v-model='employeePhoto')
@@ -169,6 +169,7 @@ export default {
       }
     },
     photoUrl: function() {
+      if (!this.showPerson.photo) return null
       return (
         this.config.photoUrl.prefix +
         this.showPerson.photo +
@@ -350,5 +351,9 @@ table td * {
   border: 2px solid lightgrey;
   background-color: lightgrey;
   cursor: not-allowed;
+}
+.nophoto {
+  font-size: 200px;
+  color: lightgrey;
 }
 </style>

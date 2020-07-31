@@ -30,7 +30,7 @@
               tr
                 td
                   img.profile(:src='config.photoUrl.prefix+departmentData.manager.photo+config.photoUrl.suffix' v-if="departmentData.manager.photo")
-                  .profile(v-else)
+                  .material-icons.nophoto(v-else) face
                 td
                   div.textdiv
                     .name(v-html="departmentData.name")
@@ -308,5 +308,9 @@ export default {
 }
 .hidden_parents1 {
   left: 50px;
+}
+.nophoto {
+  font-size: 52px;
+  color: lightgrey;
 }
 </style>
