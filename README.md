@@ -31,8 +31,10 @@
 
 To use this website as-is:
 
-1. Download and extract [orgchart.zip](https://github.com/Hoogkamer/vue-org-chart/orgchart.zip?raw=true) (or copy content of \docs folder) to any location, like a folder on your computer, AWS S3 bucket or webserver
-2. Open index.html in the browser. To change appearance, see next section Configure
+1. a) Download and extract [orgchart.zip](orgchart.zip)
+1. b) -Or- copy content of \docs folder
+1. Save to any location, like a folder on your computer, AWS S3 bucket or webserver
+1. Open index.html in the browser. To change appearance, see next section Configure
 
 ## Configure
 
