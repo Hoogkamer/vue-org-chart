@@ -173,6 +173,12 @@ export const actions = {
     var dept = state.orgArray.find(e => e.id == deptId)
     if (!dept) dept = null
     dispatch('setShowDepartment', dept)
+  },
+  setActiveEmployeeById({ commit, state, dispatch }, empId) {
+    var dept = state.people.find(e => e.id == empId)
+    if (!dept) dept = null
+    console.log(' founde', dept)
+    commit('setShowPerson', dept)
   }
 }
 

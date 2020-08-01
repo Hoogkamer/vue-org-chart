@@ -42,6 +42,9 @@ export default {
       'showPerson'
     ]),
     urlParam: function() {
+      if (this.showPerson) {
+        return { employee: this.showPerson.id }
+      }
       if (!this.activeDepartment) {
         return null
       }
@@ -76,6 +79,7 @@ export default {
     ...mapActions([
       'initStore',
       'setActiveDepartmentById',
+      'setActiveEmployeeById',
       'setHideParents',
       'setOnlyShowParents',
       'showChildren'
@@ -92,6 +96,11 @@ export default {
       this.$router.push({ path: this.$route.path, query: qry })
     },
     getUrl: function(qry) {
+      if (qry && qry.employee) {
+        console.log(qry.employee)
+        this.setActiveEmployeeById(qry.employee)
+        return
+      }
       if (qry && qry.dept) {
         this.setActiveDepartmentById(qry.dept)
         if (qry.parents == 'hide') {
