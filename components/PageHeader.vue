@@ -1,11 +1,10 @@
 <template lang='pug'>
 .header(:style='{backgroundColor:config.title.color}') {{config.title.text}}
 
-  .updated_info Updated on: {{updatedOn}}
+  
   
   .edit_indicator(v-if="editMode" v-on:click="$store.commit('setEditMode', false)") Click to leave editmode
-  a(href='https://github.com/Hoogkamer/vue-org-chart' target='_blank')
-    img.gh(src="~/assets/img/gh.svg" title='Go to Github project page')
+ 
   search-box
   .menu
     file-menu(v-if='editMode')
@@ -16,10 +15,18 @@
     .screenshot1(v-if='config.enableScreenCapture')
       i.material-icons.screenshot(v-on:click="capture" title='Save as image') photo_camera
   .info(v-if="config.information")
-    i.material-icons.info_icon(v-on:click="infoOpen=!infoOpen") info
+    i.material-icons.info_icon(v-on:click="infoOpen=!infoOpen" title="Contact and help") info
     .info-text(v-if="infoOpen")
       i.material-icons.info-close(v-on:click="infoOpen=false") close
-      div(v-html="config.information")
+      .i-text(v-html="config.information")
+
+      .updated_info Updated on: {{updatedOn}}
+      hr
+      
+      a(href='https://github.com/Hoogkamer/vue-org-chart#user-manual-for-website' target='_blank')
+        .i-github 
+          .i-github-text User manual
+          img.gh(src="~/assets/img/gh.svg" title='Go to Github project page')
 </template>
 
 <script>
@@ -144,9 +151,9 @@ function saveAs(uri, filename) {
 }
 .gh {
   position: absolute;
-  top: 5px;
   right: 10px;
-  width: 40px;
+  top: 5px;
+  width: 30px;
 }
 .info_icon {
   cursor: pointer;
@@ -154,34 +161,25 @@ function saveAs(uri, filename) {
 .info {
   position: absolute;
   top: 0px;
-  right: 60px;
+  right: 20px;
 }
-.info-text {
-  font-size: 14px;
+.i-github {
+  position: relative;
+}
+.i-github:hover {
+  background-color: lightgrey;
+}
+.i-github-text {
+  padding: 10px;
+  display: inline-block;
+  font-size: 20px;
   color: grey;
-  width: 400px;
-  padding: 20px;
-}
-.edit_indicator {
-  position: absolute;
-  top: 50px;
-  right: 0px;
-  font-size: 16px;
-  background-color: red;
-  padding: 5px;
-  cursor: pointer;
 }
 
-.updated_info {
-  position: absolute;
-  top: 50px;
-  right: 0px;
-  font-size: 16px;
-  color: grey;
-  padding: 5px;
-}
 .info-text {
   width: 300px;
+  font-size: 14px;
+  color: grey;
   background-color: white;
   border: 1px solid lightgrey;
   position: absolute;
@@ -195,5 +193,23 @@ function saveAs(uri, filename) {
   right: 5px;
   cursor: pointer;
   font-size: 14px;
+}
+.i-text {
+  padding: 10px;
+}
+.edit_indicator {
+  position: absolute;
+  top: 50px;
+  right: 0px;
+  font-size: 16px;
+  background-color: red;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.updated_info {
+  font-size: 12px;
+  color: grey;
+  padding: 5px;
 }
 </style>

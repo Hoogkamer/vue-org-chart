@@ -15,6 +15,7 @@
 ## Features
 
 - Just runs everywhere, no install, no webserver, no database needed!
+- Your data is only at the place you put it yourself, so it is completely save
 - Edit in excel (bulk updates, external source)
 - Edit in the webpage
 - Supports 1000's of departments
@@ -30,8 +31,8 @@
 
 To use this website as-is:
 
-1. Copy content of \docs folder to any location, like a folder on your computer, AWS S3 bucket or webserver
-2. Open index.html in the browser. When you use Internet Explorer it will not work if you placed the files on a folder (Chrome does work). S3 or webserverer will work for both browsers
+1. Download and extract [orgchart.zip](orgchart.zip) (or copy content of \docs folder) to any location, like a folder on your computer, AWS S3 bucket or webserver
+2. Open index.html in the browser. To change appearance, see next section Configure
 
 ## Configure
 
@@ -88,6 +89,9 @@ The config file is in /config.js
   Show/hide the photos and/or names in the graph
 
 ### FAQ
+
+- **Where is my data kept?**
+  The data is only kept where you put it yourself (see: How do I save the changes for others to see?). It is not send to any other location, so it is completely save to use.
 
 - **How can I change/edit the graph?**  
   Type _\_edit_ in the searchbar to swith to editmode. Now you can edit the graph in the application or update via excel

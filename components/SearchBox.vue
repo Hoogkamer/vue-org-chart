@@ -88,7 +88,7 @@ export default {
 #search_div {
   position: absolute;
   top: -7px;
-  right: 94px;
+  right: 64px;
   width: 200px;
 }
 .search_input {
