@@ -15,6 +15,7 @@
 ## Features
 
 - Just runs everywhere, no install, no webserver, no database needed!
+- Your data is only at the place you put it yourself, so it is completely save
 - Edit in excel (bulk updates, external source)
 - Edit in the webpage
 - Supports 1000's of departments
@@ -88,6 +89,9 @@ The config file is in /config.js
   Show/hide the photos and/or names in the graph
 
 ### FAQ
+
+- **Where is my data kept?**
+  The data is only kept where you put it yourself (see: How do I save the changes for others to see?). It is not send to any other location, so it is completely save to use.
 
 - **How can I change/edit the graph?**  
   Type _\_edit_ in the searchbar to swith to editmode. Now you can edit the graph in the application or update via excel
