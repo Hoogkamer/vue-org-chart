@@ -25,7 +25,8 @@
                   input.val1(v-model='employeeName')
               tr
                 td.prop Email
-                td(v-if='!editMode') {{employeeEmail}}
+                td(v-if='!editMode') 
+                  a(:href = '"mailto: "+ employeeEmail') {{employeeEmail}}
                 td(v-else)
                   input.val1(v-model='employeeEmail')
               tr
