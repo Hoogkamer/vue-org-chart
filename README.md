@@ -31,7 +31,7 @@
 
 To use this website as-is:
 
-1. a) Download and extract [orgchart.zip](orgchart.zip)
+1. a) Click this: [orgchart.zip](orgchart.zip) and on the next page press download button. Extract the zip on your PC.
 1. b) -Or- copy content of \docs folder
 1. Save to any location, like a folder on your computer, AWS S3 bucket or webserver
 1. Open index.html in the browser. To change appearance, see next section Configure
