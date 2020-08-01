@@ -1,7 +1,7 @@
 <template lang='pug'>
 .header(:style='{backgroundColor:config.title.color}') {{config.title.text}}
 
-  .updated_info Updated on: {{updatedOn}}
+  
   
   .edit_indicator(v-if="editMode" v-on:click="$store.commit('setEditMode', false)") Click to leave editmode
  
@@ -19,6 +19,8 @@
     .info-text(v-if="infoOpen")
       i.material-icons.info-close(v-on:click="infoOpen=false") close
       .i-text(v-html="config.information")
+
+      .updated_info Updated on: {{updatedOn}}
       hr
       
       a(href='https://github.com/Hoogkamer/vue-org-chart#user-manual-for-website' target='_blank')
@@ -206,10 +208,7 @@ function saveAs(uri, filename) {
 }
 
 .updated_info {
-  position: absolute;
-  top: 50px;
-  right: 0px;
-  font-size: 16px;
+  font-size: 12px;
   color: grey;
   padding: 5px;
 }
