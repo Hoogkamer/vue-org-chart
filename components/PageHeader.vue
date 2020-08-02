@@ -23,10 +23,11 @@
       .updated_info Updated on: {{updatedOn}}
       hr
       
-      a(href='https://github.com/Hoogkamer/vue-org-chart#user-manual-for-website' target='_blank')
+      a(href='https://freeorgchart.netlify.app/#faq' target='_blank')
         .i-github 
           .i-github-text User manual
-          img.gh(src="~/assets/img/gh.svg" title='Go to Github project page')
+          a(href="https://github.com/Hoogkamer/vue-org-chart" target="_blank")
+            img.gh(src="~/assets/img/gh.svg" title='Go to Github project page')
 </template>
 
 <script>
