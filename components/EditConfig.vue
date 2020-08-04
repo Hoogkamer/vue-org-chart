@@ -1,21 +1,30 @@
 <template lang='pug'>
    #config_container
     #config
-      i.material-icons.close(@click='$emit("close", true)') close
+     
       h3 Configure
+      button(v-if='!showHelp' @click='showHelp=true') show help
+      button(v-else @click='showHelp=false') hide help
       table.tab
         tr
           td.n Title
           td.i
             input(v-model='pageTitle')
+        tr(v-if='showHelp')
+          td.help(colspan=2) Sets the header title
         tr
           td.n Title bar color
           td.i
             input(v-model='pageTitleColor')
+        tr(v-if='showHelp')
+          td.help(colspan=2) Sets the header color (#FF0000 is red for example)
         tr
           td.n Information text
           td.i
             textarea(v-model='informationText')
+        tr(v-if='showHelp')
+          td.help(colspan=2) Sets text to display when clicked on the (i) button (you can use HTML). Leave empty if not needed
+
         tr
           td.n Photo URL prefix
           td.i 
@@ -24,6 +33,9 @@
           td.n Photo URL suffix
           td.i 
             input(v-model='photoUrlS')
+        tr(v-if='showHelp')
+          td.help(colspan=2) The position where to get the photo's. For these locations it is fetched from "prefix" + photo + "suffix". So if you have photo P0001, it will be fetched from "photos/P0001.png". If you have an api or other locations which delivers photo's based on the photo field you can change that here.
+
         tr
           td.n Link URL prefix
           td.i 
@@ -32,337 +44,311 @@
           td.n Link URL suffix
           td.i 
             input(v-model='linkUrlS')
-      //- .personname(v-if="showPerson.name") {{showPerson.name}}
-      //- .personname(v-else) Add new employee
-      //- .content
-      //-   .photo
-      //-     img.im(v-if="photoUrl" :src='photoUrl' @error="markPhotoNotFound(showPerson)")
-      //-     .material-icons.nophoto(v-else) face
-      //-     template(v-if='editMode')
-      //-       span.prop Photo id
-      //-       input.val1(v-model='employeePhoto')
-      //-   .details
-      //-     table.tab
-      //-       template(v-if='config.linkUrl')
-      //-         tr
-      //-           td(colspan="2").btn
-      //-             button(@click='gotoExtProfile(showPerson)') Open profile information
-      //-       template(v-else)
-      //-         tr
-      //-           td.prop Name*
-      //-           td.val(v-if='!editMode') {{employeeName}}
-      //-           td.val(v-else)
-      //-             input.val1(v-model='employeeName')
-      //-         tr
-      //-           td.prop Email
-      //-           td(v-if='!editMode') 
-      //-             a(:href = '"mailto: "+ employeeEmail') {{employeeEmail}}
-      //-           td(v-else)
-      //-             input.val1(v-model='employeeEmail')
-      //-         tr
-      //-           td.prop Phone
-      //-           td(v-if='!editMode') {{employeePhone}}
-      //-           td(v-else)
-      //-             input.val1(v-model='employeePhone')
-      //-         tr
-      //-           td.prop Homepage
-      //-           td(v-if='!editMode') 
-      //-             a(:href="employeeHomePage" target="_blank") {{employeeHomePage}}
-      //-           td(v-else)
-      //-             input.val1(v-model='employeeHomePage')
-      //-         tr
-      //-           td.prop Country
-      //-           td(v-if='!editMode') {{employeeCountry}}
-      //-           td(v-else)
-      //-             input.val1(v-model='employeeCountry')
-      //-         tr
-      //-           td.prop City
-      //-           td(v-if='!editMode') {{employeeCity}}
-      //-           td(v-else)
-      //-             input.val1(v-model='employeeCity')
-      //-         tr
-      //-           td.prop Street
-      //-           td(v-if='!editMode') {{employeeStreet}}
-      //-           td(v-else)
-      //-             input.val1(v-model='employeeStreet')
-      //-         tr
-      //-           td.prop Function
-      //-           td.val(v-if='!editMode') {{employeeFunctionName}}
-      //-           td.val(v-else)
-      //-             input.val1(v-model='employeeFunctionName') 
-      //-         tr
-      //-           td.prop Employee ID*
-      //-           td.val(v-if='!editMode') {{employeeID}}
-      //-           td.val(v-else)
-      //-             input.val1(v-model='employeeID')
-      //-       tr(v-if="!showPerson.new")
-      //-         td.prop Departments
-      //-         td.val
-      //-           .dep(v-for='assignment in personAssignments' @click='goto(assignment.department)') 
-      //-             span {{assignment.department.name}}  
-      //-             span.role {{assignment.role}}
-      //-   div
-      //-     button.btn1(v-if="showPerson.new" @click='addEmployee(showPerson)' :disabled='!employeeID || !employeeName') ADD
-   
+        tr(v-if='showHelp')
+          td.help(colspan=2) It will open a new tab to navigate to that page when clicked in the sidescreen on a person. If you have an api which shows a user profile page you can enter the location here. Keep both empty if you want to see the profile information from this application (default)
+
+        tr
+          td.n Enable screencapture
+          td.c
+            input(type='checkbox' v-model='enableScreenCapture')
+        tr(v-if='showHelp')
+          td.help(colspan=2) This shows the icon to make an image of the graph to save. This does not work when you are on a local folder, so disable this option then
+
+
+             
+        tr
+          td.n Edit command
+          td.i
+            input(v-model='editCommand')
+        tr(v-if='showHelp')
+          td.help(colspan=2) The command to type in the search box to switch to edit mode
+        tr
+          td.n Level colors
+          td.i
+            input(v-model='levelColors')   
+        tr(v-if='showHelp')
+          td.help(colspan=2) The colors of each level in the orgchart (specify comma separated)
+                  
+      div Startup settings
+
+      table.tab
+        tr
+          td.n  Show manager photo
+          td.c
+            input(type='checkbox' v-model='viewPhoto')
+        tr
+          td.n  Show manager name
+          td.c
+            input(type='checkbox' v-model='viewName')
+        tr
+          td.n  Columnview
+          td.c
+            input(type='checkbox' v-model='viewColumn')
+        tr
+          td.n  Staff columnview
+          td.c
+            input(type='checkbox' v-model='viewStaffColumn')
+        tr
+          td.n  Show Nr of departments
+          td.c
+            input(type='checkbox' v-model='viewNrDepartments')
+        tr
+          td.n  Show Nr of people
+          td.c
+            input(type='checkbox' v-model='viewNrPeople')
+
+        tr(v-if='showHelp')
+          td.help(colspan=2) Sets the inital options (the user can change them in the menu bar)
+            
+      div
+        button.bt(@click='generate()') Generate config
+        button.bt(@click='$emit("close", true)') close
+        
 </template>
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
+import FileSaver from 'file-saver'
 export default {
+  data: function() {
+    return {
+      showHelp: true
+    }
+  },
   computed: {
-    ...mapState([
-      'showPerson',
-      'config',
-      'people',
-      'chart',
-      'orgArray',
-      'editMode',
-      'activeDepartment'
-    ]),
+    ...mapState(['config']),
     pageTitle: {
       get() {
-        return this.$store.state.config.title.text
+        return this.config.title.text
       },
       set(value) {
-        this.$store.commit('setConfigUpdate', {
+        this.setConfigUpdate({
           prop: 'title',
-          val: { text: value, color: this.config.title.color }
+          subProp: 'text',
+          val: value
         })
       }
     },
     pageTitleColor: {
       get() {
-        return this.$store.state.config.title.color
+        return this.config.title.color
       },
       set(value) {
-        this.$store.commit('setConfigUpdate', {
+        this.setConfigUpdate({
           prop: 'title',
-          val: { color: value, text: this.config.title.text }
+          subProp: 'color',
+          val: value
         })
       }
     },
     informationText: {
       get() {
-        return this.$store.state.config.information
+        return this.config.information
       },
       set(value) {
-        this.$store.commit('setConfigUpdate', {
+        this.setConfigUpdate({
           prop: 'information',
           val: value
         })
       }
     },
-    photoUrlP: {
+    editCommand: {
       get() {
-        return this.$store.state.config.photoUrl.prefix
+        return this.config.editCommand
       },
       set(value) {
-        this.$store.commit('setConfigUpdate', {
+        this.setConfigUpdate({
+          prop: 'editCommand',
+          val: value
+        })
+      }
+    },
+    levelColors: {
+      get() {
+        return this.config.levelColors.toString()
+      },
+      set(value) {
+        this.setConfigUpdate({
+          prop: 'levelColors',
+          val: value.split(',')
+        })
+      }
+    },
+
+    enableScreenCapture: {
+      get() {
+        return this.config.enableScreenCapture
+      },
+      set(value) {
+        this.setConfigUpdate({
+          prop: 'enableScreenCapture',
+          val: value
+        })
+      }
+    },
+
+    photoUrlP: {
+      get() {
+        return this.config.photoUrl.prefix
+      },
+      set(value) {
+        this.setConfigUpdate({
           prop: 'photoUrl',
-          val: { prefix: value, suffix: this.config.photoUrl.suffix }
+          subProp: 'prefix',
+          val: value
         })
       }
     },
     photoUrlS: {
       get() {
-        return this.$store.state.config.photoUrl.suffix
+        return this.config.photoUrl.suffix
       },
       set(value) {
-        this.$store.commit('setConfigUpdate', {
+        this.setConfigUpdate({
           prop: 'photoUrl',
-          val: { suffix: value, prefix: this.config.photoUrl.prefix }
+          subProp: 'suffix',
+          val: value
         })
       }
     },
     linkUrlP: {
       get() {
-        return this.$store.state.config.linkUrl
-          ? this.$store.state.config.linkUrl.prefix
-          : ''
+        return this.config.linkUrl ? this.config.linkUrl.prefix : ''
       },
       set(value) {
         if (
           !value &&
           !(this.config.linkUrl || this.config.linkUrl.suffix)
         ) {
-          this.$store.commit('setConfigUpdate', {
+          this.setConfigUpdate({
             prop: 'linkUrl',
             val: false
           })
           return ''
         }
 
-        this.$store.commit('setConfigUpdate', {
+        this.setConfigUpdate({
           prop: 'linkUrl',
-          val: {
-            prefix: value,
-            suffix: this.config.linkUrl
-              ? this.config.linkUrl.suffix
-              : ''
-          }
+          subProp: 'prefix',
+          val: tvalue
         })
       }
     },
     linkUrlS: {
       get() {
-        return this.$store.state.config.linkUrl
-          ? this.$store.state.config.linkUrl.suffix
-          : ''
+        return this.config.linkUrl ? this.config.linkUrl.suffix : ''
       },
       set(value) {
         if (
           !value &&
           !(this.config.linkUrl || this.config.linkUrl.prefix)
         ) {
-          this.$store.commit('setConfigUpdate', {
+          this.setConfigUpdate({
             prop: 'linkUrl',
             val: false
           })
           return ''
         }
-        this.$store.commit('setConfigUpdate', {
+        this.setConfigUpdate({
           prop: 'linkUrl',
-          val: {
-            suffix: value,
-            prefix: this.config.linkUrl
-              ? this.config.linkUrl.prefix
-              : ''
-          }
+          subProp: 'suffix',
+          val: value
         })
       }
     },
-    employeePhoto: {
+    viewPhoto: {
       get() {
-        return this.$store.state.showPerson.photo
+        return this.config.startView.photos
       },
       set(value) {
-        this.$store.commit('setShowPersonPhoto', value)
+        this.setConfigUpdate({
+          prop: 'startView',
+          subProp: 'photos',
+          val: value
+        })
       }
     },
-    employeeName: {
+    viewName: {
       get() {
-        return this.$store.state.showPerson.name
+        return this.config.startView.names
       },
       set(value) {
-        this.$store.commit('setShowPersonName', value)
+        this.setConfigUpdate({
+          prop: 'startView',
+          subProp: 'names',
+          val: value
+        })
       }
     },
-    employeeCountry: {
+    viewColumn: {
       get() {
-        return this.$store.state.showPerson.country
+        return this.config.startView.columnview
       },
       set(value) {
-        this.$store.commit('setShowPersonCountry', value)
+        this.setConfigUpdate({
+          prop: 'startView',
+          subProp: 'columnview',
+          val: value
+        })
       }
     },
-    employeeCity: {
+    viewStaffColumn: {
       get() {
-        return this.$store.state.showPerson.city
+        return this.config.startView.staffColumnview
       },
       set(value) {
-        this.$store.commit('setShowPersonCity', value)
+        this.setConfigUpdate({
+          prop: 'startView',
+          subProp: 'staffColumnview',
+          val: value
+        })
       }
     },
-    employeeStreet: {
+    viewNrDepartments: {
       get() {
-        return this.$store.state.showPerson.street
+        return this.config.startView.showNrDepartments
       },
       set(value) {
-        this.$store.commit('setShowPersonStreet', value)
+        this.setConfigUpdate({
+          prop: 'startView',
+          subProp: 'showNrDepartments',
+          val: value
+        })
       }
     },
-    employeeEmail: {
+    viewNrPeople: {
       get() {
-        return this.$store.state.showPerson.email
+        return this.config.startView.showNrPeople
       },
       set(value) {
-        this.$store.commit('setShowPersonEmail', value)
+        this.setConfigUpdate({
+          prop: 'startView',
+          subProp: 'showNrPeople',
+          val: value
+        })
       }
-    },
-    employeePhone: {
-      get() {
-        return this.$store.state.showPerson.phone
-      },
-      set(value) {
-        this.$store.commit('setShowPersonPhone', value)
-      }
-    },
-    employeeFunctionName: {
-      get() {
-        return this.$store.state.showPerson.functionName
-      },
-      set(value) {
-        this.$store.commit('setShowPersonFunctionName', value)
-      }
-    },
-    employeeHomePage: {
-      get() {
-        return this.$store.state.showPerson.homepage
-      },
-      set(value) {
-        this.$store.commit('setShowPersonHomePage', value)
-      }
-    },
-    photoUrl: function() {
-      if (!this.showPerson.photo) return null
-      return (
-        this.config.photoUrl.prefix +
-        this.showPerson.photo +
-        this.config.photoUrl.suffix
-      )
-    },
-    personAssignments: function() {
-      let assignments = this.showPerson.departments
-      //assignments.sort((a, b) =>
-      //   a.department.name.localeCompare(b.department.name)
-      // )
-      return assignments
     }
   },
-  mounted: function() {
-    console.log(this.showPerson)
-  },
+  mounted: function() {},
   methods: {
-    ...mapMutations([
-      'setShowPerson',
-      'addPerson',
-      'updateActiveDepartmentManager',
-      'addAssignment'
-    ]),
-    ...mapActions(['setShowDepartment', 'setConfigUpdate']),
-    goto(d) {
-      console.log(d)
-      this.setShowPerson(null)
-      this.setShowDepartment(d)
-    },
-    gotoExtProfile(person) {
-      var url =
-        this.config.linkUrl.prefix +
-        person.id +
-        this.config.linkUrl.suffix
-      window.open(url, '_blank')
-    },
-    markPhotoNotFound(person) {
-      console.log('person photo not found', person)
-    },
-    addEmployee(person) {
-      console.log('adding', person)
-      if (this.people.find(p => p.id == person.id)) {
-        alert('A person with this id already exists')
-      } else {
-        let ismanager = person.manager
-        this.addPerson(person)
-        this.setShowPerson(null)
-        if (ismanager) {
-          this.updateActiveDepartmentManager(person)
-        } else {
-          this.addAssignment({
-            department: this.activeDepartment,
-            person: person,
-            role: ''
-          })
-        }
-      }
+    ...mapMutations(['setConfigUpdate']),
+
+    generate: function() {
+      this.setConfigUpdate({
+        prop: 'dataFields',
+        val: [{ name: 'Location', type: 'text' }]
+      })
+      console.log(this.config)
+
+      var json = 'var CONFIG = ' + JSON.stringify(this.config)
+
+      var blob = new Blob([json], {
+        type: 'text/plain;charset=utf-8'
+      })
+      FileSaver.saveAs(blob, 'config.js')
+      alert(
+        'File generated. \n Overwrite the config.js file (in the root folder) with this file.'
+      )
     }
   }
 }
@@ -370,21 +356,26 @@ export default {
 <style scoped>
 #config_container {
   top: 50px;
-  padding: 50px;
+
   width: 100%;
   position: absolute;
-  height: 100%;
+  height: 0px;
   background: rgba(200, 200, 200, 0.8);
   z-index: 2;
   text-align: center;
 }
 #config {
+  position: relative;
   font-size: 18px;
   color: black;
   width: 700px;
+  max-height: calc(100vh - 130px);
+  overflow: hidden;
+  overflow-y: auto;
   text-align: left;
   vertical-align: top;
   margin: auto;
+  margin-top: 30px;
   display: inline-block;
   display: relative;
   background-color: white;
@@ -401,8 +392,10 @@ export default {
   background-color: grey;
   color: white;
   border-radius: 3px;
-  float: right;
   cursor: pointer;
+  position: fixed;
+  right: 10px;
+  top: 10px;
 }
 .close:hover {
   background-color: lightgray;
@@ -423,6 +416,7 @@ export default {
 .tab {
   margin-bottom: 10px;
   width: 600px;
+  font-size: 14px;
 }
 .tab .n {
   color: black;
@@ -438,6 +432,9 @@ export default {
 .tab .i textarea {
   width: 100%;
   height: 50px;
+}
+.tab .c {
+  text-align: left;
 }
 .prop {
   width: 120px;
@@ -507,5 +504,17 @@ table td * {
 .nophoto {
   font-size: 200px;
   color: lightgrey;
+}
+td.help {
+  color: rgb(61, 60, 60);
+  padding-bottom: 10px;
+  font-size: 12px;
+}
+button.bt {
+  padding: 10px;
+  margin: 10px;
+}
+button {
+  cursor: pointer;
 }
 </style>
