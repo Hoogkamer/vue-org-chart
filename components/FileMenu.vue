@@ -1,6 +1,6 @@
 <template lang='pug'>
     .file(v-on:click='editMenuOpen = !editMenuOpen')
-      i.material-icons.screenshot(v-on:click="" title='Load/Save') save
+      i.material-icons.screenshot(v-on:click="" title='Load/Save/Config') save
       .file_menu(v-if='editMenuOpen')
           ul
             li
@@ -8,6 +8,7 @@
                 input(type="file" v-on:change="importData")
             li(v-on:click="doExportXls") Export excel
             li(v-on:click="generateInputFile") Generate inputfile
+            li(v-on:click="editConfig") Configure options
 
 </template>
 
@@ -39,6 +40,9 @@ export default {
     }
   },
   methods: {
+    editConfig: function() {
+      this.$emit('editconfig', true)
+    },
     generateInputFile: function() {
       var chartTable = this.tree2JSON(this.chart)
       var today = new Date()
@@ -88,6 +92,9 @@ export default {
         type: 'text/plain;charset=utf-8'
       })
       FileSaver.saveAs(blob, 'data.js')
+      alert(
+        'File generated. \n Overwrite the data.js file (in the root folder) with this file.'
+      )
     },
     importData: function(infile) {
       var f = infile.target.files[0]
@@ -278,6 +285,7 @@ export default {
 .screenshot {
   cursor: pointer;
   color: white;
+  border: 1px solid red;
 }
 .screenshot:hover {
   border: 1px solid white;
