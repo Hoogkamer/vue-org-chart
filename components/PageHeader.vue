@@ -38,7 +38,7 @@ export default {
   data: function() {
     return {
       infoOpen: false,
-      editConfig: true
+      editConfig: false
     }
   },
   computed: {

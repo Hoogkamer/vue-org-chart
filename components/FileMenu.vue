@@ -1,6 +1,6 @@
 <template lang='pug'>
     .file(v-on:click='editMenuOpen = !editMenuOpen')
-      i.material-icons.screenshot(v-on:click="" title='Load/Save') save
+      i.material-icons.screenshot(v-on:click="" title='Load/Save/Config') save
       .file_menu(v-if='editMenuOpen')
           ul
             li
@@ -285,6 +285,7 @@ export default {
 .screenshot {
   cursor: pointer;
   color: white;
+  border: 1px solid red;
 }
 .screenshot:hover {
   border: 1px solid white;
