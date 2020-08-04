@@ -1,0 +1,511 @@
+<template lang='pug'>
+   #config_container
+    #config
+      i.material-icons.close(@click='$emit("close", true)') close
+      h3 Configure
+      table.tab
+        tr
+          td.n Title
+          td.i
+            input(v-model='pageTitle')
+        tr
+          td.n Title bar color
+          td.i
+            input(v-model='pageTitleColor')
+        tr
+          td.n Information text
+          td.i
+            textarea(v-model='informationText')
+        tr
+          td.n Photo URL prefix
+          td.i 
+            input(v-model='photoUrlP')
+        tr
+          td.n Photo URL suffix
+          td.i 
+            input(v-model='photoUrlS')
+        tr
+          td.n Link URL prefix
+          td.i 
+            input(v-model='linkUrlP')
+        tr
+          td.n Link URL suffix
+          td.i 
+            input(v-model='linkUrlS')
+      //- .personname(v-if="showPerson.name") {{showPerson.name}}
+      //- .personname(v-else) Add new employee
+      //- .content
+      //-   .photo
+      //-     img.im(v-if="photoUrl" :src='photoUrl' @error="markPhotoNotFound(showPerson)")
+      //-     .material-icons.nophoto(v-else) face
+      //-     template(v-if='editMode')
+      //-       span.prop Photo id
+      //-       input.val1(v-model='employeePhoto')
+      //-   .details
+      //-     table.tab
+      //-       template(v-if='config.linkUrl')
+      //-         tr
+      //-           td(colspan="2").btn
+      //-             button(@click='gotoExtProfile(showPerson)') Open profile information
+      //-       template(v-else)
+      //-         tr
+      //-           td.prop Name*
+      //-           td.val(v-if='!editMode') {{employeeName}}
+      //-           td.val(v-else)
+      //-             input.val1(v-model='employeeName')
+      //-         tr
+      //-           td.prop Email
+      //-           td(v-if='!editMode') 
+      //-             a(:href = '"mailto: "+ employeeEmail') {{employeeEmail}}
+      //-           td(v-else)
+      //-             input.val1(v-model='employeeEmail')
+      //-         tr
+      //-           td.prop Phone
+      //-           td(v-if='!editMode') {{employeePhone}}
+      //-           td(v-else)
+      //-             input.val1(v-model='employeePhone')
+      //-         tr
+      //-           td.prop Homepage
+      //-           td(v-if='!editMode') 
+      //-             a(:href="employeeHomePage" target="_blank") {{employeeHomePage}}
+      //-           td(v-else)
+      //-             input.val1(v-model='employeeHomePage')
+      //-         tr
+      //-           td.prop Country
+      //-           td(v-if='!editMode') {{employeeCountry}}
+      //-           td(v-else)
+      //-             input.val1(v-model='employeeCountry')
+      //-         tr
+      //-           td.prop City
+      //-           td(v-if='!editMode') {{employeeCity}}
+      //-           td(v-else)
+      //-             input.val1(v-model='employeeCity')
+      //-         tr
+      //-           td.prop Street
+      //-           td(v-if='!editMode') {{employeeStreet}}
+      //-           td(v-else)
+      //-             input.val1(v-model='employeeStreet')
+      //-         tr
+      //-           td.prop Function
+      //-           td.val(v-if='!editMode') {{employeeFunctionName}}
+      //-           td.val(v-else)
+      //-             input.val1(v-model='employeeFunctionName') 
+      //-         tr
+      //-           td.prop Employee ID*
+      //-           td.val(v-if='!editMode') {{employeeID}}
+      //-           td.val(v-else)
+      //-             input.val1(v-model='employeeID')
+      //-       tr(v-if="!showPerson.new")
+      //-         td.prop Departments
+      //-         td.val
+      //-           .dep(v-for='assignment in personAssignments' @click='goto(assignment.department)') 
+      //-             span {{assignment.department.name}}  
+      //-             span.role {{assignment.role}}
+      //-   div
+      //-     button.btn1(v-if="showPerson.new" @click='addEmployee(showPerson)' :disabled='!employeeID || !employeeName') ADD
+   
+</template>
+
+<script>
+import { mapState, mapMutations, mapActions } from 'vuex'
+export default {
+  computed: {
+    ...mapState([
+      'showPerson',
+      'config',
+      'people',
+      'chart',
+      'orgArray',
+      'editMode',
+      'activeDepartment'
+    ]),
+    pageTitle: {
+      get() {
+        return this.$store.state.config.title.text
+      },
+      set(value) {
+        this.$store.commit('setConfigUpdate', {
+          prop: 'title',
+          val: { text: value, color: this.config.title.color }
+        })
+      }
+    },
+    pageTitleColor: {
+      get() {
+        return this.$store.state.config.title.color
+      },
+      set(value) {
+        this.$store.commit('setConfigUpdate', {
+          prop: 'title',
+          val: { color: value, text: this.config.title.text }
+        })
+      }
+    },
+    informationText: {
+      get() {
+        return this.$store.state.config.information
+      },
+      set(value) {
+        this.$store.commit('setConfigUpdate', {
+          prop: 'information',
+          val: value
+        })
+      }
+    },
+    photoUrlP: {
+      get() {
+        return this.$store.state.config.photoUrl.prefix
+      },
+      set(value) {
+        this.$store.commit('setConfigUpdate', {
+          prop: 'photoUrl',
+          val: { prefix: value, suffix: this.config.photoUrl.suffix }
+        })
+      }
+    },
+    photoUrlS: {
+      get() {
+        return this.$store.state.config.photoUrl.suffix
+      },
+      set(value) {
+        this.$store.commit('setConfigUpdate', {
+          prop: 'photoUrl',
+          val: { suffix: value, prefix: this.config.photoUrl.prefix }
+        })
+      }
+    },
+    linkUrlP: {
+      get() {
+        return this.$store.state.config.linkUrl
+          ? this.$store.state.config.linkUrl.prefix
+          : ''
+      },
+      set(value) {
+        if (
+          !value &&
+          !(this.config.linkUrl || this.config.linkUrl.suffix)
+        ) {
+          this.$store.commit('setConfigUpdate', {
+            prop: 'linkUrl',
+            val: false
+          })
+          return ''
+        }
+
+        this.$store.commit('setConfigUpdate', {
+          prop: 'linkUrl',
+          val: {
+            prefix: value,
+            suffix: this.config.linkUrl
+              ? this.config.linkUrl.suffix
+              : ''
+          }
+        })
+      }
+    },
+    linkUrlS: {
+      get() {
+        return this.$store.state.config.linkUrl
+          ? this.$store.state.config.linkUrl.suffix
+          : ''
+      },
+      set(value) {
+        if (
+          !value &&
+          !(this.config.linkUrl || this.config.linkUrl.prefix)
+        ) {
+          this.$store.commit('setConfigUpdate', {
+            prop: 'linkUrl',
+            val: false
+          })
+          return ''
+        }
+        this.$store.commit('setConfigUpdate', {
+          prop: 'linkUrl',
+          val: {
+            suffix: value,
+            prefix: this.config.linkUrl
+              ? this.config.linkUrl.prefix
+              : ''
+          }
+        })
+      }
+    },
+    employeePhoto: {
+      get() {
+        return this.$store.state.showPerson.photo
+      },
+      set(value) {
+        this.$store.commit('setShowPersonPhoto', value)
+      }
+    },
+    employeeName: {
+      get() {
+        return this.$store.state.showPerson.name
+      },
+      set(value) {
+        this.$store.commit('setShowPersonName', value)
+      }
+    },
+    employeeCountry: {
+      get() {
+        return this.$store.state.showPerson.country
+      },
+      set(value) {
+        this.$store.commit('setShowPersonCountry', value)
+      }
+    },
+    employeeCity: {
+      get() {
+        return this.$store.state.showPerson.city
+      },
+      set(value) {
+        this.$store.commit('setShowPersonCity', value)
+      }
+    },
+    employeeStreet: {
+      get() {
+        return this.$store.state.showPerson.street
+      },
+      set(value) {
+        this.$store.commit('setShowPersonStreet', value)
+      }
+    },
+    employeeEmail: {
+      get() {
+        return this.$store.state.showPerson.email
+      },
+      set(value) {
+        this.$store.commit('setShowPersonEmail', value)
+      }
+    },
+    employeePhone: {
+      get() {
+        return this.$store.state.showPerson.phone
+      },
+      set(value) {
+        this.$store.commit('setShowPersonPhone', value)
+      }
+    },
+    employeeFunctionName: {
+      get() {
+        return this.$store.state.showPerson.functionName
+      },
+      set(value) {
+        this.$store.commit('setShowPersonFunctionName', value)
+      }
+    },
+    employeeHomePage: {
+      get() {
+        return this.$store.state.showPerson.homepage
+      },
+      set(value) {
+        this.$store.commit('setShowPersonHomePage', value)
+      }
+    },
+    photoUrl: function() {
+      if (!this.showPerson.photo) return null
+      return (
+        this.config.photoUrl.prefix +
+        this.showPerson.photo +
+        this.config.photoUrl.suffix
+      )
+    },
+    personAssignments: function() {
+      let assignments = this.showPerson.departments
+      //assignments.sort((a, b) =>
+      //   a.department.name.localeCompare(b.department.name)
+      // )
+      return assignments
+    }
+  },
+  mounted: function() {
+    console.log(this.showPerson)
+  },
+  methods: {
+    ...mapMutations([
+      'setShowPerson',
+      'addPerson',
+      'updateActiveDepartmentManager',
+      'addAssignment'
+    ]),
+    ...mapActions(['setShowDepartment', 'setConfigUpdate']),
+    goto(d) {
+      console.log(d)
+      this.setShowPerson(null)
+      this.setShowDepartment(d)
+    },
+    gotoExtProfile(person) {
+      var url =
+        this.config.linkUrl.prefix +
+        person.id +
+        this.config.linkUrl.suffix
+      window.open(url, '_blank')
+    },
+    markPhotoNotFound(person) {
+      console.log('person photo not found', person)
+    },
+    addEmployee(person) {
+      console.log('adding', person)
+      if (this.people.find(p => p.id == person.id)) {
+        alert('A person with this id already exists')
+      } else {
+        let ismanager = person.manager
+        this.addPerson(person)
+        this.setShowPerson(null)
+        if (ismanager) {
+          this.updateActiveDepartmentManager(person)
+        } else {
+          this.addAssignment({
+            department: this.activeDepartment,
+            person: person,
+            role: ''
+          })
+        }
+      }
+    }
+  }
+}
+</script>
+<style scoped>
+#config_container {
+  top: 50px;
+  padding: 50px;
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  background: rgba(200, 200, 200, 0.8);
+  z-index: 2;
+  text-align: center;
+}
+#config {
+  font-size: 18px;
+  color: black;
+  width: 700px;
+  text-align: left;
+  vertical-align: top;
+  margin: auto;
+  display: inline-block;
+  display: relative;
+  background-color: white;
+  padding: 5px;
+  z-index: 2;
+  border: 0px solid grey;
+  padding: 3px 10px;
+  border-radius: 5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16),
+    0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.close {
+  font-size: 16px;
+  background-color: grey;
+  color: white;
+  border-radius: 3px;
+  float: right;
+  cursor: pointer;
+}
+.close:hover {
+  background-color: lightgray;
+  color: black;
+}
+.photo {
+  width: 200px;
+  height: 200px;
+  display: inline-block;
+  margin: 0px 10px;
+}
+.details {
+  width: 350px;
+  display: inline-block;
+  text-align: left;
+  vertical-align: top;
+}
+.tab {
+  margin-bottom: 10px;
+  width: 600px;
+}
+.tab .n {
+  color: black;
+  width: 150px;
+}
+.tab .i {
+  color: black;
+  width: 450px;
+}
+.tab .i input {
+  width: 100%;
+}
+.tab .i textarea {
+  width: 100%;
+  height: 50px;
+}
+.prop {
+  width: 120px;
+  color: grey;
+  text-align: left;
+}
+.tab .val {
+  color: black;
+  text-align: left;
+  width: 400px;
+}
+.tab .val1 {
+  width: 250px;
+}
+.section {
+  color: grey;
+  font-weight: 600;
+}
+.im {
+  width: 100%;
+}
+.personname {
+  width: 100%;
+  text-align: left;
+  padding: 10px;
+  color: black;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+table td,
+table td * {
+  vertical-align: top;
+}
+.role {
+  color: grey;
+}
+.dep {
+  cursor: pointer;
+}
+.dep:hover {
+  background-color: lightblue;
+}
+.btn {
+  text-align: center;
+  column-span: 2;
+}
+.btn button {
+  padding: 10px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.btn1 {
+  padding: 10px 20px;
+  border: 2px solid green;
+  border-radius: 5px;
+  color: white;
+  background-color: green;
+  cursor: pointer;
+}
+.btn1:disabled {
+  color: grey;
+  border: 2px solid lightgrey;
+  background-color: lightgrey;
+  cursor: not-allowed;
+}
+.nophoto {
+  font-size: 200px;
+  color: lightgrey;
+}
+</style>

@@ -1,13 +1,9 @@
 <template lang='pug'>
 .header(:style='{backgroundColor:config.title.color}') {{config.title.text}}
-
-  
-  
   .edit_indicator(v-if="editMode" v-on:click="$store.commit('setEditMode', false)") Click to leave editmode
- 
   search-box
   .menu
-    file-menu(v-if='editMode')
+    file-menu(v-if='editMode' @editconfig='editConfig=true')
     options-menu
     .home1
       a(href="/")
@@ -19,29 +15,30 @@
     .info-text(v-if="infoOpen")
       i.material-icons.info-close(v-on:click="infoOpen=false") close
       .i-text(v-html="config.information")
-
       .updated_info Updated on: {{updatedOn}}
       hr
-      
       a(href='https://freeorgchart.netlify.app/#faq' target='_blank')
         .i-github 
           .i-github-text User manual
           a(href="https://github.com/Hoogkamer/vue-org-chart" target="_blank")
             img.gh(src="~/assets/img/gh.svg" title='Go to Github project page')
+  edit-config(v-if='editConfig' @close='editConfig=false')
 </template>
 
 <script>
 import html2canvas from 'html2canvas'
 import SearchBox from '~/components/SearchBox.vue'
 import FileMenu from '~/components/FileMenu.vue'
+import EditConfig from '~/components/EditConfig.vue'
 import OptionsMenu from '~/components/OptionsMenu.vue'
 import { mapState, mapActions } from 'vuex'
 var panzoom = require('panzoom')
 export default {
-  components: { SearchBox, FileMenu, OptionsMenu },
+  components: { SearchBox, FileMenu, OptionsMenu, EditConfig },
   data: function() {
     return {
-      infoOpen: false
+      infoOpen: false,
+      editConfig: true
     }
   },
   computed: {

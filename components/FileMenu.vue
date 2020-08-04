@@ -8,6 +8,7 @@
                 input(type="file" v-on:change="importData")
             li(v-on:click="doExportXls") Export excel
             li(v-on:click="generateInputFile") Generate inputfile
+            li(v-on:click="editConfig") Configure options
 
 </template>
 
@@ -39,6 +40,9 @@ export default {
     }
   },
   methods: {
+    editConfig: function() {
+      this.$emit('editconfig', true)
+    },
     generateInputFile: function() {
       var chartTable = this.tree2JSON(this.chart)
       var today = new Date()
@@ -88,6 +92,9 @@ export default {
         type: 'text/plain;charset=utf-8'
       })
       FileSaver.saveAs(blob, 'data.js')
+      alert(
+        'File generated. \n Overwrite the data.js file (in the root folder) with this file.'
+      )
     },
     importData: function(infile) {
       var f = infile.target.files[0]

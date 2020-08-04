@@ -194,6 +194,9 @@ export const mutations = {
     state.showNrDepartments = state.config.startView.showNrDepartments
     state.showNrPeople = state.config.startView.showNrPeople
   },
+  setConfigUpdate(state, { prop, val }) {
+    state.config[prop] = val
+  },
   setShowPersonID(state, val) {
     state.showPerson.id = val
   },
