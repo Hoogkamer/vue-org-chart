@@ -19,10 +19,13 @@
                   button(@click='gotoExtProfile(showPerson)') Open profile information
             template(v-else)
               tr
-                td.prop Name*
-                td.val(v-if='!editMode') {{employeeName}}
-                td.val(v-else)
-                  input.val1(v-model='employeeName')
+                template(v-if='!editMode')
+                  td.prop Name
+                  td.val {{employeeName}}
+                template(v-else)
+                  td.prop.must Name*
+                  td.val
+                    input.val1(v-model='employeeName')
               tr
                 td.prop Email
                 td(v-if='!editMode') 
@@ -61,10 +64,13 @@
                 td.val(v-else)
                   input.val1(v-model='employeeFunctionName') 
               tr
-                td.prop Employee ID*
-                td.val(v-if='!editMode') {{employeeID}}
-                td.val(v-else)
-                  input.val1(v-model='employeeID')
+                template(v-if='!editMode')
+                  td.prop Employee ID
+                  td.val {{employeeID}}
+                template(v-else)
+                  td.prop.must Employee ID*
+                  td.val
+                    input.val1(v-model='employeeID')
             tr(v-if="!showPerson.new")
               td.prop Departments
               td.val
@@ -292,6 +298,9 @@ export default {
   width: 120px;
   color: grey;
   text-align: left;
+}
+.must {
+  color: red;
 }
 .tab .val {
   color: black;
