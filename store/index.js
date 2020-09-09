@@ -29,7 +29,15 @@ export const state = () => ({
   zoomInstance: null,
   showNrDepartments: null,
   showNrPeople: null,
-  showPerson: null
+  showPerson: null,
+  personProperties: [
+    { name: 'Email', type: 'email' },
+    { name: 'Phone' },
+    { name: 'Homepage', type: 'link' },
+    { name: 'Country' },
+    { name: 'City' },
+    { name: 'Street' }
+  ]
 })
 
 export const actions = {
@@ -201,6 +209,9 @@ export const mutations = {
     } else {
       state.config[prop] = val
     }
+  },
+  setShowPersonProperty(state, val) {
+    state.showPerson[val.prop.name.toLowerCase()] = val.value
   },
   setShowPersonID(state, val) {
     state.showPerson.id = val

@@ -27,6 +27,20 @@
                   td.val
                     input.val1(v-model='employeeName')
               tr
+                template(v-if='!editMode')
+                  td.prop Employee ID
+                  td.val {{employeeID}}
+                template(v-else)
+                  td.prop.must Employee ID*
+                  td.val
+                    input.val1(v-model='employeeID')
+              tr
+                td.prop Function
+                td.val(v-if='!editMode') {{employeeFunctionName}}
+                td.val(v-else)
+                  input.val1(v-model='employeeFunctionName') 
+
+              tr
                 td.prop Email
                 td(v-if='!editMode') 
                   a(:href = '"mailto: "+ employeeEmail') {{employeeEmail}}
@@ -58,25 +72,22 @@
                 td(v-if='!editMode') {{employeeStreet}}
                 td(v-else)
                   input.val1(v-model='employeeStreet')
-              tr
-                td.prop Function
-                td.val(v-if='!editMode') {{employeeFunctionName}}
-                td.val(v-else)
-                  input.val1(v-model='employeeFunctionName') 
-              tr
-                template(v-if='!editMode')
-                  td.prop Employee ID
-                  td.val {{employeeID}}
-                template(v-else)
-                  td.prop.must Employee ID*
-                  td.val
-                    input.val1(v-model='employeeID')
+           
+             
             tr(v-if="!showPerson.new")
               td.prop Departments
               td.val
                 .dep(v-for='assignment in personAssignments' @click='goto(assignment.department)') 
                   span {{assignment.department.name}}  
                   span.role {{assignment.role}}
+
+          table.tab
+            tr(v-for="prop in personProperties")
+              td {{prop.name}}   
+              td
+                input(type="text" :value="getProp(prop)" @input="setProp(prop, $event.target.value)")
+ 
+
         div
           button.btn1(v-if="showPerson.new" @click='addEmployee(showPerson)' :disabled='!employeeID || !employeeName') ADD
    
@@ -88,6 +99,7 @@ export default {
   computed: {
     ...mapState([
       'showPerson',
+      'personProperties',
       'config',
       'people',
       'chart',
@@ -192,11 +204,12 @@ export default {
     }
   },
   mounted: function() {
-    console.log(this.showPerson)
+    console.log(this.personProperties)
   },
   methods: {
     ...mapMutations([
       'setShowPerson',
+      'setShowPersonProperty',
       'addPerson',
       'updateActiveDepartmentManager',
       'addAssignment'
@@ -216,6 +229,20 @@ export default {
     },
     markPhotoNotFound(person) {
       console.log('person photo not found', person)
+    },
+    getProp(prop) {
+      console.log(
+        prop.name.toLowerCase(),
+        this.$store.state.showPerson
+      )
+      return this.$store.state.showPerson[prop.name.toLowerCase()]
+    },
+    setProp(prop, value) {
+      console.log(prop, value)
+      this.$store.commit('setShowPersonProperty', {
+        prop: prop,
+        value: value
+      })
     },
     addEmployee(person) {
       console.log('adding', person)
