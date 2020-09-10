@@ -21,7 +21,7 @@ export const state = () => ({
   managerPhotoView: true,
   activeDepartment: null,
   moveDepartment: null,
-  editMode: false,
+  editMode: true,
   showEditMenu: null,
   showViewMenu: null,
   selectedPerson: null,
@@ -212,6 +212,9 @@ export const mutations = {
   },
   setShowPersonProperty(state, val) {
     state.showPerson[val.prop.name.toLowerCase()] = val.value
+  },
+  setPropName(state, p) {
+    p.prop.newName = p.value
   },
   setShowPersonID(state, val) {
     state.showPerson.id = val

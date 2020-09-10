@@ -85,7 +85,7 @@
             tr(v-for="prop in personProperties")
               td {{prop.name}}   
               td
-                input(type="text" :value="getProp(prop)" @input="setProp(prop, $event.target.value)")
+                input(type="text" :value="getPropName(prop)" @input="setPropName(prop, $event.target.value)")
  
 
         div
@@ -230,14 +230,14 @@ export default {
     markPhotoNotFound(person) {
       console.log('person photo not found', person)
     },
-    getProp(prop) {
+    getPropName(prop) {
       console.log(
         prop.name.toLowerCase(),
         this.$store.state.showPerson
       )
       return this.$store.state.showPerson[prop.name.toLowerCase()]
     },
-    setProp(prop, value) {
+    setPropName(prop, value) {
       console.log(prop, value)
       this.$store.commit('setShowPersonProperty', {
         prop: prop,

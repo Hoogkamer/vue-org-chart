@@ -69,6 +69,15 @@
         tr(v-if='showHelp')
           td.help(colspan=2) The colors of each level in the orgchart (specify comma separated)
                   
+
+      div Person fields  
+      table.tab
+        tr(v-for = 'prop in newProperties')
+          td
+            input(type="text" v-model="prop.name")
+          td(v-if="prop.deleted" @click='prop.deleted=false') Undelete
+          td(v-else @click='prop.deleted=true') Delete
+      button(@click='addProperty()') Add property
       div Startup settings
 
       table.tab
@@ -102,7 +111,7 @@
             
       div
         button.bt(@click='generate()') Generate config
-        button.bt(@click='$emit("close", true)') close
+        button.bt(@click='close();$emit("close", true)') close
         
 </template>
 
@@ -112,11 +121,12 @@ import FileSaver from 'file-saver'
 export default {
   data: function() {
     return {
-      showHelp: true
+      showHelp: true,
+      newProperties: null
     }
   },
   computed: {
-    ...mapState(['config']),
+    ...mapState(['config', 'personProperties']),
     pageTitle: {
       get() {
         return this.config.title.text
@@ -329,9 +339,21 @@ export default {
       }
     }
   },
-  mounted: function() {},
+  mounted: function() {
+    var newProperties = JSON.parse(
+      JSON.stringify(this.personProperties)
+    )
+    newProperties.forEach(p => {
+      p.oldName = p.name
+      p.deleted = true
+    })
+    this.newProperties = newProperties
+  },
   methods: {
     ...mapMutations(['setConfigUpdate']),
+    close: function() {
+      console.log(this.newProperties)
+    },
 
     generate: function() {
       this.setConfigUpdate({
@@ -349,6 +371,15 @@ export default {
       alert(
         'File generated. \n Overwrite the config.js file (in the root folder) with this file.'
       )
+    },
+    addProperty() {
+      this.newProperties.push({
+        name: '',
+        oldName: '',
+        deleted: false,
+        order: this.newProperties.length,
+        type: ''
+      })
     }
   }
 }
