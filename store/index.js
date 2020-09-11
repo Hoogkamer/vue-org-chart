@@ -31,12 +31,12 @@ export const state = () => ({
   showNrPeople: null,
   showPerson: null,
   personProperties: [
-    { name: 'Email', type: 'email' },
-    { name: 'Phone' },
-    { name: 'Homepage', type: 'link' },
-    { name: 'Country' },
-    { name: 'City' },
-    { name: 'Street' }
+    { name: 'Email', type: 'email', order: 0 },
+    { name: 'Phone', order: 1 },
+    { name: 'Homepage', type: 'url', order: 2 },
+    { name: 'Country', order: 3 },
+    { name: 'City', order: 4 },
+    { name: 'Street', order: 5 }
   ]
 })
 

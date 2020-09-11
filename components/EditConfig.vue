@@ -53,9 +53,6 @@
             input(type='checkbox' v-model='enableScreenCapture')
         tr(v-if='showHelp')
           td.help(colspan=2) This shows the icon to make an image of the graph to save. This does not work when you are on a local folder, so disable this option then
-
-
-             
         tr
           td.n Edit command
           td.i
@@ -69,15 +66,28 @@
         tr(v-if='showHelp')
           td.help(colspan=2) The colors of each level in the orgchart (specify comma separated)
                   
-
-      div Person fields  
+      hr
+      div Person fields
+      div.help(v-if='showHelp') Add, remove, rename or move the fields of a person  
       table.tab
-        tr(v-for = 'prop in newProperties')
+        tr(v-for = '(prop, i) in newProperties')
+          td(v-bind:class="{ prop_deleted: prop.deleted }")
+            input(type="text" v-bind:class="{ prop_deleted: prop.deleted }" v-model="prop.name")
+          td 
+            i.material-icons.move_icon(v-if='i!==0' title="Move up" @click='moveProp(prop, -1)') expand_less    
           td
-            input(type="text" v-model="prop.name")
-          td(v-if="prop.deleted" @click='prop.deleted=false') Undelete
-          td(v-else @click='prop.deleted=true') Delete
+            i.material-icons.move_icon(v-if='i!==newProperties.length-1' title="Move down" @click='moveProp(prop, 1)') expand_more   
+          td 
+            select(v-model="prop.type")
+              option text
+              option url 
+              option email
+          td
+            button(v-if="prop.deleted" @click='prop.deleted=false') Undelete
+            button(v-else @click='prop.deleted=true') Delete
       button(@click='addProperty()') Add property
+      button(@click='reset()') Reset
+      hr
       div Startup settings
 
       table.tab
@@ -340,19 +350,32 @@ export default {
     }
   },
   mounted: function() {
-    var newProperties = JSON.parse(
-      JSON.stringify(this.personProperties)
-    )
-    newProperties.forEach(p => {
-      p.oldName = p.name
-      p.deleted = true
-    })
-    this.newProperties = newProperties
+    this.reset()
   },
   methods: {
     ...mapMutations(['setConfigUpdate']),
     close: function() {
       console.log(this.newProperties)
+    },
+    reset: function() {
+      var newProperties = JSON.parse(
+        JSON.stringify(this.personProperties)
+      )
+      newProperties.forEach(p => {
+        p.oldName = p.name
+        p.deleted = false
+        p.type = p.type || 'text'
+      })
+      this.newProperties = newProperties
+    },
+    moveProp: function(prop, direction) {
+      var curOrder = prop.order
+      prop.order += direction
+
+      this.newProperties[curOrder + direction].order -= direction
+      this.newProperties.sort(function(a, b) {
+        return a.order - b.order
+      })
     },
 
     generate: function() {
@@ -378,7 +401,7 @@ export default {
         oldName: '',
         deleted: false,
         order: this.newProperties.length,
-        type: ''
+        type: 'text'
       })
     }
   }
@@ -536,7 +559,7 @@ table td * {
   font-size: 200px;
   color: lightgrey;
 }
-td.help {
+.help {
   color: rgb(61, 60, 60);
   padding-bottom: 10px;
   font-size: 12px;
@@ -547,5 +570,14 @@ button.bt {
 }
 button {
   cursor: pointer;
+}
+.move_icon {
+  cursor: pointer;
+}
+.move_icon:hover {
+  color: grey;
+}
+.prop_deleted {
+  color: red;
 }
 </style>
