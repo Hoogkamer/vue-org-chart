@@ -40,38 +40,15 @@
                 td.val(v-else)
                   input.val1(v-model='employeeFunctionName') 
 
-              tr
-                td.prop Email
-                td(v-if='!editMode') 
-                  a(:href = '"mailto: "+ employeeEmail') {{employeeEmail}}
-                td(v-else)
-                  input.val1(v-model='employeeEmail')
-              tr
-                td.prop Phone
-                td(v-if='!editMode') {{employeePhone}}
-                td(v-else)
-                  input.val1(v-model='employeePhone')
-              tr
-                td.prop Homepage
-                td(v-if='!editMode') 
-                  a(:href="employeeHomePage" target="_blank") {{employeeHomePage}}
-                td(v-else)
-                  input.val1(v-model='employeeHomePage')
-              tr
-                td.prop Country
-                td(v-if='!editMode') {{employeeCountry}}
-                td(v-else)
-                  input.val1(v-model='employeeCountry')
-              tr
-                td.prop City
-                td(v-if='!editMode') {{employeeCity}}
-                td(v-else)
-                  input.val1(v-model='employeeCity')
-              tr
-                td.prop Street
-                td(v-if='!editMode') {{employeeStreet}}
-                td(v-else)
-                  input.val1(v-model='employeeStreet')
+              tr(v-for="prop in personProperties")
+                td {{prop.name}}
+                td
+                  template(v-if='!editMode')
+                    a(v-if='prop.type=="url"' :href="getPropName(prop)" target="_blank") {{getPropName(prop)}}
+                    a(v-else-if='prop.type=="email"' :href = '"mailto: "+ getPropName(prop)') {{getPropName(prop)}}
+                    span(v-else) {{getPropName(prop)}}
+                  template(v-else)
+                    input(type="text" :value="getPropName(prop)" @input="setPropName(prop, $event.target.value)")
            
              
             tr(v-if="!showPerson.new")
@@ -80,14 +57,6 @@
                 .dep(v-for='assignment in personAssignments' @click='goto(assignment.department)') 
                   span {{assignment.department.name}}  
                   span.role {{assignment.role}}
-
-          table.tab
-            tr(v-for="prop in personProperties")
-              td {{prop.name}}   
-              td
-                input(type="text" :value="getPropName(prop)" @input="setPropName(prop, $event.target.value)")
- 
-
         div
           button.btn1(v-if="showPerson.new" @click='addEmployee(showPerson)' :disabled='!employeeID || !employeeName') ADD
    
@@ -231,11 +200,7 @@ export default {
       console.log('person photo not found', person)
     },
     getPropName(prop) {
-      console.log(
-        prop.name.toLowerCase(),
-        this.$store.state.showPerson
-      )
-      return this.$store.state.showPerson[prop.name.toLowerCase()]
+      return this.$store.state.showPerson.fields[prop.name]
     },
     setPropName(prop, value) {
       console.log(prop, value)

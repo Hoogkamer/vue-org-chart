@@ -81,7 +81,7 @@ export default {
       var json =
         'var INPUT_DATA=' +
         JSON.stringify({
-          api_version: '1.0',
+          api_version: '2.0',
           chart: chartTable,
           people: people,
           assignments: assignments
@@ -115,6 +115,30 @@ export default {
             defval: ''
           }
         )
+
+        //check if old format
+        // find al columns with 'field_' in it and place in fields object
+        let fields = Object.keys(people[0]).filter(
+          n => n.search('field_') === 0
+        )
+        console.log(fields)
+        if (fields.length) {
+          // is new format
+          console.log('reading new format excel')
+          people.forEach(p => {
+            p.fields = {}
+            fields.forEach(f => {
+              p.fields[f.substring(6)] = p[f]
+              delete p[f]
+            })
+          })
+        } else {
+          console.log(' old format excel')
+        }
+
+        console.log(people[0])
+        debugger
+
         var assignments = XLSX.utils.sheet_to_json(
           workbook.Sheets['assignment'],
           {
@@ -176,6 +200,13 @@ export default {
       this.people.forEach((p, i) => {
         let person = Object.assign({}, p)
         delete person.departments
+        delete person.manager
+
+        for (const field in person.fields) {
+          person['field_' + field] = person.fields[field]
+        }
+        delete person.fields
+
         people.push(person)
         if (p.departments) {
           p.departments.forEach(d => {

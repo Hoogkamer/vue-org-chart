@@ -68,7 +68,19 @@
                   
       hr
       div Person fields
-      div.help(v-if='showHelp') Add, remove, rename or move the fields of a person  
+      div.help(v-if='showHelp') Add, remove, rename or move the fields of a person (Name, Employee ID and Function cannot be changed)
+      
+      table.tab
+        tr
+          td Name
+          td (fixed field)
+        tr
+          td Employee ID
+          td (fixed field)
+        tr 
+          td Function
+          td (fixed field)
+
       table.tab
         tr(v-for = '(prop, i) in newProperties')
           td(v-bind:class="{ prop_deleted: prop.deleted }")
@@ -87,6 +99,7 @@
             button(v-else @click='prop.deleted=true') Delete
       button(@click='addProperty()') Add property
       button(@click='reset()') Reset
+      .vspacer
       hr
       div Startup settings
 
@@ -353,9 +366,11 @@ export default {
     this.reset()
   },
   methods: {
-    ...mapMutations(['setConfigUpdate']),
+    ...mapMutations(['setConfigUpdate', 'setPersonProperties']),
+
     close: function() {
       console.log(this.newProperties)
+      this.setPersonProperties(this.newProperties)
     },
     reset: function() {
       var newProperties = JSON.parse(
@@ -579,5 +594,8 @@ button {
 }
 .prop_deleted {
   color: red;
+}
+.vspacer {
+  height: 10px;
 }
 </style>

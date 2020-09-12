@@ -45,6 +45,7 @@ export const actions = {
     commit('setConfig')
     console.log(CONFIG)
     var data
+    var people
 
     // check if the data is saved in old format (array) or new format (tree)
     // new format has much faster load time
@@ -53,19 +54,25 @@ export const actions = {
       commit('createTree', data)
       console.log('Loading OLD input data format')
     } else if (INPUT_DATA.api_version === '1.0') {
-      data = processDataNew(INPUT_DATA.chart, [])
+      data = processData10(INPUT_DATA.chart, [])
+      people = processPeople10(INPUT_DATA.people)
       commit('createTree1', data)
-      console.log('Loading NEW input data format')
+      console.log('Loading 1.0 input data format')
+    } else if (INPUT_DATA.api_version === '2.0') {
+      data = processData10(INPUT_DATA.chart, [])
+      people = processPeople20(INPUT_DATA.people)
+      commit('createTree1', data)
+      console.log('Loading 2.0 input data format')
     } else {
       alert('wrong version input file')
     }
 
     commit('processAssignments', {
       departments: data.orgArray,
-      people: INPUT_DATA.people,
+      people: people,
       assignments: INPUT_DATA.assignments
     })
-    commit('setPeople', INPUT_DATA.people)
+    commit('setPeople', people)
     commit('setAssignments', INPUT_DATA.assignments)
     var that = this
     window.onresize = function(event) {
@@ -210,8 +217,44 @@ export const mutations = {
       state.config[prop] = val
     }
   },
+  setPersonProperties(state, newprops) {
+    // update personproperties metadata (order, type)
+    state.personProperties = []
+    newprops.forEach(np => {
+      state.personProperties.push({
+        name: np.name,
+        type: np.type,
+        order: np.order
+      })
+    })
+    // update all properties of the people
+    let deletedProps = newprops.filter(p => p.deleted)
+    let changedProps = newprops.filter(
+      p => p.oldName && p.name !== p.oldName
+    )
+    let addedProps = newprops.filter(p => !p.oldName)
+
+    console.log('del', deletedProps)
+    console.log('cha', changedProps)
+    console.log('add', addedProps)
+
+    state.people.forEach(pp => {
+      changedProps.forEach(cpr => {
+        delete Object.assign(pp.fields, {
+          [cpr.name]: pp.fields[cpr.oldName]
+        })[cpr.oldName]
+      })
+      addedProps.forEach(apr => {
+        pp.fields[apr.name] = '??'
+      })
+      deletedProps.forEach(dpr => {
+        delete pp.fields[dpr.name]
+      })
+    })
+    console.log(state.people[0])
+  },
   setShowPersonProperty(state, val) {
-    state.showPerson[val.prop.name.toLowerCase()] = val.value
+    state.showPerson.fields[val.prop.name] = val.value
   },
   setPropName(state, p) {
     p.prop.newName = p.value
@@ -281,6 +324,7 @@ export const mutations = {
   },
   setPeople(state, datas) {
     state.people = datas
+    console.log('____people', state.people)
   },
   processAssignments(state, { departments, people, assignments }) {
     departments.forEach(dept => {
@@ -759,7 +803,36 @@ function refreshLines(that, dept) {
     }
   }, 0)
 }
-function processDataNew(dept, orgArray) {
+function processPeople10(people) {
+  //in new format, custom fields are in fields object in stead of at root
+  //convert old format to new
+
+  people.forEach(p => {
+    p.fields = {
+      Email: p.email,
+      Phone: p.phone,
+      Homepage: p.homepage,
+      Country: p.country,
+      City: p.city,
+      Street: p.street
+    }
+    delete p.email
+    delete p.phone
+    delete p.homepage
+    delete p.country
+    delete p.city
+    delete p.street
+    // these are unused field which also can be cleaned
+    delete p.function
+    delete p.main_role
+  })
+
+  return people
+}
+function processPeople20(people) {
+  return people
+}
+function processData10(dept, orgArray) {
   if (!dept.employees) {
     //dept.employees = []
     Vue.set(dept, 'employees', [])
@@ -788,7 +861,7 @@ function processDataNew(dept, orgArray) {
   dept.onlyShowThisChild = null
   dept.children.forEach(c => {
     c.parent = dept
-    processDataNew(c, orgArray)
+    processData10(c, orgArray)
   })
   return { dept: dept, orgArray: orgArray }
 }
