@@ -16,7 +16,7 @@
 import XLSX from 'xlsx'
 import FileSaver from 'file-saver'
 
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   data: function() {
     return {
@@ -26,6 +26,7 @@ export default {
   computed: {
     ...mapState([
       'chart',
+      'orgArray',
       'people',
       'assignments',
       'editMode',
@@ -39,12 +40,19 @@ export default {
       }
     }
   },
+  mounted: function() {
+    //this.setHideParents(false)
+  },
   methods: {
+    ...mapMutations(['setHideParents']),
+
     editConfig: function() {
       this.$emit('editconfig', true)
     },
     generateInputFile: function() {
-      var chartTable = this.tree2JSON(this.chart)
+      var chartTable = this.tree2JSON(
+        this.orgArray.find(d => d.parent_id === '')
+      )
       var today = new Date()
       var dd = today.getDate()
       var mm = today.getMonth() + 1 //January is 0!
@@ -202,9 +210,10 @@ export default {
         delete person.departments
         delete person.manager
 
-        for (const field in person.fields) {
-          person['field_' + field] = person.fields[field]
-        }
+        this.config.personProperties.forEach(prop => {
+          person['field_' + prop.name] = person.fields[prop.name]
+        })
+
         delete person.fields
 
         people.push(person)
@@ -222,7 +231,10 @@ export default {
         }
       })
 
-      var chartTable = this.tree2array(this.chart, [])
+      var chartTable = this.tree2array(
+        this.orgArray.find(d => d.parent_id === ''),
+        []
+      )
       var wb = XLSX.utils.book_new()
       XLSX.utils.book_append_sheet(
         wb,

@@ -40,8 +40,8 @@
                 td.val(v-else)
                   input.val1(v-model='employeeFunctionName') 
 
-              tr(v-for="prop in personProperties")
-                td {{prop.name}}
+              tr(v-for="prop in config.personProperties")
+                td.prop {{prop.name}}
                 td
                   template(v-if='!editMode')
                     a(v-if='prop.type=="url"' :href="getPropName(prop)" target="_blank") {{getPropName(prop)}}
@@ -100,60 +100,13 @@ export default {
         this.$store.commit('setShowPersonName', value)
       }
     },
-    employeeCountry: {
-      get() {
-        return this.$store.state.showPerson.country
-      },
-      set(value) {
-        this.$store.commit('setShowPersonCountry', value)
-      }
-    },
-    employeeCity: {
-      get() {
-        return this.$store.state.showPerson.city
-      },
-      set(value) {
-        this.$store.commit('setShowPersonCity', value)
-      }
-    },
-    employeeStreet: {
-      get() {
-        return this.$store.state.showPerson.street
-      },
-      set(value) {
-        this.$store.commit('setShowPersonStreet', value)
-      }
-    },
-    employeeEmail: {
-      get() {
-        return this.$store.state.showPerson.email
-      },
-      set(value) {
-        this.$store.commit('setShowPersonEmail', value)
-      }
-    },
-    employeePhone: {
-      get() {
-        return this.$store.state.showPerson.phone
-      },
-      set(value) {
-        this.$store.commit('setShowPersonPhone', value)
-      }
-    },
+
     employeeFunctionName: {
       get() {
         return this.$store.state.showPerson.functionName
       },
       set(value) {
         this.$store.commit('setShowPersonFunctionName', value)
-      }
-    },
-    employeeHomePage: {
-      get() {
-        return this.$store.state.showPerson.homepage
-      },
-      set(value) {
-        this.$store.commit('setShowPersonHomePage', value)
       }
     },
     photoUrl: function() {

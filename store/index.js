@@ -30,13 +30,13 @@ export const state = () => ({
   showNrDepartments: null,
   showNrPeople: null,
   showPerson: null,
-  personProperties: [
+  defaultPersonProperties: [
     { name: 'Email', type: 'email', order: 0 },
-    { name: 'Phone', order: 1 },
+    { name: 'Phone', type: 'text', order: 1 },
     { name: 'Homepage', type: 'url', order: 2 },
-    { name: 'Country', order: 3 },
-    { name: 'City', order: 4 },
-    { name: 'Street', order: 5 }
+    { name: 'Country', type: 'text', order: 3 },
+    { name: 'City', type: 'text', order: 4 },
+    { name: 'Street', type: 'text', order: 5 }
   ]
 })
 
@@ -202,6 +202,9 @@ export const mutations = {
     if (!state.config.editCommand) {
       state.config.editCommand = '_edit'
     }
+    if (!state.config.personProperties) {
+      state.config.personProperties = state.defaultPersonProperties
+    }
     state.columnView = state.config.startView.columnview
     state.columnView_noStaff = !state.config.startView.staffColumnview
     state.managerNameView = state.config.startView.names
@@ -219,9 +222,9 @@ export const mutations = {
   },
   setPersonProperties(state, newprops) {
     // update personproperties metadata (order, type)
-    state.personProperties = []
+    state.config.personProperties = []
     newprops.forEach(np => {
-      state.personProperties.push({
+      state.config.personProperties.push({
         name: np.name,
         type: np.type,
         order: np.order

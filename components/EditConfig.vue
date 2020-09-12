@@ -149,7 +149,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['config', 'personProperties']),
+    ...mapState(['config']),
     pageTitle: {
       get() {
         return this.config.title.text
@@ -370,11 +370,11 @@ export default {
 
     close: function() {
       console.log(this.newProperties)
-      this.setPersonProperties(this.newProperties)
+      //this.setPersonProperties(this.newProperties)
     },
     reset: function() {
       var newProperties = JSON.parse(
-        JSON.stringify(this.personProperties)
+        JSON.stringify(this.config.personProperties)
       )
       newProperties.forEach(p => {
         p.oldName = p.name
@@ -394,20 +394,19 @@ export default {
     },
 
     generate: function() {
+      this.setPersonProperties(this.newProperties)
       this.setConfigUpdate({
         prop: 'dataFields',
         val: [{ name: 'Location', type: 'text' }]
       })
-      console.log(this.config)
 
       var json = 'var CONFIG = ' + JSON.stringify(this.config)
-
       var blob = new Blob([json], {
         type: 'text/plain;charset=utf-8'
       })
       FileSaver.saveAs(blob, 'config.js')
       alert(
-        'File generated. \n Overwrite the config.js file (in the root folder) with this file.'
+        'File generated. \n Overwrite the "config.js" file (in the root folder) with this file. \n You also need to generate and save a new inputfile "data.js" !!'
       )
     },
     addProperty() {
