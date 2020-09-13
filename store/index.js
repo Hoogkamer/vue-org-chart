@@ -21,7 +21,7 @@ export const state = () => ({
   managerPhotoView: true,
   activeDepartment: null,
   moveDepartment: null,
-  editMode: true,
+  editMode: false,
   showEditMenu: null,
   showViewMenu: null,
   selectedPerson: null,
@@ -224,18 +224,27 @@ export const mutations = {
     // update personproperties metadata (order, type)
     state.config.personProperties = []
     newprops.forEach(np => {
-      state.config.personProperties.push({
-        name: np.name,
-        type: np.type,
-        order: np.order
-      })
+      if (!np.deleted && np.name) {
+        state.config.personProperties.push({
+          name: np.name,
+          type: np.type,
+          order: np.order
+        })
+      }
     })
+
+    //there may be gaps in the order when fields have been deleted. Recalculate order
+    state.config.personProperties.sort(function(a, b) {
+      return a.order - b.order
+    })
+    state.config.personProperties.forEach((a, i) => (a.order = i))
+
     // update all properties of the people
     let deletedProps = newprops.filter(p => p.deleted)
     let changedProps = newprops.filter(
       p => p.oldName && p.name !== p.oldName
     )
-    let addedProps = newprops.filter(p => !p.oldName)
+    let addedProps = newprops.filter(p => !p.oldName && p.name)
 
     console.log('del', deletedProps)
     console.log('cha', changedProps)
@@ -247,11 +256,12 @@ export const mutations = {
           [cpr.name]: pp.fields[cpr.oldName]
         })[cpr.oldName]
       })
-      addedProps.forEach(apr => {
-        pp.fields[apr.name] = '??'
-      })
+
       deletedProps.forEach(dpr => {
-        delete pp.fields[dpr.name]
+        delete pp.fields[dpr.oldName]
+      })
+      addedProps.forEach(apr => {
+        pp.fields[apr.name] = ''
       })
     })
     console.log(state.people[0])
@@ -462,7 +472,7 @@ export const mutations = {
       manager: { name: '', id: '', role: '' },
       name: '',
       parent: state.activeDepartment,
-      parentId: state.activeDepartment.id,
+      parent_id: state.activeDepartment.id,
       showChildren: false
     }
 
@@ -725,7 +735,7 @@ function createTree(array, parent, nextparent, tree) {
   //var children = array.filter(child => child.parentId === parent.id)
   var children = _.remove(
     array,
-    child => child.parentId === parent.id
+    child => child.parent_id === parent.id
   )
 
   if (!parent.id) {
@@ -840,6 +850,11 @@ function processData10(dept, orgArray) {
     //dept.employees = []
     Vue.set(dept, 'employees', [])
   }
+  // if (dept.hasOwnProperty('parent_id')) {
+  //   delete Object.assign(dept, {
+  //     parentId: dept['parent_id']
+  //   })['parent_id']
+  // }
   orgArray.push(dept)
   var manager = INPUT_DATA.people.find(p => p.id == dept.manager_id)
   var dataFields = []
@@ -887,7 +902,7 @@ function processData() {
 
     data.push({
       id: dept.id,
-      parentId: dept.parent_id,
+      parent_id: dept.parent_id,
       isStaff: dept.staff_department == 'Y',
       name: dept.name,
       description: dept.description,

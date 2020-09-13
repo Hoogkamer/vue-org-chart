@@ -134,7 +134,7 @@
             
       div
         button.bt(@click='generate()') Generate config
-        button.bt(@click='close();$emit("close", true)') close
+        button.bt(@click='close()') close
         
 </template>
 
@@ -370,6 +370,7 @@ export default {
 
     close: function() {
       console.log(this.newProperties)
+      this.$emit('close', true)
       //this.setPersonProperties(this.newProperties)
     },
     reset: function() {
@@ -408,6 +409,7 @@ export default {
       alert(
         'File generated. \n Overwrite the "config.js" file (in the root folder) with this file. \n You also need to generate and save a new inputfile "data.js" !!'
       )
+      this.close()
     },
     addProperty() {
       this.newProperties.push({

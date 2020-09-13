@@ -50,6 +50,11 @@ export default {
       this.$emit('editconfig', true)
     },
     generateInputFile: function() {
+      console.log(
+        ' generate',
+        this.orgArray,
+        this.orgArray.find(d => d.parent_id === '')
+      )
       var chartTable = this.tree2JSON(
         this.orgArray.find(d => d.parent_id === '')
       )
@@ -143,10 +148,7 @@ export default {
         } else {
           console.log(' old format excel')
         }
-
         console.log(people[0])
-        debugger
-
         var assignments = XLSX.utils.sheet_to_json(
           workbook.Sheets['assignment'],
           {
@@ -178,7 +180,7 @@ export default {
             showChildren: false,
             employees: [],
             parent: null,
-            parentId: x.parent_id,
+            parent_id: x.parent_id,
             children: null,
             isStaff: x.staff_department === 'Y' ? true : false,
             id: x.id,
