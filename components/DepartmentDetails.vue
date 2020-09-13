@@ -128,7 +128,7 @@ export default {
     },
 
     visitProfile(person) {
-      this.setShowPerson(person)
+      if (person.name) this.setShowPerson(person)
     }
   }
 }

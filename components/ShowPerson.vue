@@ -27,43 +27,6 @@
                   td.val
                     input.val1(v-model='employeeName')
               tr
-                td.prop Email
-                td(v-if='!editMode') 
-                  a(:href = '"mailto: "+ employeeEmail') {{employeeEmail}}
-                td(v-else)
-                  input.val1(v-model='employeeEmail')
-              tr
-                td.prop Phone
-                td(v-if='!editMode') {{employeePhone}}
-                td(v-else)
-                  input.val1(v-model='employeePhone')
-              tr
-                td.prop Homepage
-                td(v-if='!editMode') 
-                  a(:href="employeeHomePage" target="_blank") {{employeeHomePage}}
-                td(v-else)
-                  input.val1(v-model='employeeHomePage')
-              tr
-                td.prop Country
-                td(v-if='!editMode') {{employeeCountry}}
-                td(v-else)
-                  input.val1(v-model='employeeCountry')
-              tr
-                td.prop City
-                td(v-if='!editMode') {{employeeCity}}
-                td(v-else)
-                  input.val1(v-model='employeeCity')
-              tr
-                td.prop Street
-                td(v-if='!editMode') {{employeeStreet}}
-                td(v-else)
-                  input.val1(v-model='employeeStreet')
-              tr
-                td.prop Function
-                td.val(v-if='!editMode') {{employeeFunctionName}}
-                td.val(v-else)
-                  input.val1(v-model='employeeFunctionName') 
-              tr
                 template(v-if='!editMode')
                   td.prop Employee ID
                   td.val {{employeeID}}
@@ -71,6 +34,23 @@
                   td.prop.must Employee ID*
                   td.val
                     input.val1(v-model='employeeID')
+              tr
+                td.prop Function
+                td.val(v-if='!editMode') {{employeeFunctionName}}
+                td.val(v-else)
+                  input.val1(v-model='employeeFunctionName') 
+
+              tr(v-for="prop in config.personProperties")
+                td.prop {{prop.name}}
+                td
+                  template(v-if='!editMode')
+                    a(v-if='prop.type=="url"' :href="getPropName(prop)" target="_blank") {{getPropName(prop)}}
+                    a(v-else-if='prop.type=="email"' :href = '"mailto: "+ getPropName(prop)') {{getPropName(prop)}}
+                    span(v-else) {{getPropName(prop)}}
+                  template(v-else)
+                    input(type="text" :value="getPropName(prop)" @input="setPropName(prop, $event.target.value)")
+           
+             
             tr(v-if="!showPerson.new")
               td.prop Departments
               td.val
@@ -88,6 +68,7 @@ export default {
   computed: {
     ...mapState([
       'showPerson',
+      'personProperties',
       'config',
       'people',
       'chart',
@@ -119,60 +100,13 @@ export default {
         this.$store.commit('setShowPersonName', value)
       }
     },
-    employeeCountry: {
-      get() {
-        return this.$store.state.showPerson.country
-      },
-      set(value) {
-        this.$store.commit('setShowPersonCountry', value)
-      }
-    },
-    employeeCity: {
-      get() {
-        return this.$store.state.showPerson.city
-      },
-      set(value) {
-        this.$store.commit('setShowPersonCity', value)
-      }
-    },
-    employeeStreet: {
-      get() {
-        return this.$store.state.showPerson.street
-      },
-      set(value) {
-        this.$store.commit('setShowPersonStreet', value)
-      }
-    },
-    employeeEmail: {
-      get() {
-        return this.$store.state.showPerson.email
-      },
-      set(value) {
-        this.$store.commit('setShowPersonEmail', value)
-      }
-    },
-    employeePhone: {
-      get() {
-        return this.$store.state.showPerson.phone
-      },
-      set(value) {
-        this.$store.commit('setShowPersonPhone', value)
-      }
-    },
+
     employeeFunctionName: {
       get() {
         return this.$store.state.showPerson.functionName
       },
       set(value) {
         this.$store.commit('setShowPersonFunctionName', value)
-      }
-    },
-    employeeHomePage: {
-      get() {
-        return this.$store.state.showPerson.homepage
-      },
-      set(value) {
-        this.$store.commit('setShowPersonHomePage', value)
       }
     },
     photoUrl: function() {
@@ -192,11 +126,12 @@ export default {
     }
   },
   mounted: function() {
-    console.log(this.showPerson)
+    console.log(this.personProperties)
   },
   methods: {
     ...mapMutations([
       'setShowPerson',
+      'setShowPersonProperty',
       'addPerson',
       'updateActiveDepartmentManager',
       'addAssignment'
@@ -216,6 +151,16 @@ export default {
     },
     markPhotoNotFound(person) {
       console.log('person photo not found', person)
+    },
+    getPropName(prop) {
+      return this.$store.state.showPerson.fields[prop.name]
+    },
+    setPropName(prop, value) {
+      console.log(prop, value)
+      this.$store.commit('setShowPersonProperty', {
+        prop: prop,
+        value: value
+      })
     },
     addEmployee(person) {
       console.log('adding', person)

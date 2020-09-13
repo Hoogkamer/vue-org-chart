@@ -29,7 +29,15 @@ export const state = () => ({
   zoomInstance: null,
   showNrDepartments: null,
   showNrPeople: null,
-  showPerson: null
+  showPerson: null,
+  defaultPersonProperties: [
+    { name: 'Email', type: 'email', order: 0 },
+    { name: 'Phone', type: 'text', order: 1 },
+    { name: 'Homepage', type: 'url', order: 2 },
+    { name: 'Country', type: 'text', order: 3 },
+    { name: 'City', type: 'text', order: 4 },
+    { name: 'Street', type: 'text', order: 5 }
+  ]
 })
 
 export const actions = {
@@ -37,6 +45,7 @@ export const actions = {
     commit('setConfig')
     console.log(CONFIG)
     var data
+    var people
 
     // check if the data is saved in old format (array) or new format (tree)
     // new format has much faster load time
@@ -45,19 +54,25 @@ export const actions = {
       commit('createTree', data)
       console.log('Loading OLD input data format')
     } else if (INPUT_DATA.api_version === '1.0') {
-      data = processDataNew(INPUT_DATA.chart, [])
+      data = processData10(INPUT_DATA.chart, [])
+      people = processPeople10(INPUT_DATA.people)
       commit('createTree1', data)
-      console.log('Loading NEW input data format')
+      console.log('Loading 1.0 input data format')
+    } else if (INPUT_DATA.api_version === '2.0') {
+      data = processData10(INPUT_DATA.chart, [])
+      people = processPeople20(INPUT_DATA.people)
+      commit('createTree1', data)
+      console.log('Loading 2.0 input data format')
     } else {
       alert('wrong version input file')
     }
 
     commit('processAssignments', {
       departments: data.orgArray,
-      people: INPUT_DATA.people,
+      people: people,
       assignments: INPUT_DATA.assignments
     })
-    commit('setPeople', INPUT_DATA.people)
+    commit('setPeople', people)
     commit('setAssignments', INPUT_DATA.assignments)
     var that = this
     window.onresize = function(event) {
@@ -187,6 +202,9 @@ export const mutations = {
     if (!state.config.editCommand) {
       state.config.editCommand = '_edit'
     }
+    if (!state.config.personProperties) {
+      state.config.personProperties = state.defaultPersonProperties
+    }
     state.columnView = state.config.startView.columnview
     state.columnView_noStaff = !state.config.startView.staffColumnview
     state.managerNameView = state.config.startView.names
@@ -201,6 +219,58 @@ export const mutations = {
     } else {
       state.config[prop] = val
     }
+  },
+  setPersonProperties(state, newprops) {
+    // update personproperties metadata (order, type)
+    state.config.personProperties = []
+    newprops.forEach(np => {
+      if (!np.deleted && np.name) {
+        state.config.personProperties.push({
+          name: np.name,
+          type: np.type,
+          order: np.order
+        })
+      }
+    })
+
+    //there may be gaps in the order when fields have been deleted. Recalculate order
+    state.config.personProperties.sort(function(a, b) {
+      return a.order - b.order
+    })
+    state.config.personProperties.forEach((a, i) => (a.order = i))
+
+    // update all properties of the people
+    let deletedProps = newprops.filter(p => p.deleted)
+    let changedProps = newprops.filter(
+      p => p.oldName && p.name !== p.oldName
+    )
+    let addedProps = newprops.filter(p => !p.oldName && p.name)
+
+    console.log('del', deletedProps)
+    console.log('cha', changedProps)
+    console.log('add', addedProps)
+
+    state.people.forEach(pp => {
+      changedProps.forEach(cpr => {
+        delete Object.assign(pp.fields, {
+          [cpr.name]: pp.fields[cpr.oldName]
+        })[cpr.oldName]
+      })
+
+      deletedProps.forEach(dpr => {
+        delete pp.fields[dpr.oldName]
+      })
+      addedProps.forEach(apr => {
+        pp.fields[apr.name] = ''
+      })
+    })
+    console.log(state.people[0])
+  },
+  setShowPersonProperty(state, val) {
+    state.showPerson.fields[val.prop.name] = val.value
+  },
+  setPropName(state, p) {
+    p.prop.newName = p.value
   },
   setShowPersonID(state, val) {
     state.showPerson.id = val
@@ -267,6 +337,7 @@ export const mutations = {
   },
   setPeople(state, datas) {
     state.people = datas
+    console.log('____people', state.people)
   },
   processAssignments(state, { departments, people, assignments }) {
     departments.forEach(dept => {
@@ -401,7 +472,7 @@ export const mutations = {
       manager: { name: '', id: '', role: '' },
       name: '',
       parent: state.activeDepartment,
-      parentId: state.activeDepartment.id,
+      parent_id: state.activeDepartment.id,
       showChildren: false
     }
 
@@ -664,7 +735,7 @@ function createTree(array, parent, nextparent, tree) {
   //var children = array.filter(child => child.parentId === parent.id)
   var children = _.remove(
     array,
-    child => child.parentId === parent.id
+    child => child.parent_id === parent.id
   )
 
   if (!parent.id) {
@@ -745,11 +816,45 @@ function refreshLines(that, dept) {
     }
   }, 0)
 }
-function processDataNew(dept, orgArray) {
+function processPeople10(people) {
+  //in new format, custom fields are in fields object in stead of at root
+  //convert old format to new
+
+  people.forEach(p => {
+    p.fields = {
+      Email: p.email,
+      Phone: p.phone,
+      Homepage: p.homepage,
+      Country: p.country,
+      City: p.city,
+      Street: p.street
+    }
+    delete p.email
+    delete p.phone
+    delete p.homepage
+    delete p.country
+    delete p.city
+    delete p.street
+    // these are unused field which also can be cleaned
+    delete p.function
+    delete p.main_role
+  })
+
+  return people
+}
+function processPeople20(people) {
+  return people
+}
+function processData10(dept, orgArray) {
   if (!dept.employees) {
     //dept.employees = []
     Vue.set(dept, 'employees', [])
   }
+  // if (dept.hasOwnProperty('parent_id')) {
+  //   delete Object.assign(dept, {
+  //     parentId: dept['parent_id']
+  //   })['parent_id']
+  // }
   orgArray.push(dept)
   var manager = INPUT_DATA.people.find(p => p.id == dept.manager_id)
   var dataFields = []
@@ -774,7 +879,7 @@ function processDataNew(dept, orgArray) {
   dept.onlyShowThisChild = null
   dept.children.forEach(c => {
     c.parent = dept
-    processDataNew(c, orgArray)
+    processData10(c, orgArray)
   })
   return { dept: dept, orgArray: orgArray }
 }
@@ -797,7 +902,7 @@ function processData() {
 
     data.push({
       id: dept.id,
-      parentId: dept.parent_id,
+      parent_id: dept.parent_id,
       isStaff: dept.staff_department == 'Y',
       name: dept.name,
       description: dept.description,

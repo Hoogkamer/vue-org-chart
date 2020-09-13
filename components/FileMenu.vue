@@ -16,7 +16,7 @@
 import XLSX from 'xlsx'
 import FileSaver from 'file-saver'
 
-import { mapState } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   data: function() {
     return {
@@ -26,6 +26,7 @@ export default {
   computed: {
     ...mapState([
       'chart',
+      'orgArray',
       'people',
       'assignments',
       'editMode',
@@ -39,12 +40,24 @@ export default {
       }
     }
   },
+  mounted: function() {
+    //this.setHideParents(false)
+  },
   methods: {
+    ...mapMutations(['setHideParents']),
+
     editConfig: function() {
       this.$emit('editconfig', true)
     },
     generateInputFile: function() {
-      var chartTable = this.tree2JSON(this.chart)
+      console.log(
+        ' generate',
+        this.orgArray,
+        this.orgArray.find(d => d.parent_id === '')
+      )
+      var chartTable = this.tree2JSON(
+        this.orgArray.find(d => d.parent_id === '')
+      )
       var today = new Date()
       var dd = today.getDate()
       var mm = today.getMonth() + 1 //January is 0!
@@ -81,7 +94,7 @@ export default {
       var json =
         'var INPUT_DATA=' +
         JSON.stringify({
-          api_version: '1.0',
+          api_version: '2.0',
           chart: chartTable,
           people: people,
           assignments: assignments
@@ -115,6 +128,27 @@ export default {
             defval: ''
           }
         )
+
+        //check if old format
+        // find al columns with 'field_' in it and place in fields object
+        let fields = Object.keys(people[0]).filter(
+          n => n.search('field_') === 0
+        )
+        console.log(fields)
+        if (fields.length) {
+          // is new format
+          console.log('reading new format excel')
+          people.forEach(p => {
+            p.fields = {}
+            fields.forEach(f => {
+              p.fields[f.substring(6)] = p[f]
+              delete p[f]
+            })
+          })
+        } else {
+          console.log(' old format excel')
+        }
+        console.log(people[0])
         var assignments = XLSX.utils.sheet_to_json(
           workbook.Sheets['assignment'],
           {
@@ -146,7 +180,7 @@ export default {
             showChildren: false,
             employees: [],
             parent: null,
-            parentId: x.parent_id,
+            parent_id: x.parent_id,
             children: null,
             isStaff: x.staff_department === 'Y' ? true : false,
             id: x.id,
@@ -176,6 +210,14 @@ export default {
       this.people.forEach((p, i) => {
         let person = Object.assign({}, p)
         delete person.departments
+        delete person.manager
+
+        this.config.personProperties.forEach(prop => {
+          person['field_' + prop.name] = person.fields[prop.name]
+        })
+
+        delete person.fields
+
         people.push(person)
         if (p.departments) {
           p.departments.forEach(d => {
@@ -191,7 +233,10 @@ export default {
         }
       })
 
-      var chartTable = this.tree2array(this.chart, [])
+      var chartTable = this.tree2array(
+        this.orgArray.find(d => d.parent_id === ''),
+        []
+      )
       var wb = XLSX.utils.book_new()
       XLSX.utils.book_append_sheet(
         wb,
