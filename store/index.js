@@ -94,7 +94,6 @@ export const actions = {
       maxZoom: 2,
       minZoom: 0.2
     })
-    //instance.moveTo(0, 0)
     setTimeout(x => {
       var pos
       if (dept) {
@@ -106,22 +105,14 @@ export const actions = {
 
       instance.moveTo(pos.x, pos.y)
     }, 500)
-
-    //instance.zoomAbs(pos.x * scale, pos.y * scale, scalex)
-
     instance.on('panend', function(e) {
       console.log('Fired when pan ended', e)
       var x = document.getElementById('chart')
       console.log('transform', x.style.transform)
       var scaleX = x.getBoundingClientRect().width / x.offsetWidth
       console.log(scaleX)
-      // var chartpos = document.getElementById('chart').getBoundingClientRect()
-      // console.log(chartpos)
-      // var chartpos1 = document.getElementById('ID_1').getBoundingClientRect()
-      // console.log(chartpos1)
     })
     commit('setZoomInstance', instance)
-    //instance.moveTo(600, 100)
   },
   setShowNrDepartments({ commit, state, dispatch }, dept) {
     commit('setShowNrDepartments', dept)
@@ -178,6 +169,10 @@ export const actions = {
   },
   setOnlyShowParents({ commit, state, dispatch }, value) {
     commit('setOnlyShowParents', value)
+    refreshLines(this, state.activeDepartment)
+  },
+  toggleHideParents({ commit, state, dispatch }) {
+    commit('toggleHideParents')
     refreshLines(this, state.activeDepartment)
   },
   setHideParents({ commit, state, dispatch }, value) {
@@ -281,27 +276,11 @@ export const mutations = {
   setShowPersonName(state, val) {
     state.showPerson.name = val
   },
-  setShowPersonEmail(state, val) {
-    state.showPerson.email = val
-  },
-  setShowPersonPhone(state, val) {
-    state.showPerson.phone = val
-  },
-  setShowPersonCountry(state, val) {
-    state.showPerson.country = val
-  },
-  setShowPersonCity(state, val) {
-    state.showPerson.city = val
-  },
-  setShowPersonStreet(state, val) {
-    state.showPerson.street = val
-  },
+
   setShowPersonFunctionName(state, val) {
     state.showPerson.functionName = val
   },
-  setShowPersonHomePage(state, val) {
-    state.showPerson.homepage = val
-  },
+
   setShowPerson(state, person) {
     console.log('setshowperson', person)
     if (person && person.new) {
@@ -310,16 +289,14 @@ export const mutations = {
         id: '',
         new: true,
         manager: person.manager,
-        photo: '',
-        email: '',
-        phone: '',
-        country: '',
-        city: '',
-        street: '',
         functionName: '',
-        homepage: '',
-        departments: []
+        departments: [],
+        fields: {}
       }
+      state.config.personProperties.forEach(p => {
+        state.showPerson.fields[p.name] = ''
+      })
+      console.log('NNNNEEWW', state.showPerson)
     } else {
       state.showPerson = person
     }
@@ -631,6 +608,17 @@ export const mutations = {
       state.chart = state.orgArray.find(e => !e.parent)
     }
   },
+  toggleHideParents(state) {
+    state.activeDepartment.showParents = state.activeDepartment
+      .showParents
+      ? false
+      : true
+    if (!state.activeDepartment.showParents) {
+      state.chart = state.activeDepartment
+    } else {
+      state.chart = state.orgArray.find(e => !e.parent)
+    }
+  },
   setZoomInstance(state, val) {
     state.zoomInstance = val
   },
@@ -847,14 +835,9 @@ function processPeople20(people) {
 }
 function processData10(dept, orgArray) {
   if (!dept.employees) {
-    //dept.employees = []
     Vue.set(dept, 'employees', [])
   }
-  // if (dept.hasOwnProperty('parent_id')) {
-  //   delete Object.assign(dept, {
-  //     parentId: dept['parent_id']
-  //   })['parent_id']
-  // }
+
   orgArray.push(dept)
   var manager = INPUT_DATA.people.find(p => p.id == dept.manager_id)
   var dataFields = []
