@@ -19,8 +19,8 @@
             template(v-if="showNrPeople")
               div.ppl_count(v-if='departmentData.employees.length' title='Nr of people in department') {{departmentData.employees.length}}
             
-            i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="view options") visibility
-            i.material-icons.hidden_parents1(v-if="hiddenParents" v-on:click="setHideParents(false)") more_vert
+            i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="Show/hide parents") visibility
+            i.material-icons.hidden_parents1(v-if="hiddenParents" v-on:click="setHideParents(false)" title="Show parents") more_vert
         
         // layout of department box WITH manager photo    
         template(v-else)
@@ -44,8 +44,8 @@
             template(v-if="showNrPeople")
               div.ppl_count(v-if='departmentData.employees.length' title='Nr of people in department') {{departmentData.employees.length}}
             
-            i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="view options") visibility
-            i.material-icons.hidden_parents(v-if="hiddenParents" v-on:click="setHideParents(false)") more_vert   
+            i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="Show/hide parents") visibility
+            i.material-icons.hidden_parents(v-if="hiddenParents" v-on:click="setHideParents(false)" title="Show parents") more_vert   
       template(v-if="!departmentData")
           .department.invisible(v-if='!managerPhotoView' :class="[type]")
           .department.manager_photo.invisible(v-else :class="[type]")
@@ -103,7 +103,8 @@ export default {
       'showChildren',
       'hideChildren',
       'setHideSiblings',
-      'setHideParents'
+      'setHideParents',
+      'toggleHideParents'
     ]),
 
     doShowChildren(down) {
@@ -134,19 +135,23 @@ export default {
     },
     showViewMenu(department, event) {
       this.$store.commit('setActiveDepartment', department)
-      this.$store.commit('showViewMenu', null)
+      this.toggleHideParents()
 
+      /*
+      this.$store.commit('setActiveDepartment', department)
+      this.$store.commit('showViewMenu', null)
+      
       this.$nextTick(e => {
         this.$store.commit('showViewMenu', event)
       })
+      */
     },
     mouseOverBox(value) {
       if (!value) {
         this.displaySiblingIcon = false
       } else {
         if (
-          this.departmentData.parent &&
-          this.departmentData.parent.showChildren
+          this.departmentData.parent //&& this.departmentData.parent.showChildren
         ) {
           this.displaySiblingIcon = true
         }

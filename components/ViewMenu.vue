@@ -13,10 +13,8 @@ import { mapState, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapState([
-      'chart',
       'showViewMenu',
       'activeDepartment',
-      'moveDepartment',
       'onlyShowParents'
     ])
   },
@@ -79,15 +77,5 @@ li {
 li:hover {
   background-color: grey;
   color: white;
-}
-.noclick {
-  cursor: default;
-}
-.noclick:hover {
-  background-color: lightgrey;
-  color: black;
-}
-.delete {
-  color: red;
 }
 </style>
