@@ -310,16 +310,14 @@ export const mutations = {
         id: '',
         new: true,
         manager: person.manager,
-        photo: '',
-        email: '',
-        phone: '',
-        country: '',
-        city: '',
-        street: '',
         functionName: '',
-        homepage: '',
-        departments: []
+        departments: [],
+        fields: {}
       }
+      state.config.personProperties.forEach(p => {
+        state.showPerson.fields[p.name] = ''
+      })
+      console.log('NNNNEEWW', state.showPerson)
     } else {
       state.showPerson = person
     }
