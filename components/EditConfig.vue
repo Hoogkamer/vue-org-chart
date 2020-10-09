@@ -1,141 +1,165 @@
 <template lang='pug'>
-   #config_container
-    #config
-     
-      h3 Configure
-      button(v-if='!showHelp' @click='showHelp=true') show help
-      button(v-else @click='showHelp=false') hide help
-      table.tab
-        tr
-          td.n Title
-          td.i
-            input(v-model='pageTitle')
-        tr(v-if='showHelp')
-          td.help(colspan=2) Sets the header title
-        tr
-          td.n Title bar color
-          td.i
-            input(v-model='pageTitleColor')
-        tr(v-if='showHelp')
-          td.help(colspan=2) Sets the header color (#FF0000 is red for example)
-        tr
-          td.n Information text
-          td.i
-            textarea(v-model='informationText')
-        tr(v-if='showHelp')
-          td.help(colspan=2) Sets text to display when clicked on the (i) button (you can use HTML). Leave empty if not needed
+#config_container
+  #config
+    h3 Configure
+    input(type='checkbox', v-model='showHelp')
+    span  Show explanations of the options in this screen 
+    
+    .sectiontitle Title bar settings
+    table.tab
+      tr
+        td.n Title
+        td.i
+          input(v-model='pageTitle')
+      tr(v-if='showHelp')
+        td.help(colspan=2) Sets the header title
+      tr
+        td.n Title bar color
+        td.i
+          input(v-model='pageTitleColor')
+      tr(v-if='showHelp')
+        td.help(colspan=2) Sets the header color (#FF0000 is red for example)
+      tr
+        td.n Information text
+        td.i
+          textarea(v-model='informationText')
+      tr(v-if='showHelp')
+        td.help(colspan=2) Sets text to display when clicked on the (i) button (you can use HTML). Leave empty if not needed
+      tr
+        td.n Enable screencapture
+        td.c
+          input(type='checkbox', v-model='enableScreenCapture')
+      tr(v-if='showHelp')
+        td.help(colspan=2) This shows the icon to make an image of the graph to save. This does not work when you are on a local folder, so disable this option then
+      tr
+        td.n Enable user settings
+        td.c
+          input(type='checkbox', v-model='enableUserSettings')
+      tr(v-if='showHelp')
+        td.help(colspan=2) This shows the icon for the user to change the default display settings (see start up settings)
+      tr
+        td.n Show link to User Manual
+        td.c
+          input(type='checkbox', v-model='showUserManual')
+      tr(v-if='showHelp')
+        td.help(colspan=2) This enables the link to the user manual on the external website, and also a link to the GitHub project. Which you will see under the (i) icon at the top-right. If you do not want this, disable this option.
+      tr
+        td.n Edit command
+        td.i
+          input(v-model='editCommand')
+      tr(v-if='showHelp')
+        td.help(colspan=2) The command to type in the search box to switch to edit mode
 
-        tr
-          td.n Photo URL prefix
-          td.i 
-            input(v-model='photoUrlP')
-        tr
-          td.n Photo URL suffix
-          td.i 
-            input(v-model='photoUrlS')
-        tr(v-if='showHelp')
-          td.help(colspan=2) The position where to get the photo's. For these locations it is fetched from "prefix" + photo + "suffix". So if you have photo P0001, it will be fetched from "photos/P0001.png". If you have an api or other locations which delivers photo's based on the photo field you can change that here.
+    .sectiontitle Links settings
+    table.tab
+      tr
+        td.n Photo URL prefix
+        td.i 
+          input(v-model='photoUrlP')
+      tr
+        td.n Photo URL suffix
+        td.i 
+          input(v-model='photoUrlS')
+      tr(v-if='showHelp')
+        td.help(colspan=2) The position where to get the photo's. For these locations it is fetched from "prefix" + photo + "suffix". So if you have photo P0001, it will be fetched from "photos/P0001.png". If you have an api or other locations which delivers photo's based on the photo field you can change that here.
 
-        tr
-          td.n Link URL prefix
-          td.i 
-            input(v-model='linkUrlP')
-        tr
-          td.n Link URL suffix
-          td.i 
-            input(v-model='linkUrlS')
-        tr(v-if='showHelp')
-          td.help(colspan=2) It will open a new tab to navigate to that page when clicked in the sidescreen on a person. If you have an api which shows a user profile page you can enter the location here. Keep both empty if you want to see the profile information from this application (default)
+      tr
+        td.n Link URL prefix
+        td.i 
+          input(v-model='linkUrlP')
+      tr
+        td.n Link URL suffix
+        td.i 
+          input(v-model='linkUrlS')
+      tr(v-if='showHelp')
+        td.help(colspan=2) It will open a new tab to navigate to that page when clicked in the sidescreen on a person. If you have an api which shows a user profile page you can enter the location here. Keep both empty if you want to see the profile information from this application (default)
+      tr
+        td.n Level colors
+        td.i
+          input(v-model='levelColors') 
+      tr(v-if='showHelp')
+        td.help(colspan=2) The colors of each level in the orgchart (specify comma separated)
 
-        tr
-          td.n Enable screencapture
-          td.c
-            input(type='checkbox' v-model='enableScreenCapture')
-        tr(v-if='showHelp')
-          td.help(colspan=2) This shows the icon to make an image of the graph to save. This does not work when you are on a local folder, so disable this option then
-        tr
-          td.n Edit command
-          td.i
-            input(v-model='editCommand')
-        tr(v-if='showHelp')
-          td.help(colspan=2) The command to type in the search box to switch to edit mode
-        tr
-          td.n Level colors
-          td.i
-            input(v-model='levelColors')   
-        tr(v-if='showHelp')
-          td.help(colspan=2) The colors of each level in the orgchart (specify comma separated)
-                  
-      hr
-      div Person fields
-      div.help(v-if='showHelp') Add, remove, rename or move the fields of a person (Name, Employee ID and Function cannot be changed)
-      
-      table.tab
-        tr
-          td Name
-          td (fixed field)
-        tr
-          td Employee ID
-          td (fixed field)
-        tr 
-          td Function
-          td (fixed field)
+    .sectiontitle Person fields
+    .help(v-if='showHelp') Add, remove, rename or move the fields of a person (Name, Employee ID and Function cannot be changed)
 
-      table.tab
-        tr(v-for = '(prop, i) in newProperties')
-          td(v-bind:class="{ prop_deleted: prop.deleted }")
-            input(type="text" v-bind:class="{ prop_deleted: prop.deleted }" v-model="prop.name")
-          td 
-            i.material-icons.move_icon(v-if='i!==0' title="Move up" @click='moveProp(prop, -1)') expand_less    
-          td
-            i.material-icons.move_icon(v-if='i!==newProperties.length-1' title="Move down" @click='moveProp(prop, 1)') expand_more   
-          td 
-            select(v-model="prop.type")
-              option text
-              option url 
-              option email
-          td
-            button(v-if="prop.deleted" @click='prop.deleted=false') Undelete
-            button(v-else @click='prop.deleted=true') Delete
-      button(@click='addProperty()') Add property
-      button(@click='reset()') Reset
-      .vspacer
-      hr
-      div Startup settings
+    table.tab
+      tr
+        td Name
+        td (fixed field)
+      tr
+        td Employee ID
+        td (fixed field)
+      tr 
+        td Function
+        td (fixed field)
 
-      table.tab
-        tr
-          td.n  Show manager photo
-          td.c
-            input(type='checkbox' v-model='viewPhoto')
-        tr
-          td.n  Show manager name
-          td.c
-            input(type='checkbox' v-model='viewName')
-        tr
-          td.n  Columnview
-          td.c
-            input(type='checkbox' v-model='viewColumn')
-        tr
-          td.n  Staff columnview
-          td.c
-            input(type='checkbox' v-model='viewStaffColumn')
-        tr
-          td.n  Show Nr of departments
-          td.c
-            input(type='checkbox' v-model='viewNrDepartments')
-        tr
-          td.n  Show Nr of people
-          td.c
-            input(type='checkbox' v-model='viewNrPeople')
+    table.tab
+      tr(v-for='(prop, i) in newProperties')
+        td(v-bind:class='{ prop_deleted: prop.deleted }')
+          input(
+            type='text',
+            v-bind:class='{ prop_deleted: prop.deleted }',
+            v-model='prop.name'
+          )
+        td 
+          i.material-icons.move_icon(
+            v-if='i !== 0',
+            title='Move up',
+            @click='moveProp(prop, -1)'
+          ) expand_less
+        td
+          i.material-icons.move_icon(
+            v-if='i !== newProperties.length - 1',
+            title='Move down',
+            @click='moveProp(prop, 1)'
+          ) expand_more
+        td 
+          select(v-model='prop.type')
+            option text
+            option url
+            option email
+        td
+          button(v-if='prop.deleted', @click='prop.deleted = false') Undelete
+          button(v-else, @click='prop.deleted = true') Delete
+    button(@click='addProperty()') Add property
+    button(@click='reset()') Reset
 
-        tr(v-if='showHelp')
-          td.help(colspan=2) Sets the inital options (the user can change them in the menu bar)
-            
-      div
-        button.bt(@click='generate()') Generate config
-        button.bt(@click='close()') close
-        
+
+    .sectiontitle Startup settings
+
+    table.tab
+      tr
+        td.n Show manager photo
+        td.c
+          input(type='checkbox', v-model='viewPhoto')
+      tr
+        td.n Show manager name
+        td.c
+          input(type='checkbox', v-model='viewName')
+      tr
+        td.n Columnview
+        td.c
+          input(type='checkbox', v-model='viewColumn')
+      tr
+        td.n Staff columnview
+        td.c
+          input(type='checkbox', v-model='viewStaffColumn')
+      tr
+        td.n Show Nr of departments
+        td.c
+          input(type='checkbox', v-model='viewNrDepartments')
+      tr
+        td.n Show Nr of people
+        td.c
+          input(type='checkbox', v-model='viewNrPeople')
+
+      tr(v-if='showHelp')
+        td.help(colspan=2) Sets the inital options. The user can change them in the menu bar, if 'Enable user settings' is enabled.
+
+    div
+      button.bt(@click='generate()') Generate config
+      button.bt(@click='close()') close
 </template>
 
 <script>
@@ -215,6 +239,28 @@ export default {
       set(value) {
         this.setConfigUpdate({
           prop: 'enableScreenCapture',
+          val: value
+        })
+      }
+    },
+    enableUserSettings: {
+      get() {
+        return this.config.enableUserSettings
+      },
+      set(value) {
+        this.setConfigUpdate({
+          prop: 'enableUserSettings',
+          val: value
+        })
+      }
+    },
+    showUserManual: {
+      get() {
+        return this.config.showUserManual
+      },
+      set(value) {
+        this.setConfigUpdate({
+          prop: 'showUserManual',
           val: value
         })
       }
@@ -598,5 +644,11 @@ button {
 }
 .vspacer {
   height: 10px;
+}
+.sectiontitle {
+  border-top: 1px solid blue;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: blue;
 }
 </style>

@@ -43,7 +43,7 @@ export const state = () => ({
 export const actions = {
   initStore({ commit, state }, dept) {
     commit('setConfig')
-    console.log(CONFIG)
+    console.log(CONFIG, state.config)
     var data
     var people
 
@@ -84,7 +84,7 @@ export const actions = {
         commit('setActiveDepartment', null)
       }
     })
-    //commit('setEditMode', true)
+    commit('setEditMode', true)
   },
   initZoom({ commit, state }, dept) {
     var area = document.querySelector('#chart')
@@ -194,6 +194,11 @@ export const actions = {
 
 export const mutations = {
   setConfig(state) {
+    state.config = {
+      enableUserSettings: true,
+      showUserManual: true,
+      ...CONFIG
+    }
     if (!state.config.editCommand) {
       state.config.editCommand = '_edit'
     }
@@ -214,6 +219,7 @@ export const mutations = {
     } else {
       state.config[prop] = val
     }
+    console.log(state.config)
   },
   setPersonProperties(state, newprops) {
     // update personproperties metadata (order, type)

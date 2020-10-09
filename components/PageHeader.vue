@@ -1,28 +1,47 @@
 <template lang='pug'>
-.header(:style='{backgroundColor:config.title.color}') {{config.title.text}}
-  .edit_indicator(v-if="editMode" v-on:click="$store.commit('setEditMode', false)") Click to leave editmode
+.header(:style='{ backgroundColor: config.title.color }') {{ config.title.text }}
+  .edit_indicator(
+    v-if='editMode',
+    v-on:click='$store.commit("setEditMode", false)'
+  ) Click to leave editmode
   search-box
   .menu
-    file-menu(v-if='editMode' @editconfig='editConfig=true')
-    options-menu
+    file-menu(v-if='editMode', @editconfig='editConfig = true')
+    options-menu(v-if='config.enableUserSettings')
     .home1
-      a(href="/")
-        i.material-icons.home(v-on:click="capture" title='Home') home
+      a(href='/')
+        i.material-icons.home(v-on:click='capture', title='Home') home
     .screenshot1(v-if='config.enableScreenCapture')
-      i.material-icons.screenshot(v-on:click="capture" title='Save as image') photo_camera
-  .info(v-if="config.information")
-    i.material-icons.info_icon(v-on:click="infoOpen=!infoOpen" title="Contact and help") info
-    .info-text(v-if="infoOpen")
-      i.material-icons.info-close(v-on:click="infoOpen=false") close
-      .i-text(v-html="config.information")
-      .updated_info Updated on: {{updatedOn}}
-      hr
-      a(href='https://freeorgchart.netlify.app/#faq' target='_blank')
-        .i-github 
-          .i-github-text User manual
-          a(href="https://github.com/Hoogkamer/vue-org-chart" target="_blank")
-            img.gh(src="~/assets/img/gh.svg" title='Go to Github project page')
-  edit-config(v-if='editConfig' @close='editConfig=false')
+      i.material-icons.screenshot(
+        v-on:click='capture',
+        title='Save as image'
+      ) photo_camera
+  .info(v-if='config.information')
+    i.material-icons.info_icon(
+      v-on:click='infoOpen = !infoOpen',
+      title='Contact and help'
+    ) info
+    .info-text(v-if='infoOpen')
+      i.material-icons.info-close(v-on:click='infoOpen = false') close
+      .i-text(v-html='config.information')
+      .updated_info Updated on: {{ updatedOn }}
+      div(v-if='config.showUserManual')
+        hr
+        a(
+          href='https://freeorgchart.netlify.app/#faq',
+          target='_blank'
+        )
+          .i-github 
+            .i-github-text User manual
+            a(
+              href='https://github.com/Hoogkamer/vue-org-chart',
+              target='_blank'
+            )
+              img.gh(
+                src='~/assets/img/gh.svg',
+                title='Go to Github project page'
+              )
+  edit-config(v-if='editConfig', @close='editConfig = false')
 </template>
 
 <script>
