@@ -84,7 +84,7 @@ export const actions = {
         commit('setActiveDepartment', null)
       }
     })
-    commit('setEditMode', true)
+    commit('setEditMode', false)
   },
   initZoom({ commit, state }, dept) {
     var area = document.querySelector('#chart')
