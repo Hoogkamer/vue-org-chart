@@ -59,6 +59,7 @@
                   span.role {{assignment.role}}
         div
           button.btn1(v-if="showPerson.new" @click='addEmployee(showPerson)' :disabled='!employeeID || !employeeName') ADD
+          button.btn2(v-if="editMode" @click='deleteEmployee1(showPerson)' title='Removes the user from all departments and completely deletes the user') Delete this user
    
 </template>
 
@@ -134,7 +135,8 @@ export default {
       'setShowPersonProperty',
       'addPerson',
       'updateActiveDepartmentManager',
-      'addAssignment'
+      'addAssignment',
+      'deleteEmployee'
     ]),
     ...mapActions(['setShowDepartment']),
     goto(d) {
@@ -161,6 +163,15 @@ export default {
         prop: prop,
         value: value
       })
+    },
+    deleteEmployee1(person) {
+      console.log('Deleting', person)
+      if (
+        confirm('This will remove the person completely. Continue?')
+      ) {
+        this.deleteEmployee(person)
+        this.setShowPerson(null)
+      }
     },
     addEmployee(person) {
       console.log('adding', person)
@@ -306,6 +317,14 @@ table td * {
   border: 2px solid lightgrey;
   background-color: lightgrey;
   cursor: not-allowed;
+}
+.btn2 {
+  padding: 5px 20px;
+  border: 2px solid red;
+  border-radius: 5px;
+  color: white;
+  background-color: red;
+  cursor: pointer;
 }
 .nophoto {
   font-size: 200px;

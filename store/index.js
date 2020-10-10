@@ -84,7 +84,7 @@ export const actions = {
         commit('setActiveDepartment', null)
       }
     })
-    commit('setEditMode', false)
+    commit('setEditMode', true)
   },
   initZoom({ commit, state }, dept) {
     var area = document.querySelector('#chart')
@@ -624,6 +624,21 @@ export const mutations = {
     } else {
       state.chart = state.orgArray.find(e => !e.parent)
     }
+  },
+  deleteEmployee(state, person) {
+    person.departments.forEach(dept => {
+      let department = dept.department
+      // remove this person as manager of all departments
+      if (department.manager === person) {
+        department.manager = { name: '', id: '', role: '' }
+      }
+      // remove this person as employee of all departments
+      department.employees = department.employees.filter(
+        emp => emp.person !== person
+      )
+    })
+    // remove this person itself
+    state.people = state.people.filter(p => p.id !== person.id)
   },
   setZoomInstance(state, val) {
     state.zoomInstance = val
