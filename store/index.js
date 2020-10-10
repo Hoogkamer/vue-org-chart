@@ -435,13 +435,19 @@ export const mutations = {
     }
     state.activeDepartment = dept
   },
-  deleteDepartment(state) {
-    var foundDept = findDept(state.chart, state.activeDepartment)
-    if (foundDept && foundDept.parent) {
-      foundDept.parent.children = foundDept.parent.children.filter(
+  deleteDepartment(state, department) {
+    // do not remove if this is the ultimate top department
+    let children = []
+    // unlink this department from the parent
+    if (department.parent) {
+      children = department.parent.children.filter(
         child => child !== state.activeDepartment
       )
+      department.parent.children = children
     }
+
+    delDept(state, department)
+
     state.activeDepartment = null
     state.showEditMenu = null
   },
@@ -625,6 +631,21 @@ export const mutations = {
       state.chart = state.orgArray.find(e => !e.parent)
     }
   },
+  deleteEmployee(state, person) {
+    person.departments.forEach(dept => {
+      let department = dept.department
+      // remove this person as manager of all departments
+      if (department.manager === person) {
+        department.manager = { name: '', id: '', role: '' }
+      }
+      // remove this person as employee of all departments
+      department.employees = department.employees.filter(
+        emp => emp.person !== person
+      )
+    })
+    // remove this person itself
+    state.people = state.people.filter(p => p.id !== person.id)
+  },
   setZoomInstance(state, val) {
     state.zoomInstance = val
   },
@@ -635,6 +656,26 @@ export const mutations = {
       1 // initial zoom
     )
   }
+}
+
+function delDept(state, department) {
+  if (department.children.length) {
+    department.children.forEach(child => {
+      delDept(state, child)
+    })
+  }
+  // unassign manager from department
+  department.manager.departments = department.manager.departments.filter(
+    d => d.department !== department
+  )
+  //unassign each employee from department
+  department.employees.forEach(e => {
+    e.person.departments = e.person.departments.filter(
+      pd => pd.department !== department
+    )
+  })
+  // delete department
+  state.orgArray = state.orgArray.filter(d => d !== department)
 }
 
 function updateLines(dept, lines) {

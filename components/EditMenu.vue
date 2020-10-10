@@ -55,7 +55,7 @@ export default {
       }
       this.$store.commit('showEditMenu', null)
       if (confirmed) {
-        this.deleteDepartment()
+        this.deleteDepartment(this.activeDepartment)
       }
     },
     addDept: function() {
