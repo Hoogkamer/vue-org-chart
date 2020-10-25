@@ -54,7 +54,7 @@
             tr(v-if="!showPerson.new")
               td.prop Departments
               td.val
-                .dep(v-for='assignment in personAssignments' @click='goto(assignment.department)') 
+                .dep(v-for='assignment in personAssignments' @click='gotoDepartment(assignment.department)') 
                   span {{assignment.department.name}}  
                   span.role {{assignment.role}}
         div
@@ -139,7 +139,7 @@ export default {
       'deleteEmployee'
     ]),
     ...mapActions(['setShowDepartment']),
-    goto(d) {
+    gotoDepartment(d) {
       console.log(d)
       this.setShowPerson(null)
       this.setShowDepartment(d)
@@ -198,7 +198,6 @@ export default {
 <style scoped>
 #person_details_container {
   top: 50px;
-  padding: 50px;
   width: 100%;
   position: absolute;
   height: 100%;
@@ -207,10 +206,11 @@ export default {
   text-align: center;
 }
 #person_details {
-  width: 700px;
+  max-width: 700px;
   text-align: left;
   vertical-align: top;
   margin: auto;
+  margin-top: 10px;
   display: inline-block;
   display: relative;
   background-color: white;
@@ -223,7 +223,8 @@ export default {
     0 3px 6px rgba(0, 0, 0, 0.23);
 }
 .close {
-  font-size: 16px;
+  margin: 10px;
+  font-size: 24px;
   background-color: grey;
   color: white;
   border-radius: 3px;
