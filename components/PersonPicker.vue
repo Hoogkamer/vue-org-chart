@@ -1,13 +1,16 @@
 <template lang='pug'>
   #person_picker
     i.material-icons.close(v-on:click='close') close
+    .vspace
+    .nextline Search existing person
     input.search_input(v-model='searchField' placeholder='Search...')
     #search_results(v-if="searchField.length")
       ul
         li(v-if="searchresults.length" v-for="result in searchresults" v-on:click="selectPerson(result)") {{result.name}}
+    .vspace
     .nextline or
     .addnew
-      button.btn(@click='registerNew()') Administer new employee
+      button.btn(@click='registerNew()') Add new person
 
 </template>
 
@@ -163,5 +166,8 @@ li:hover {
 .nextline {
   width: 100%;
   text-align: center;
+}
+.vspace {
+  height: 10px;
 }
 </style>
