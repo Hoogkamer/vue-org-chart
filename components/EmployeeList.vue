@@ -10,7 +10,7 @@
           td
             .name 
               span {{activeDepartment.manager.name}}
-            .manager_role Manager of department
+            .manager_role  {{uiNames.sidebar.managerOfDepartment}}
     .hspace
     .nopeople(v-if='activeDepartment.employees.length ===0')
       span No employees
@@ -48,7 +48,13 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeDepartment', 'editMode', 'people', 'config'])
+    ...mapState([
+      'activeDepartment',
+      'editMode',
+      'people',
+      'config',
+      'uiNames'
+    ])
   },
   methods: {
     ...mapActions(['setShowDepartment']),

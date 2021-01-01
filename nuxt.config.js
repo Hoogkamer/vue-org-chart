@@ -12,7 +12,10 @@ module.exports = {
     title: 'Organization chart',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      {
+        name: 'viewport',
+        content: 'width=device-width, initial-scale=1'
+      },
       {
         hid: 'description',
         name: 'description',
@@ -21,7 +24,8 @@ module.exports = {
       {
         hid: 'keywords',
         name: 'keywords',
-        content: 'vuejs, nuxt, javascript, orgchart, organization, open-source'
+        content:
+          'vuejs, nuxt, javascript, orgchart, organization, open-source'
       },
       {
         name: 'google-site-verification',
@@ -32,9 +36,12 @@ module.exports = {
       {
         src: 'data.js'
       },
-      { src: 'config.js' }
+      { src: 'config.js' },
+      { src: 'translate.js' }
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ]
   },
 
   /*

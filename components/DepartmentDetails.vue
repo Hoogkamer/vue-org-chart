@@ -1,19 +1,19 @@
 <template lang='pug'>
   div
     .property
-      span.label Name
+      span.label {{uiNames.sidebar.departmentName}}
       br
       input.name(v-if='editMode' :class="{error:!activeDepartment_name}" v-model="activeDepartment_name")
       span(v-else).text {{activeDepartment_name}}
 
     .property
-      span.label Manager
+      span.label {{uiNames.sidebar.departmentManager}}
       i.material-icons.edit(v-if='editMode' v-on:click='personPicker="manager"') edit
       br
       span.text(v-if='activeDepartment.manager.name') {{activeDepartment.manager.name}}
       span.untext(v-else) No manager
     .property
-      span.label Description
+      span.label {{uiNames.sidebar.departmentDescription}}
       br 
       textarea.description(v-if='editMode' v-model="activeDepartment_description")
       span(v-else).text {{activeDepartment_description}}
@@ -31,15 +31,15 @@
 
     .property
       template(v-if='!editMode')
-        span.label Department type
+        span.label {{uiNames.sidebar.departmentType}}
         br
-        span(v-if='activeDepartment_isStaff') Staff department
-        span(v-else) Normal department
+        span(v-if='activeDepartment_isStaff') {{uiNames.sidebar.departmentTypeStaff}}
+        span(v-else)  {{uiNames.sidebar.departmentTypeNormal}}
       template(v-else)
         span.label Staff department:
         input.isstaff(type='checkbox' v-model="activeDepartment_isStaff" :disabled="!editMode")
     .property
-      span.label Hierarchy
+      span.label  {{uiNames.sidebar.departmentHierarchy}}
       ul
         li.clickable(v-for='(parent, pnr) in parents' v-on:click="setActiveDepartment(parent)") 
           span(v-for="n in pnr") &nbsp
@@ -76,7 +76,8 @@ export default {
       'activeDepartment',
       'editMode',
       'people',
-      'config'
+      'config',
+      'uiNames'
     ]),
     activeDepartment_name: {
       get: function() {

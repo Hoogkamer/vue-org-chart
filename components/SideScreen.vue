@@ -5,8 +5,8 @@
     template(v-if="activeDepartment")
       .title {{activeDepartment.name}}
       .tabs
-        button.tab(:class='{active:activeTab===1}' v-on:click='activeTab=1') Details
-        button.tab(:class='{active:activeTab===2}' v-on:click='activeTab=2') People
+        button.tab(:class='{active:activeTab===1}' v-on:click='activeTab=1') {{uiNames.sidebar.detailTabName}}
+        button.tab(:class='{active:activeTab===2}' v-on:click='activeTab=2') {{uiNames.sidebar.peopleTabName}}
       department-details(v-if="activeTab===1")    
       employee-list(v-if='activeTab===2')
       
@@ -34,7 +34,8 @@ export default {
       'showSideScreen',
       'activeDepartment',
       'people',
-      'config'
+      'config',
+      'uiNames'
     ])
   },
   methods: {

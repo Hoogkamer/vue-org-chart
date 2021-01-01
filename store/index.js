@@ -9,6 +9,7 @@ var _ = require('lodash')
 export const state = () => ({
   config: CONFIG,
   updatedOn: UPDATED_ON,
+  uiNames: UINAMES,
   chart: null,
   people: [],
   assignments: [],

@@ -20,22 +20,22 @@
             template(v-else)
               tr
                 template(v-if='!editMode')
-                  td.prop Name
+                  td.prop {{uiNames.person.name}}
                   td.val {{employeeName}}
                 template(v-else)
-                  td.prop.must Name*
+                  td.prop.must {{uiNames.person.name}}*
                   td.val
                     input.val1(v-model='employeeName')
               tr
                 template(v-if='!editMode')
-                  td.prop Employee ID
+                  td.prop {{uiNames.person.id}}
                   td.val {{employeeID}}
                 template(v-else)
-                  td.prop.must Employee ID*
+                  td.prop.must {{uiNames.person.id}}*
                   td.val
                     input.val1(v-model='employeeID')
               tr
-                td.prop Function
+                td.prop {{uiNames.person.function}}
                 td.val(v-if='!editMode') {{employeeFunctionName}}
                 td.val(v-else)
                   input.val1(v-model='employeeFunctionName') 
@@ -52,7 +52,7 @@
            
              
             tr(v-if="!showPerson.new")
-              td.prop Departments
+              td.prop {{uiNames.person.departments}}
               td.val
                 .dep(v-for='assignment in personAssignments' @click='gotoDepartment(assignment.department)') 
                   span {{assignment.department.name}}  
@@ -75,7 +75,8 @@ export default {
       'chart',
       'orgArray',
       'editMode',
-      'activeDepartment'
+      'activeDepartment',
+      'uiNames'
     ]),
     employeeID: {
       get() {
