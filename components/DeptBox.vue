@@ -180,10 +180,14 @@ export default {
   margin: -8px;
 }
 .down {
-  cursor: zoom-in;
+  cursor: pointer;
 }
 .up {
-  cursor: zoom-out;
+  cursor: pointer;
+}
+.down:hover,
+.up:hover {
+  color: red;
 }
 .view_button {
   font-size: 24px;
