@@ -1,8 +1,9 @@
 const pkg = require('./package')
 
 module.exports = {
-  mode: 'spa',
-  // change router for githup pages
+  target: 'static',
+  ssr: false,
+  // change router for github pages
   router: { mode: 'hash' },
   /*
   ** Headers of the page
@@ -40,7 +41,7 @@ module.exports = {
       { src: 'translate.js' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: './favicon.ico' }
     ]
   },
 
@@ -74,15 +75,15 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    publicPath: '.'
+  },
+  builder: {
     /*
     ** You can extend webpack config here
     */
 
     plugins: [],
     extend(config, ctx) {
-      if (!ctx.isDev) {
-        config.output.publicPath = './_nuxt/'
-      }
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {
         config.module.rules.push({
