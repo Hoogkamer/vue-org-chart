@@ -74,9 +74,7 @@ module.exports = {
   /*
   ** Build configuration
   */
-  build: {
-    publicPath: '.'
-  },
+  build: {},
   builder: {
     /*
     ** You can extend webpack config here

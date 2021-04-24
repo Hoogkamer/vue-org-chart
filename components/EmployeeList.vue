@@ -21,7 +21,7 @@
         table
           tr
             td
-              img.photo(v-if='photoURL(person)' :src='photoURL(person)' @error="markPhotoNotFound(person)")
+              img.photo(v-if='photoURL(person.person)' :src='photoURL(person.person)' @error="markPhotoNotFound(person)")
               .material-icons.nophoto(v-else) face
             td
               .name 
