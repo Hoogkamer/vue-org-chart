@@ -121,6 +121,8 @@ div.staff-right {
 .container {
   display: inline-block;
   position: relative;
+  margin: 20px 5px 10px 5px;
+  text-align: center;
 }
 table.staff {
   margin: auto;
@@ -137,13 +139,22 @@ table.staff {
 }
 table {
   table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 0px;
+  padding: 0px;
+  border-collapse: collapse;
+  box-sizing: border-box;
+  border: 0px solid orange;
 }
 tr {
+  box-sizing: border-box;
 }
 td {
   text-align: center;
   vertical-align: top;
-  width: 150px;
-  padding: 0px 3px;
+  box-sizing: border-box;
+}
+.col {
+  border: 1px solid red;
 }
 </style>

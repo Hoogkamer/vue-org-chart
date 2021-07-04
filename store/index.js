@@ -198,6 +198,8 @@ export const mutations = {
     state.config = {
       enableUserSettings: true,
       showUserManual: true,
+      boxwidth: 140,
+      boxheight: 60,
       ...CONFIG
     }
     if (!state.config.editCommand) {

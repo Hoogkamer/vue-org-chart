@@ -1,35 +1,28 @@
 <template lang='pug'>
     div(v-on:mouseenter="mouseOverBox(true)" v-on:mouseleave="mouseOverBox(false)")
       template(v-if="departmentData")
-        .department( :id="'ID_'+ departmentData.id" :class="[type, active, managerPhoto]" @click="setActiveDepartment(departmentData, $event)" @touchend="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")
-          // layout of department box WITHOUT manager photo
-          .level_indicator(:style="{backgroundColor:config.levelColors[level-1]||'#FFFFFF'}")
-          template(v-if="!managerPhotoView")
-              
-            template(v-if="managerNameView")
-              .name1(v-html="departmentData.name")
-              .name_manager(v-if="managerNameView") {{departmentData.manager.name}}
-            template(v-else)
-              .name2(v-html="departmentData.name")
-              
-          // layout of department box WITH manager photo    
-          template(v-else)
+        .department
+          .col( :id="'ID_'+ departmentData.id" :class="[type, active, managerPhoto]"  @click="setActiveDepartment(departmentData, $event)" @touchend="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")  
+  
             table
               tr
-                td
+                td(v-if='managerPhotoView')
                   img.profile(:src='config.photoUrl.prefix+departmentData.manager.photo+config.photoUrl.suffix' v-if="departmentData.manager.photo")
                   .material-icons.nophoto(v-else) face
                 td
-                  div.textdiv
+                  .level_indicator(:style="{backgroundColor:config.levelColors[level-1]||'#FFFFFF'}")
+                  div.textdiv(:style="{ height: config.boxheight + 'px', width: config.boxwidth + 'px' }")
                     .name(v-html="departmentData.name")
                     .name_manager(v-if="managerNameView") {{departmentData.manager.name}}
-              
-          template(v-if="departmentData.children.length")
-            i.material-icons.arrow.down(v-if='!departmentData.showChildren' @click.prevent="doShowChildren(true)" @touchend.prevent="doShowChildren(true)") arrow_drop_down
-            i.material-icons.arrow.up(v-if='departmentData.showChildren' @click.prevent="doShowChildren(false)" @touchend.prevent="doShowChildren(false)") arrow_drop_up
-            template(v-if="showNrDepartments")
-              div.hidden_dept.down(v-if='!departmentData.showChildren' @click.prevent="doShowChildren(true)" @touchend.prevent="doShowChildren(true)" title='Nr of subdepartments') {{departmentData.children.length}}
-              div.hidden_dept.up(v-if='departmentData.showChildren' @click.prevent="doShowChildren(false)" @touchend.prevent="doShowChildren(false)" title='Nr of subdepartments') {{departmentData.children.length}}
+                td
+                  .drill 
+                    template(v-if="departmentData.children.length")
+                      i.material-icons.arrow.down(v-if='!departmentData.showChildren' @click.prevent="doShowChildren(true)" @touchend.prevent="doShowChildren(true)") arrow_drop_down
+                      i.material-icons.arrow.up(v-if='departmentData.showChildren' @click.prevent="doShowChildren(false)" @touchend.prevent="doShowChildren(false)") arrow_drop_up
+                      template(v-if="showNrDepartments")
+                        div.hidden_dept.down(v-if='!departmentData.showChildren' @click.prevent="doShowChildren(true)" @touchend.prevent="doShowChildren(true)" title='Nr of subdepartments') {{departmentData.children.length}}
+                        div.hidden_dept.up(v-if='departmentData.showChildren' @click.prevent="doShowChildren(false)" @touchend.prevent="doShowChildren(false)" title='Nr of subdepartments') {{departmentData.children.length}}
+
           template(v-if="showNrPeople")
             div.ppl_count(v-if='departmentData.employees.length' title='Nr of people in department') {{departmentData.employees.length}}
           
@@ -174,7 +167,6 @@ export default {
 }
 .arrow {
   font-size: 30px;
-  position: absolute;
   bottom: 0px;
   right: 0px;
   margin: -8px;
@@ -197,11 +189,13 @@ export default {
   margin: 0px;
   color: black;
 }
+.drill {
+  width: 10px;
+  height: 100%;
+}
 .department {
-  width: 120px;
-  height: 60px;
-  border: 1px solid rgb(180, 180, 180);
-  margin: 30px 0px 5px 0px;
+  border: 0px solid rgb(180, 180, 180);
+  /* margin: 30px 0px 5px 0px; */
   text-align: center;
   font-size: 11px;
   vertical-align: middle;
@@ -217,28 +211,21 @@ export default {
   margin-right: auto;
   padding: 2px 2px;
   position: relative;
+  width: 100%;
   /*box-shadow: 3px 3px 3px lightgrey;*/
 }
 .manager_photo {
-  width: 180px;
-  height: 60px;
   margin-top: 20px;
 }
 .invisible {
   visibility: hidden;
 }
 .level_indicator {
-  position: absolute;
-  height: 3px;
-  width: 100px;
-  right: 10px;
-  top: 3px;
   border-radius: 5px;
+  height: 5px;
+  margin-bottom: 5px;
 }
 .textdiv {
-  width: 114px;
-  height: 50px;
-  position: relative;
 }
 .column {
   margin-top: 1px;
@@ -256,11 +243,7 @@ export default {
 .name2 {
   overflow-wrap: break-word;
   min-width: 1%;
-  width: 114px;
-  display: inline-block;
-  position: absolute;
-  left: 0px;
-  top: 8px;
+  min-height: 2rem;
 }
 .name1 {
   top: 10px;
@@ -271,15 +254,10 @@ export default {
 .name_manager {
   overflow-wrap: break-word;
   min-width: 1%;
-  width: 100px;
   display: inline-block;
-  position: absolute;
-  left: 5px;
-  bottom: 5px;
   color: grey;
 }
 .hidden_dept {
-  position: absolute;
   bottom: 10px;
   right: 1px;
   width: 14px;
@@ -313,5 +291,11 @@ export default {
 .nophoto {
   font-size: 52px;
   color: lightgrey;
+}
+.col {
+  border: 1px solid green;
+  border-collapse: collapse;
+  margin: auto;
+  padding: 5px 10px;
 }
 </style>
