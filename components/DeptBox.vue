@@ -11,10 +11,10 @@
                   .material-icons.nophoto(v-else) face
                 td
                   .level_indicator(:style="{backgroundColor:config.levelColors[level-1]||'#FFFFFF'}")
-                  div.textdiv(:style="{ height: config.boxheight + 'px', width: config.boxwidth + 'px' }")
+                  div.textdiv(:style="{ height: config.boxHeight + 'px', width: config.boxWidth + 'px' }")
                     .name(v-html="departmentData.name")
                     .name_manager(v-if="managerNameView") {{departmentData.manager.name}}
-                td
+                td.drill0
                   .drill 
                     template(v-if="departmentData.children.length")
                       i.material-icons.arrow.down(v-if='!departmentData.showChildren' @click.prevent="doShowChildren(true)" @touchend.prevent="doShowChildren(true)") arrow_drop_down
@@ -192,6 +192,11 @@ export default {
 .drill {
   width: 10px;
   height: 100%;
+  position: absolute;
+  bottom: 0px;
+}
+.drill0 {
+  position: relative;
 }
 .department {
   border: 0px solid rgb(180, 180, 180);
@@ -243,7 +248,7 @@ export default {
 .name2 {
   overflow-wrap: break-word;
   min-width: 1%;
-  min-height: 2rem;
+  min-height: 1.9rem;
 }
 .name1 {
   top: 10px;
@@ -261,7 +266,6 @@ export default {
   bottom: 10px;
   right: 1px;
   width: 14px;
-  background-color: white;
   color: grey;
   font-size: 12px;
   padding: 0px 2px;
@@ -269,9 +273,8 @@ export default {
 }
 .ppl_count {
   position: absolute;
-  bottom: 1px;
-  left: 1px;
-  background-color: white;
+  bottom: 5px;
+  left: 5px;
   color: grey;
   font-size: 12px;
   padding: 0px 2px;
@@ -293,9 +296,18 @@ export default {
   color: lightgrey;
 }
 .col {
-  border: 1px solid green;
+  border: 1px solid grey;
   border-collapse: collapse;
   margin: auto;
   padding: 5px 10px;
+  border-radius: 3px;
+}
+.material-icons.arrow {
+  position: absolute;
+  bottom: -5px;
+}
+.hidden_dept {
+  position: absolute;
+  bottom: 5px;
 }
 </style>

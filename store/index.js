@@ -180,6 +180,10 @@ export const actions = {
     commit('setHideParents', value)
     refreshLines(this, state.activeDepartment)
   },
+  refreshLines({ commit, state, dispatch }, value) {
+    refreshLines(this, state.activeDepartment)
+  },
+
   setActiveDepartmentById({ commit, state, dispatch }, deptId) {
     var dept = state.orgArray.find(e => e.id == deptId)
     if (!dept) dept = null
@@ -198,8 +202,8 @@ export const mutations = {
     state.config = {
       enableUserSettings: true,
       showUserManual: true,
-      boxwidth: 140,
-      boxheight: 60,
+      boxWidth: 120,
+      boxHeight: 50,
       ...CONFIG
     }
     if (!state.config.editCommand) {

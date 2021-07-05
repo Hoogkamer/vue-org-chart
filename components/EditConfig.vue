@@ -73,12 +73,27 @@
           input(v-model='linkUrlS')
       tr(v-if='showHelp')
         td.help(colspan=2) It will open a new tab to navigate to that page when clicked in the sidescreen on a person. If you have an api which shows a user profile page you can enter the location here. Keep both empty if you want to see the profile information from this application (default)
+      
+    .sectiontitle Department boxes 
+    table.tab 
       tr
         td.n Level colors
         td.i
           input(v-model='levelColors') 
       tr(v-if='showHelp')
         td.help(colspan=2) The colors of each level in the orgchart (specify comma separated)
+    table.tab  
+      tr
+        td.n Box width
+        td.i
+          input(v-model='boxWidth') 
+      tr  
+        td.n Box height
+        td.i
+          input(v-model='boxHeight') 
+
+      tr(v-if='showHelp')
+        td.help(colspan=2) The height and width of the department boxes in the graph. Adjust if department names or people names are too long/short to properly fit
 
     .sectiontitle Person fields
     .help(v-if='showHelp') Add, remove, rename or move the fields of a person (Name, Employee ID and Function cannot be changed)
@@ -229,6 +244,30 @@ export default {
           prop: 'levelColors',
           val: value.split(',')
         })
+      }
+    },
+    boxWidth: {
+      get() {
+        return this.config.boxWidth.toString()
+      },
+      set(value) {
+        this.setConfigUpdate({
+          prop: 'boxWidth',
+          val: value
+        })
+        this.refreshLines()
+      }
+    },
+    boxHeight: {
+      get() {
+        return this.config.boxHeight.toString()
+      },
+      set(value) {
+        this.setConfigUpdate({
+          prop: 'boxHeight',
+          val: value
+        })
+        this.refreshLines()
       }
     },
 
@@ -413,6 +452,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setConfigUpdate', 'setPersonProperties']),
+    ...mapActions(['refreshLines']),
 
     close: function() {
       console.log(this.newProperties)
