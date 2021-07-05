@@ -183,7 +183,6 @@ export const actions = {
   refreshLines({ commit, state, dispatch }, value) {
     refreshLines(this, state.activeDepartment)
   },
-
   setActiveDepartmentById({ commit, state, dispatch }, deptId) {
     var dept = state.orgArray.find(e => e.id == deptId)
     if (!dept) dept = null
