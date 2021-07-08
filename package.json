@@ -21,7 +21,7 @@
     "html2canvas": "^1.0.0-alpha.12",
     "lodash": "^4.17.19",
     "nodemon": "^2.0.4",
-    "nuxt": "^2.14.4",
+    "nuxt": "^2.15.7",
     "nuxt-material-design-icons": "^1.0.4",
     "panzoom": "^7.1.2",
     "pug": "^3.0.1",
