@@ -207,7 +207,7 @@ export default {
   text-align: center;
 }
 #person_details {
-  max-width: 700px;
+  max-width: 800px;
   text-align: left;
   vertical-align: top;
   margin: auto;
@@ -243,7 +243,7 @@ export default {
   margin: 0px 10px;
 }
 .details {
-  width: 350px;
+  min-width: 350px;
   display: inline-block;
   text-align: left;
   vertical-align: top;
