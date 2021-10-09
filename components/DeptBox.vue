@@ -6,6 +6,9 @@
   
             table
               tr
+                td.ppl_count0
+                  .ppl_count(v-if="showNrPeople")
+                    .ppl_count_nr(v-if='departmentData.employees.length' title='Nr of people in department') {{departmentData.employees.length}}
                 td(v-if='managerPhotoView')
                   img.profile(:src='config.photoUrl.prefix+departmentData.manager.photo+config.photoUrl.suffix' v-if="departmentData.manager.photo")
                   .material-icons.nophoto(v-else) face
@@ -23,8 +26,7 @@
                         div.hidden_dept.down(v-if='!departmentData.showChildren' @click.prevent="doShowChildren(true)" @touchend.prevent="doShowChildren(true)" title='Nr of subdepartments') {{departmentData.children.length}}
                         div.hidden_dept.up(v-if='departmentData.showChildren' @click.prevent="doShowChildren(false)" @touchend.prevent="doShowChildren(false)" title='Nr of subdepartments') {{departmentData.children.length}}
 
-          template(v-if="showNrPeople")
-            div.ppl_count(v-if='departmentData.employees.length' title='Nr of people in department') {{departmentData.employees.length}}
+         
           
           i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="Show/hide parents") visibility
           i.material-icons.hidden_parents(v-if="hiddenParents" v-on:click="setHideParents(false)" title="Show parents") more_vert   
@@ -195,8 +197,22 @@ export default {
   position: absolute;
   bottom: 0px;
 }
-.drill0 {
+.drill0,
+.ppl_count0 {
   position: relative;
+  height: 100%;
+}
+.ppl_count {
+  height: 100%;
+  color: grey;
+  font-size: 12px;
+}
+.ppl_count_nr {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  color: grey;
+  font-size: 12px;
 }
 .department {
   border: 0px solid rgb(180, 180, 180);
@@ -271,15 +287,7 @@ export default {
   padding: 0px 2px;
   border-radius: 4px;
 }
-.ppl_count {
-  position: absolute;
-  bottom: 5px;
-  left: 5px;
-  color: grey;
-  font-size: 12px;
-  padding: 0px 2px;
-  border-radius: 4px;
-}
+
 .hidden_parents,
 .hidden_parents1 {
   position: absolute;
