@@ -8,7 +8,7 @@
               tr
                 td.ppl_count0
                   .ppl_count(v-if="showNrPeople")
-                    .ppl_count_nr(v-if='departmentData.employees.length' :title= "departmentData.employees.length + ' people in this department'") {{departmentData.employees.length}}
+                    .ppl_count_nr(v-if='departmentData.employees.length' :title= "departmentData.employees.length + (departmentData.employees.length===1? ' person in this department': ' people in this department')") {{departmentData.employees.length}}
                 td(v-if='managerPhotoView')
                   img.profile(:src='config.photoUrl.prefix+departmentData.manager.photo+config.photoUrl.suffix' v-if="departmentData.manager.photo")
                   .material-icons.nophoto(v-else) face
@@ -23,8 +23,8 @@
                       i.material-icons.arrow.down(v-if='!departmentData.showChildren' @click.prevent="doShowChildren(true)" @touchend.prevent="doShowChildren(true)") arrow_drop_down
                       i.material-icons.arrow.up(v-if='departmentData.showChildren' @click.prevent="doShowChildren(false)" @touchend.prevent="doShowChildren(false)") arrow_drop_up
                       template(v-if="showNrDepartments")
-                        div.hidden_dept.down(v-if='!departmentData.showChildren' @click.prevent="doShowChildren(true)" @touchend.prevent="doShowChildren(true)" :title="departmentData.children.length + ' subdepartments'") {{departmentData.children.length}}
-                        div.hidden_dept.up(v-if='departmentData.showChildren' @click.prevent="doShowChildren(false)" @touchend.prevent="doShowChildren(false)" :title="departmentData.children.length + ' subdepartments'") {{departmentData.children.length}}
+                        div.hidden_dept.down(v-if='!departmentData.showChildren' @click.prevent="doShowChildren(true)" @touchend.prevent="doShowChildren(true)" :title="departmentData.children.length + ' subdepartment' + (departmentData.children.length===1?'':'s')") {{departmentData.children.length}}
+                        div.hidden_dept.up(v-if='departmentData.showChildren' @click.prevent="doShowChildren(false)" @touchend.prevent="doShowChildren(false)" :title="departmentData.children.length + ' subdepartment' + (departmentData.children.length===1?'':'s')") {{departmentData.children.length}}
 
          
           
