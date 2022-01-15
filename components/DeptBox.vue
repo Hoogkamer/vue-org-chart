@@ -1,9 +1,10 @@
 <template lang='pug'>
-    div(v-on:mouseenter="mouseOverBox(true)" v-on:mouseleave="mouseOverBox(false)")
+    div()
       template(v-if="departmentData")
+        i.material-icons.hidden_parents(v-if="hiddenParents" v-on:click="setHideParents(false)" title="Show parents") more_vert 
         .department
-          .col( :id="'ID_'+ departmentData.id" :class="[type, active, managerPhoto]"  @click="setActiveDepartment(departmentData, $event)" @touchend="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)")  
-  
+          .col( :id="'ID_'+ departmentData.id" :class="[type, active, managerPhoto]"  @click="setActiveDepartment(departmentData, $event)" @touchend="setActiveDepartment(departmentData, $event)" v-on:contextmenu.prevent="showCtxMenu(departmentData,  $event)" v-on:mouseenter="mouseOverBox(true)" v-on:mouseleave="mouseOverBox(false)")  
+            i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="Show/hide parents") visibility
             table
               tr
                 td.ppl_count0
@@ -28,8 +29,8 @@
 
          
           
-          i.material-icons.view_button(v-if="displaySiblingIcon" v-on:click="showViewMenu(departmentData, $event)" title="Show/hide parents") visibility
-          i.material-icons.hidden_parents(v-if="hiddenParents" v-on:click="setHideParents(false)" title="Show parents") more_vert   
+         
+            
         template(v-if="!departmentData")
             .department.invisible(v-if='!managerPhotoView' :class="[type]")
             .department.manager_photo.invisible(v-else :class="[type]")
@@ -190,6 +191,7 @@ export default {
   right: 0px;
   margin: 0px;
   color: black;
+  z-index: 2;
 }
 .drill {
   width: 10px;
@@ -292,11 +294,9 @@ export default {
 
 .hidden_parents,
 .hidden_parents1 {
-  position: absolute;
-  top: -24px;
-  left: 78px;
   font-size: 24px;
   color: grey;
+  cursor: pointer;
 }
 .hidden_parents1 {
   left: 50px;
@@ -311,6 +311,7 @@ export default {
   margin: auto;
   padding: 5px 10px;
   border-radius: 3px;
+  position: relative;
 }
 .material-icons.arrow {
   position: absolute;

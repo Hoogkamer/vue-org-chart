@@ -36,9 +36,9 @@
                 tr(v-for="staff in staffChildren")
                   td 
                     show-dept(v-if="staff.right" :parent="staff.right" :level="level+1")
-    table
+    table.tabchildren
       tr(v-if="parent.showChildren")
-        td(v-for="child in hierarchyChildren")
+        td.tabchild(v-for="child in hierarchyChildren")
           show-dept(:parent="child" :level="level+1")
                
   </template>
@@ -156,5 +156,10 @@ td {
 }
 .col {
   border: 1px solid red;
+}
+.tabchildren {
+}
+.tabchild {
+  width: auto;
 }
 </style>
