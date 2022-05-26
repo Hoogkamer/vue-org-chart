@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "array-from-polyfill": "^1.0.1",
-    "eventsource": "^1.0.7",
+    "eventsource": "^2.0.2",
     "file-saver": "^2.0.0",
     "html2canvas": "^1.0.0-alpha.12",
     "lodash": "^4.17.19",
