@@ -50,7 +50,6 @@
                   template(v-else)
                     input(type="text" :value="getPropName(prop)" @input="setPropName(prop, $event.target.value)")
            
-             
             tr(v-if="!showPerson.new")
               td.prop {{uiNames.person.departments}}
               td.val
