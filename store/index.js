@@ -718,7 +718,10 @@ function getLine(dept) {
       Math.round(pos.parent.y + pos.parent.height) * scale +
       ' v' +
       Math.round(
-        pos.element.y - pos.parent.y - pos.parent.height / 2
+        // pos.element.y - pos.parent.y - pos.parent.height / 2
+        pos.element.bottom -
+          pos.parent.bottom -
+          pos.element.height / 2
       ) *
         scale +
       ' H' +
