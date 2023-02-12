@@ -20,7 +20,7 @@
     "file-saver": "^2.0.0",
     "html2canvas": "^1.0.0-alpha.12",
     "lodash": "^4.17.19",
-    "nodemon": "^2.0.4",
+    "nodemon": "^2.0.20",
     "nuxt": "^2.15.7",
     "nuxt-material-design-icons": "^1.0.4",
     "panzoom": "^7.1.2",
