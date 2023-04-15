@@ -16,7 +16,7 @@
       span.label {{uiNames.sidebar.departmentDescription}}
       br 
       textarea.description(v-if='editMode' v-model="activeDepartment_description")
-      span(v-else).text {{activeDepartment_description}}
+      span(v-else v-html="activeDepartment_description").text
 
     .property(v-for="field in activeDepartment.dataFields" v-if="field.value")
       span.label {{field.name}}
