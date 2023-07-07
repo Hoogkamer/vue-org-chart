@@ -1,5 +1,5 @@
 <template lang='pug'>
-  .p-container(v-on:mousemove.selve="onMouseMove")
+.p-container(v-on:mousemove.selve="onMouseMove")
     page-header
     .container1(id='xparent')
       org-chart(v-if="chart")
