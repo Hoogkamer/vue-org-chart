@@ -1,20 +1,21 @@
 <template lang='pug'>
-    .file(v-on:click='editMenuOpen = !editMenuOpen')
-      i.material-icons.screenshot(v-on:click="" title='Load/Save/Config') save
-      .file_menu(v-if='editMenuOpen')
-          ul
-            li
-              label.file_select(v-on:click="editMenuOpen=!editMenuOpen") Import excel
-                input(type="file" v-on:change="importData")
-            li(v-on:click="doExportXls") Export excel
-            li(v-on:click="generateInputFile") Generate inputfile
-            li(v-on:click="editConfig") Configure options
+.file(v-on:click='editMenuOpen = !editMenuOpen')
+  i.material-icons.screenshot(v-on:click="" title='Load/Save/Config') save
+  .file_menu(v-if='editMenuOpen')
+      ul
+        li
+          label.file_select(v-on:click="editMenuOpen=!editMenuOpen" @click="uploadfile") Import excel
+           // input(ref='fileinput1' type="file" @change="importData1")
+        li(v-on:click="doExportXls") Export excel
+        li(v-on:click="generateInputFile") Generate inputfile
+        li(v-on:click="editConfig") Configure options
 
 </template>
 
 <script>
 import XLSX from 'xlsx'
 import FileSaver from 'file-saver'
+import { fileOpen, directoryOpen, fileSave } from 'browser-fs-access'
 
 import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
@@ -45,6 +46,17 @@ export default {
   },
   methods: {
     ...mapMutations(['setHideParents']),
+    uploadfile: function() {
+      fileOpen({
+        mimeTypes: [
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'application/vnd.ms-excel'
+        ]
+      }).then(blob => {
+        window.openBlob = blob
+        this.importData1(blob)
+      })
+    },
 
     editConfig: function() {
       this.$emit('editconfig', true)
@@ -109,8 +121,8 @@ export default {
         'File generated. \n Overwrite the data.js file (in the root folder) with this file.'
       )
     },
-    importData: function(infile) {
-      var f = infile.target.files[0]
+    importData1: function(f) {
+      console.log('** import data')
       var reader = new FileReader()
       var that = this
       reader.onload = function(e) {

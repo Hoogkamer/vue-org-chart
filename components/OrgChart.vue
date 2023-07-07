@@ -1,9 +1,9 @@
 <template lang='pug'>
-    #chart
-      .chart_container
-        show-dept(v-if="chart" :parent="chart" :level="1")
-        draw-lines(v-if="chart")
-        view-menu(v-if="showViewMenu")
+#chart
+  .chart_container
+    show-dept(v-if="chart" :parent="chart" :level="1")
+    draw-lines(v-if="chart")
+    view-menu(v-if="showViewMenu")
 </template>
 
 <script>
