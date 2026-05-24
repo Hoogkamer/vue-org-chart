@@ -4,42 +4,29 @@
   "description": "Organization chart",
   "author": "Michael Hoogkamer",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "nuxt",
-    "build": "nuxt build",
-    "start": "nuxt start",
-    "generate": "nuxt generate -c nuxt.config.generate.js",
-    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
-    "precommit": "npm run lint",
-    "build:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES nuxt build",
-    "generate:gh-pages": "cross-env DEPLOY_ENV=GH_PAGES nuxt generate"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
     "array-from-polyfill": "^1.0.1",
+    "browser-fs-access": "^0.35.0",
     "eventsource": "^1.1.2",
-    "file-saver": "^2.0.0",
-    "html2canvas": "^1.0.0-alpha.12",
-    "lodash": "^4.17.19",
-    "nodemon": "^2.0.4",
-    "nuxt": "^2.15.7",
-    "nuxt-material-design-icons": "^1.0.4",
+    "file-saver": "^2.0.5",
+    "html2canvas": "^1.4.1",
+    "lodash": "^4.17.21",
     "panzoom": "^7.1.2",
-    "pug": "^3.0.1",
-    "pug-plain-loader": "^1.0.0",
-    "vue-async-computed": "^3.5.2",
-    "xlsx": "^0.17.0"
+    "vue": "^3.4.0",
+    "vue-router": "^4.3.0",
+    "vuex": "^4.0.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "acorn": "^6.4.1",
-    "acorn-dynamic-import": "^4.0.0",
-    "babel-eslint": "^8.2.1",
-    "cross-env": "^5.2.0",
-    "eslint": "^5.16.0",
-    "eslint-config-prettier": "^3.6.0",
-    "eslint-loader": "^2.1.2",
-    "eslint-plugin-prettier": "2.6.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "prettier": "1.14.3",
-    "webpack": "^4.42.1"
+    "@vitejs/plugin-vue": "^5.0.0",
+    "pug": "^3.0.1",
+    "vite": "^5.0.0",
+    "vite-plugin-singlefile": "^2.3.3"
   }
 }

@@ -38,7 +38,7 @@
               target='_blank'
             )
               img.gh(
-                src='~/assets/img/gh.svg',
+                src='../assets/img/gh.svg',
                 title='Go to Github project page'
               )
   edit-config(v-if='editConfig', @close='editConfig = false')
@@ -51,7 +51,6 @@ import FileMenu from '~/components/FileMenu.vue'
 import EditConfig from '~/components/EditConfig.vue'
 import OptionsMenu from '~/components/OptionsMenu.vue'
 import { mapState, mapActions } from 'vuex'
-var panzoom = require('panzoom')
 export default {
   components: { SearchBox, FileMenu, OptionsMenu, EditConfig },
   data: function() {
@@ -91,7 +90,13 @@ export default {
             })
           }
         }).then(canvas => {
-          saveAs(canvas.toDataURL(), 'orgchart.png')
+          try {
+            saveAs(canvas.toDataURL(), 'orgchart.png')
+          } catch (e) {
+            alert("Security restriction: Double-clicking local index.html (file://) blocks canvas export when profile photos are loaded.\n\nPlease host this page on an HTTP fileserver (http:// or https://) or use 'npm run preview' to save organization chart as an image.")
+          }
+        }).catch(err => {
+          console.error("Canvas export failed:", err)
         })
       }, 500)
     }

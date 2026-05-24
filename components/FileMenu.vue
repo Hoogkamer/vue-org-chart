@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import XLSX from 'xlsx'
+import * as XLSX from 'xlsx'
 import FileSaver from 'file-saver'
 import { fileOpen, directoryOpen, fileSave } from 'browser-fs-access'
 

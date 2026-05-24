@@ -2,8 +2,8 @@
   #search_div
     input.search_input(v-model='searchField' placeholder='Search department or person...')
     #search_results(v-if="searchField.length")
-      ul
-        li(v-if="searchresults.length" v-for="result in searchresults" v-on:click="findDept(result)") 
+      ul(v-if="searchresults.length")
+        li(v-for="result in searchresults" v-on:click="findDept(result)") 
           .name {{result.name}}
           .parent(v-if="result.context") {{result.context}}
 </template>
@@ -15,29 +15,18 @@ export default {
   data: function() {
     return { searchField: '' }
   },
-  asyncComputed: {
-    searchresults: {
-      get() {
-        return new Promise((resolve, reject) => {
-          var res
-          if (this.searchField.length < 2) {
-            res = [{ name: 'Type at least 2 characters' }]
-          } else {
-            //res = this.searchDept(this.chart, this.searchField, [])
-            res = this.searchDept(this.searchField)
-            if (!res.length) {
-              res = [{ name: 'No matches' }]
-            }
-          }
-
-          resolve(res)
-        })
-      },
-      default: [{ name: 'Searching....' }]
-    }
-  },
   computed: {
-    ...mapState(['chart', 'editMode', 'orgArray', 'config', 'people'])
+    ...mapState(['chart', 'editMode', 'orgArray', 'config', 'people']),
+    searchresults() {
+      if (this.searchField.length < 2) {
+        return [{ name: 'Type at least 2 characters' }]
+      }
+      var res = this.searchDept(this.searchField)
+      if (!res.length) {
+        return [{ name: 'No matches' }]
+      }
+      return res
+    }
   },
   watch: {
     searchField: function(val) {

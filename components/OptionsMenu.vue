@@ -28,8 +28,6 @@
 </template>
 
 <script>
-import XLSX from 'xlsx'
-
 import { mapState, mapActions } from 'vuex'
 export default {
   data: function() {
