@@ -162,36 +162,42 @@ export default {
   max-height: 55px;
   display: block;
   margin: auto;
-  border-radius: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--border-color);
+  box-shadow: var(--card-shadow);
+  transition: border-color var(--transition-speed);
 }
 .active_department {
-  background-color: yellow !important;
-  color: black !important;
+  border: 2px solid var(--accent-color) !important;
+  box-shadow: 0 0 14px var(--accent-glow) !important;
+  background-color: var(--bg-card) !important;
 }
 .arrow {
   font-size: 30px;
-  bottom: 0px;
+  bottom: -5px;
   right: 0px;
   margin: -8px;
 }
-.down {
+.down, .up {
   cursor: pointer;
-}
-.up {
-  cursor: pointer;
+  transition: color var(--transition-speed);
 }
 .down:hover,
 .up:hover {
-  color: red;
+  color: var(--accent-color);
 }
 .view_button {
-  font-size: 24px;
+  font-size: 18px;
   position: absolute;
-  top: 0px;
-  right: 0px;
+  top: 4px;
+  right: 4px;
   margin: 0px;
-  color: black;
+  color: var(--text-muted);
   z-index: 2;
+  transition: color var(--transition-speed);
+}
+.view_button:hover {
+  color: var(--accent-color);
 }
 .drill {
   width: 10px;
@@ -206,38 +212,38 @@ export default {
 }
 .ppl_count {
   height: 100%;
-  color: grey;
+  color: var(--text-muted);
   font-size: 12px;
 }
 .ppl_count_nr {
   position: absolute;
   bottom: 0px;
   left: -10px;
-  color: grey;
-  font-size: 12px;
-  background-color: white;
-  padding: 0px 2px;
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 700;
+  background-color: var(--bg-secondary);
+  padding: 0px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
 }
 .department {
-  border: 0px solid rgb(180, 180, 180);
-  /* margin: 30px 0px 5px 0px; */
+  border: 0px solid transparent;
   text-align: center;
   font-size: 11px;
   vertical-align: middle;
   display: flex;
-  border-radius: 3px;
+  border-radius: var(--card-radius);
   align-items: center;
   cursor: pointer;
   box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -webkit-box-sizing: border-box;
-  background-color: white;
+  background-color: transparent;
   margin-left: auto;
   margin-right: auto;
   padding: 2px 2px;
   position: relative;
   width: 100%;
-  /*box-shadow: 3px 3px 3px lightgrey;*/
 }
 .manager_photo {
   margin-top: 20px;
@@ -246,7 +252,7 @@ export default {
   visibility: hidden;
 }
 .level_indicator {
-  border-radius: 5px;
+  border-radius: 4px;
   height: 5px;
   margin-bottom: 5px;
 }
@@ -269,6 +275,9 @@ export default {
   overflow-wrap: break-word;
   min-width: 1%;
   min-height: 1.9rem;
+  color: var(--text-primary);
+  font-weight: 700;
+  transition: color var(--transition-speed);
 }
 .name1 {
   top: 10px;
@@ -280,45 +289,60 @@ export default {
   overflow-wrap: break-word;
   min-width: 1%;
   display: inline-block;
-  color: grey;
+  color: var(--text-secondary);
+  font-size: 11px;
+  transition: color var(--transition-speed);
 }
 .hidden_dept {
-  bottom: 10px;
-  right: 1px;
-  width: 14px;
-  color: grey;
-  font-size: 12px;
-  padding: 0px 2px;
+  position: absolute;
+  bottom: 5px;
+  width: 16px;
+  color: var(--text-primary);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 3px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   border-radius: 4px;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
 }
 
 .hidden_parents,
 .hidden_parents1 {
   font-size: 24px;
-  color: grey;
+  color: var(--text-muted);
   cursor: pointer;
+  transition: color var(--transition-speed);
+}
+.hidden_parents:hover,
+.hidden_parents1:hover {
+  color: var(--accent-color);
 }
 .hidden_parents1 {
   left: 50px;
 }
 .nophoto {
   font-size: 52px;
-  color: lightgrey;
+  color: var(--text-muted);
 }
 .col {
-  border: 1px solid grey;
+  border: 1px solid var(--border-color);
   border-collapse: collapse;
   margin: auto;
-  padding: 5px 10px;
-  border-radius: 3px;
+  padding: 8px 12px;
+  border-radius: var(--card-radius);
   position: relative;
+  background-color: var(--bg-card);
+  box-shadow: var(--card-shadow);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed), border-color var(--transition-speed), background-color var(--transition-speed);
+}
+.col:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--accent-color);
 }
 .material-icons.arrow {
   position: absolute;
   bottom: -5px;
-}
-.hidden_dept {
-  position: absolute;
-  bottom: 5px;
 }
 </style>

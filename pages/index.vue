@@ -126,7 +126,6 @@ export default {
   outline: 0;
 }
 body {
-  background-color: white;
   overflow: hidden;
 }
 #move_dept {
@@ -144,13 +143,14 @@ body {
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  background-color: white;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
   margin-left: auto;
   margin-right: auto;
   padding: 2px 2px;
   box-sizing: border-box;
   top: 0px;
   left: 0px;
-  border: 1px dashed #006696;
+  border: 1px dashed var(--accent-color);
 }
 </style>

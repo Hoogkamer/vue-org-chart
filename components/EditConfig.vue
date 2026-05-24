@@ -168,6 +168,10 @@
         td.n Show Nr of people
         td.c
           input(type='checkbox', v-model='viewNrPeople')
+      tr
+        td.n Start in Dark Mode
+        td.c
+          input(type='checkbox', v-model='startInDarkMode')
 
       tr(v-if='showHelp')
         td.help(colspan=2) Sets the inital options. The user can change them in the menu bar, if 'Enable user settings' is enabled.
@@ -445,6 +449,18 @@ export default {
           val: value
         })
       }
+    },
+    startInDarkMode: {
+      get() {
+        return this.config.startView.darkMode
+      },
+      set(value) {
+        this.setConfigUpdate({
+          prop: 'startView',
+          subProp: 'darkMode',
+          val: value
+        })
+      }
     }
   },
   mounted: function() {
@@ -512,18 +528,17 @@ export default {
 <style scoped>
 #config_container {
   top: 50px;
-
   width: 100%;
   position: absolute;
   height: 0px;
-  background: rgba(200, 200, 200, 0.8);
-  z-index: 2;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
   text-align: center;
 }
 #config {
   position: relative;
   font-size: 18px;
-  color: black;
+  color: var(--text-primary);
   width: 700px;
   max-height: calc(100vh - 130px);
   overflow: hidden;
@@ -533,15 +548,13 @@ export default {
   margin: auto;
   margin-top: 30px;
   display: inline-block;
-  display: relative;
-  background-color: white;
-  padding: 5px;
-  z-index: 2;
-  border: 0px solid grey;
-  padding: 3px 10px;
-  border-radius: 5px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16),
-    0 3px 6px rgba(0, 0, 0, 0.23);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 15px 25px;
+  z-index: 10;
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow-hover);
+  transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
 }
 .close {
   font-size: 16px;
@@ -575,11 +588,11 @@ export default {
   font-size: 14px;
 }
 .tab .n {
-  color: black;
+  color: var(--text-primary);
   width: 150px;
 }
 .tab .i {
-  color: black;
+  color: var(--text-primary);
   width: 450px;
 }
 .tab .i input {
@@ -662,7 +675,7 @@ table td * {
   color: lightgrey;
 }
 .help {
-  color: rgb(61, 60, 60);
+  color: var(--text-secondary);
   padding-bottom: 10px;
   font-size: 12px;
 }
@@ -686,9 +699,10 @@ button {
   height: 10px;
 }
 .sectiontitle {
-  border-top: 1px solid blue;
-  margin-top: 10px;
+  border-top: 1px solid var(--accent-color);
+  margin-top: 15px;
   margin-bottom: 10px;
-  color: blue;
+  color: var(--accent-color);
+  font-weight: 700;
 }
 </style>

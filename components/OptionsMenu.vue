@@ -124,48 +124,77 @@ export default {
 
 <style scoped>
 .file {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  width: 50px;
-  height: 50px;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  color: inherit;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+.file:hover {
+  background-color: var(--bg-secondary);
 }
 .settings {
+  font-size: 24px;
+  cursor: pointer;
+  color: inherit;
+  transition: color var(--transition-speed);
 }
-.settings:hover {
-  border: 1px solid white;
+.file:hover .settings {
+  color: var(--accent-color);
 }
-.file_select,
-.file {
+.file_select {
   cursor: pointer;
 }
 .file_select > input[type='file'] {
   display: none;
 }
 .file_menu {
-  font-size: 14px;
-  background-color: #006696;
+  font-size: 13px;
+  background-color: var(--bg-card);
   display: inline-block;
   position: absolute;
-  left: 0px;
-  top: 45px;
+  right: 0px;
+  top: 47px;
   width: 220px;
-  border: 1px solid grey;
-  border-top: 1px solid white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow-hover);
+  z-index: 10;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
 }
 ul {
   list-style: none;
-
   padding: 5px;
   text-align: left;
+  margin: 0px;
 }
 
 input {
   margin: 0px 5px;
 }
 
+li {
+  padding: 6px 10px;
+  margin: 2px 0px;
+  border-radius: 4px;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
 li:hover {
-  background: lightblue;
+  background-color: var(--bg-secondary);
+  color: var(--accent-color);
   cursor: pointer;
-  color: black;
+}
+label {
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: color var(--transition-speed);
 }
 </style>

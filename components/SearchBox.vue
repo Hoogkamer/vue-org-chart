@@ -82,48 +82,62 @@ export default {
 }
 .search_input {
   width: 100%;
-  border-radius: 3px;
-  border: none;
-  padding: 5px 10px 3px 10px;
+  border-radius: var(--card-radius);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  padding: 6px 12px;
   font-size: 14px;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
 }
 .search_input:focus {
   outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 8px var(--accent-glow);
 }
 #search_results {
   width: 218px;
   max-height: 500px;
-  border: 1px solid lightgrey;
+  border: 1px solid var(--border-color);
   position: absolute;
   z-index: 1;
-  background-color: white;
+  background-color: var(--bg-card);
   overflow-y: scroll;
   overflow-x: hidden;
   margin-left: 0px;
-  color: grey;
+  color: var(--text-secondary);
   font-size: 12px;
-  box-shadow: 3px 3px 3px grey;
-  border-radius: 3px;
+  box-shadow: var(--card-shadow-hover);
+  border-radius: var(--card-radius);
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), color var(--transition-speed);
 }
 ul {
   list-style: none;
-  background-color: white;
+  background-color: var(--bg-card);
   padding: 5px;
   text-align: left;
+  transition: background-color var(--transition-speed);
 }
 li {
-  border-bottom: 1px solid lightgrey;
+  border-bottom: 1px solid var(--border-color);
+  padding: 6px 10px;
+  border-radius: 4px;
+  transition: background-color var(--transition-speed);
 }
 
 li:hover {
-  background: lightblue;
+  background-color: var(--bg-secondary);
   cursor: pointer;
 }
 .name {
-  color: black;
+  color: var(--text-primary);
+  font-weight: 700;
+  transition: color var(--transition-speed);
 }
 .parent {
-  color: chocolate;
+  color: var(--accent-color);
   font-size: 10px;
+  font-weight: 700;
+  transition: color var(--transition-speed);
 }
 </style>

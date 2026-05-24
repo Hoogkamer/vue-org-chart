@@ -1,17 +1,17 @@
 <template lang='pug'>
-   #edit_menu
-    div.bold {{activeDepartment.name}}
-    div.noclick ---------------------------------------
-     ul(v-if='moveDepartment')
-        li(v-on:click="doMoveTo()") Paste (move under here)
-        li(v-on:click="cancelMoveTo()") Cancel move
-     ul(v-else)
-        li(v-on:click="addDept()") Add department
-        li(v-on:click="moveTo()") Cut (move to...)
-        li.noclick ---------------------------------------
-        li(v-on:click="cancel()") Cancel
-        li.noclick ---------------------------------------
-        li.delete(v-on:click="removeDept()") Delete
+#edit_menu
+  div.bold {{activeDepartment.name}}
+  hr.divider
+  ul(v-if='moveDepartment')
+    li(v-on:click="doMoveTo()") Paste (move under here)
+    li(v-on:click="cancelMoveTo()") Cancel move
+  ul(v-else)
+    li(v-on:click="addDept()") Add department
+    li(v-on:click="moveTo()") Cut (move to...)
+    hr.divider
+    li(v-on:click="cancel()") Cancel
+    hr.divider
+    li.delete(v-on:click="removeDept()") Delete
 </template>
 
 <script>
@@ -83,21 +83,30 @@ export default {
 <style scoped>
 #edit_menu {
   position: absolute;
-  width: 150px;
-  background-color: lightgrey;
-  box-shadow: 5px 5px 5px black;
+  width: 160px;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--card-shadow-hover);
   top: 50px;
   left: 50px;
-  padding: 5px;
-  z-index: 2;
+  padding: 8px;
+  z-index: 10;
   text-align: left;
-  border-radius: 2px;
-  font-size: 14px;
+  border-radius: var(--card-radius);
+  font-size: 13px;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
 }
 .bold {
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--text-primary);
+  padding: 2px 4px;
 }
-
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 6px 0;
+}
 ul {
   padding: 0;
   list-style-type: none;
@@ -106,19 +115,21 @@ ul {
 
 li {
   cursor: pointer;
+  padding: 6px 10px;
+  margin: 2px 0px;
+  border-radius: 4px;
+  color: var(--text-primary);
+  transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 li:hover {
-  background-color: grey;
-  color: white;
-}
-.noclick {
-  cursor: default;
-}
-.noclick:hover {
-  background-color: lightgrey;
-  color: black;
+  background-color: var(--bg-secondary);
+  color: var(--accent-color);
 }
 .delete {
-  color: red;
+  color: red !important;
+  font-weight: 700;
+}
+.delete:hover {
+  background-color: rgba(255, 0, 0, 0.1) !important;
 }
 </style>

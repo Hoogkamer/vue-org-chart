@@ -82,8 +82,8 @@ export default {
   user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
   /*box-shadow: 0px 0px 25px 3px lightgrey;*/
 
-  background-color: white;
-  /*cursor: grab;*/
+  background-color: transparent;
+  transition: background-color var(--transition-speed);
 }
 .chart-container {
   margin: auto;

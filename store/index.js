@@ -214,6 +214,19 @@ export default createStore({
       if (!state.config.personProperties) {
         state.config.personProperties = state.defaultPersonProperties
       }
+      if (!state.config.startView) {
+        state.config.startView = {
+          photos: true,
+          names: true,
+          columnview: true,
+          staffColumnview: false,
+          showNrDepartments: true,
+          showNrPeople: true,
+          darkMode: false
+        }
+      } else if (typeof state.config.startView.darkMode === 'undefined') {
+        state.config.startView.darkMode = false
+      }
       state.columnView = state.config.startView.columnview
       state.columnView_noStaff = !state.config.startView.staffColumnview
       state.managerNameView = state.config.startView.names

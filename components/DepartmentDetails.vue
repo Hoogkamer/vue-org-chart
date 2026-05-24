@@ -144,14 +144,21 @@ export default {
   position: absolute;
   right: 16px;
   top: 154px;
-  border: 1px solid grey;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
   cursor: pointer;
+  box-shadow: var(--card-shadow);
+  transition: transform var(--transition-speed), border-color var(--transition-speed);
 }
 .profile:hover {
-  border: 2px solid orange;
+  transform: scale(1.05);
+  border-color: var(--accent-color);
 }
 .name {
   font-size: 16px;
+  color: var(--text-primary);
+  font-weight: 700;
+  transition: color var(--transition-speed);
 }
 
 .property {
@@ -160,40 +167,67 @@ export default {
 .clickable {
   cursor: pointer;
   font-size: 14px;
+  color: var(--text-primary);
+  padding: 6px 10px;
+  margin: 2px 0px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 input.name {
   width: calc(100% - 10px);
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px 8px;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
 }
 textarea.description {
   width: calc(100% - 10px);
   height: 80px;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px 8px;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
 }
 .clickable:hover {
-  background-color: lightblue;
+  background-color: var(--bg-secondary);
+  color: var(--accent-color);
 }
 .noclickable {
   cursor: default;
 }
 .label {
-  font-weight: 600;
-  text-decoration: underline;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: color var(--transition-speed);
 }
 .untext {
-  color: grey;
+  color: var(--text-muted);
   font-style: italic;
+  transition: color var(--transition-speed);
 }
 ul {
   list-style: none;
-  background-color: white;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
   padding: 5px;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
 }
 .this-department {
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--accent-color);
 }
 .sub {
   font-size: 16px;
-
   margin: -8px 0px;
+  color: var(--text-primary);
 }
 .isstaff {
   margin: 0px 10px;
@@ -202,9 +236,14 @@ ul {
 .material-icons.edit {
   font-size: 16px;
   cursor: pointer;
+  color: var(--text-muted);
+  transition: color var(--transition-speed);
+}
+.material-icons.edit:hover {
+  color: var(--accent-color);
 }
 .nophoto {
   font-size: 80px;
-  color: lightgrey;
+  color: var(--text-muted);
 }
 </style>

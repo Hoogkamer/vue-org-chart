@@ -48,42 +48,50 @@ export default {
 <style scoped>
 .title {
   text-align: center;
-  min-height: 50px;
-  margin-bottom: 10px;
+  min-height: 40px;
+  margin-bottom: 15px;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--text-primary);
   width: calc(100% - 30px);
+  transition: color var(--transition-speed);
 }
 
 .name {
   font-size: 16px;
+  color: var(--text-primary);
 }
 .role {
-  color: grey;
-  font-size: 14px;
+  color: var(--text-secondary);
+  font-size: 13px;
 }
 
 .tabs {
   width: 100%;
   margin-bottom: 20px;
   padding: 0px 10px;
-  border-bottom: 2px solid lightgrey;
+  border-bottom: 2px solid var(--border-color);
+  display: flex;
+  gap: 8px;
+  transition: border-color var(--transition-speed);
 }
 .tab {
-  width: 120px;
-  margin: 0px 0px 0px 0px;
+  flex: 1;
+  text-align: center;
+  padding: 8px 0px;
   border: none;
   background: none;
   margin-bottom: -2px;
   border-bottom: 2px solid transparent;
   outline: none;
   cursor: pointer;
+  font-weight: 700;
+  color: var(--text-muted);
+  transition: color var(--transition-speed), border-color var(--transition-speed);
 }
 .tab.active {
-  border: 2px solid lightgrey;
-  border-top-left-radius: 7px;
-  border-top-right-radius: 7px;
-  background-color: lightgrey;
+  color: var(--accent-color);
+  border-bottom: 2px solid var(--accent-color);
 }
 
 input.name {
@@ -96,11 +104,14 @@ input.name {
   top: 50px;
   width: 300px;
   height: 100vh;
-  border-right: 0px solid lightgrey;
-  background-color: #f9f5f5;
-  padding: 5px;
+  border-right: 1px solid var(--border-color);
+  background-color: var(--bg-sidebar);
+  box-shadow: var(--sidebar-shadow);
+  padding: 15px;
   overflow: auto;
   padding-bottom: 80px;
+  z-index: 5;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
 }
 .noside-screen {
   position: fixed;
@@ -108,21 +119,30 @@ input.name {
   top: 50px;
   width: 25px;
   height: 45px;
-  border: 0px solid lightgray;
-  background-color: #f9f5f5;
+  border: 1px solid var(--border-color);
+  border-left: none;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  background-color: var(--bg-sidebar);
+  box-shadow: var(--sidebar-shadow);
   z-index: 9;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed), box-shadow var(--transition-speed);
 }
 
 .right {
   position: absolute;
-  right: 0px;
+  right: 8px;
   top: 10px;
   background-color: transparent;
-  border: 0px solid grey;
-  padding: 1px;
+  border: none;
   cursor: pointer;
+  color: var(--text-muted);
+  transition: color var(--transition-speed);
 }
 .right:focus {
   outline: none;
+}
+.right:hover {
+  color: var(--accent-color);
 }
 </style>

@@ -15,9 +15,9 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
+
 export default {
-  components: {},
   props: {
     type: {
       type: String,
@@ -26,58 +26,47 @@ export default {
   },
   data: function() {
     return {
-      searchField: '',
-      person: { name: '', function: '', id: '', photo: '' }
+      searchField: ''
     }
   },
   computed: {
-    ...mapState(['people', 'selectedPerson', 'activeDepartment']),
+    ...mapState(['chart', 'people']),
     searchresults: function() {
-      var res
-      if (this.searchField.length < 3) {
-        res = [{ name: 'Type at least 3 characters' }]
-      } else {
-        res = this.people.filter(
-          p =>
-            p.name
-              .toLowerCase()
-              .indexOf(this.searchField.toLowerCase()) > -1
-        )
-        if (!res.length) {
-          res = [{ name: 'No matches' }]
+      var result = []
+      if (this.searchField.length < 2) return result
+      this.people.forEach(e => {
+        if (
+          e.name.toLowerCase().indexOf(this.searchField.toLowerCase()) > -1
+        ) {
+          result.push(e)
         }
-      }
-      return res
+      })
+      return result
     }
   },
-  watch: {},
-  mounted: function() {},
   methods: {
-    ...mapMutations(['setShowPerson', 'addAssignment', 'addManager']),
-    selectPerson: function(person) {
-      if (this.type === 'manager') {
-        this.addManager({
-          department: this.activeDepartment,
-          person: person
-        })
-      } else {
-        this.addAssignment({
-          department: this.activeDepartment,
-          person: person,
-          role: ''
-        })
-      }
-      this.searchField = ''
-      this.$store.commit('setSelectedPerson', null)
-      this.$emit('close')
-    },
+    ...mapActions(['setShowDepartment']),
     close: function() {
       this.$store.commit('setSelectedPerson', null)
       this.$emit('close')
     },
-    registerNew: function() {
-      this.setShowPerson({
-        name: '',
+    selectPerson(person) {
+      if (this.type === 'manager') {
+        this.$store.commit('updateActiveDepartmentManager', person)
+      } else {
+        this.$store.commit('addAssignment', {
+          department: this.$store.state.activeDepartment,
+          role: '',
+          person: person
+        })
+      }
+      this.close()
+    },
+    registerNew() {
+      // create a new profile
+      var person = { name: this.searchField, new: true }
+      this.$store.commit('setShowPerson', {
+        name: this.searchField,
         new: true,
         manager: this.type === 'manager'
       })
@@ -92,80 +81,93 @@ export default {
   position: absolute;
   top: 200px;
   left: 50px;
-  width: 180px;
-  height: 120px;
-  background-color: lightgrey;
-  padding: 10px;
-}
-.buttons {
-  position: absolute;
-  left: 0px;
-  bottom: 10px;
-  padding: 0px 20px;
-}
-.buttons button {
-  margin: 0px 10px;
-  cursor: pointer;
+  width: 200px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 12px;
+  border-radius: var(--card-radius);
+  box-shadow: var(--card-shadow-hover);
+  z-index: 10;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
 }
 .search_input {
-  width: calc(100% - 30px);
-  border-radius: 3px;
-  border: none;
-  box-shadow: inset 0px 2px 5px grey;
-  padding: 4px 10px 4px 10px;
-  font-size: 14px;
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 6px 10px;
+  font-size: 13px;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
 }
 .search_input:focus {
   outline: none;
+  border-color: var(--accent-color);
 }
 #search_results {
-  width: 218px;
-  max-height: 500px;
-  border: 1px solid lightgrey;
+  width: 176px;
+  max-height: 200px;
+  border: 1px solid var(--border-color);
   position: absolute;
-  z-index: 1;
-  background-color: white;
-  overflow-y: scroll;
+  z-index: 11;
+  background-color: var(--bg-card);
+  overflow-y: auto;
   overflow-x: hidden;
   margin-left: 0px;
-  color: grey;
+  color: var(--text-secondary);
   font-size: 12px;
-  box-shadow: 3px 3px 3px grey;
-  border-radius: 3px;
+  box-shadow: var(--card-shadow-hover);
+  border-radius: var(--card-radius);
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
 }
 ul {
   list-style: none;
-  background-color: white;
+  background-color: var(--bg-card);
   padding: 5px;
   text-align: left;
 }
 li {
-  border-bottom: 1px solid lightgrey;
+  border-bottom: 1px solid var(--border-color);
+  padding: 4px 8px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
 }
-
 li:hover {
-  background: lightblue;
-  cursor: pointer;
-}
-.addnew {
-  margin: 5px;
-}
-.addnew input {
-  width: 170px;
-}
-.material-icons.close {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  font-size: 16px;
-  cursor: pointer;
+  background-color: var(--bg-secondary);
+  color: var(--accent-color);
 }
 .btn {
   cursor: pointer;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 700;
+  transition: background-color var(--transition-speed);
+}
+.btn:hover {
+  background-color: var(--accent-hover);
+}
+.material-icons.close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: color var(--transition-speed);
+}
+.material-icons.close:hover {
+  color: var(--accent-color);
 }
 .nextline {
   width: 100%;
   text-align: center;
+  color: var(--text-secondary);
+  font-size: 12px;
 }
 .vspace {
   height: 10px;

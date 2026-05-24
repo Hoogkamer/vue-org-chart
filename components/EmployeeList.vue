@@ -101,49 +101,79 @@ export default {
 .assignment {
   width: 90%;
   height: 60px;
-  margin: 4px auto;
+  margin: 8px auto;
   position: relative;
-  border: 1px solid lightgrey;
-  background-color: white;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed), border-color var(--transition-speed), background-color var(--transition-speed);
 }
 .assignment:hover {
-  border: 2px solid orange;
+  transform: translateY(-1px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--accent-color);
 }
 .photo {
-  width: 52px;
-  max-height: 52px;
+  width: 48px;
+  max-height: 48px;
   display: block;
   margin: auto;
+  border-radius: 50%;
+  border: 1px solid var(--border-color);
 }
 .name {
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: color var(--transition-speed);
 }
 .role {
-  color: grey;
-  font-size: 14px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  transition: color var(--transition-speed);
 }
 .manager_role {
-  color: white;
-  background-color: grey;
-  font-size: 14px;
-  padding: 0px 10px;
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 1px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  transition: background-color var(--transition-speed), border-color var(--transition-speed);
 }
 .delete {
   position: absolute;
   top: 5px;
-  right: 0px;
+  right: 8px;
   font-size: 20px;
   color: red;
   cursor: pointer;
+  transition: opacity var(--transition-speed);
+}
+.delete:hover {
+  opacity: 0.8;
 }
 
 input.name {
   width: calc(100% - 10px);
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px 8px;
 }
 textarea.description {
   width: calc(100% - 10px);
   height: 80px;
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px 8px;
 }
 
 .noclickable {
@@ -152,21 +182,34 @@ textarea.description {
 
 ul {
   list-style: none;
-  background-color: white;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--card-radius);
   padding: 5px;
 }
 
 .btn {
   cursor: pointer;
+  background-color: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 700;
+  transition: background-color var(--transition-speed);
+}
+.btn:hover {
+  background-color: var(--accent-hover);
 }
 .nopeople {
   width: 100%;
   text-align: center;
   font-style: italic;
+  color: var(--text-muted);
 }
 .nophoto {
-  font-size: 52px;
-  color: lightgrey;
+  font-size: 48px;
+  color: var(--text-muted);
 }
 .hspace {
   height: 10px;

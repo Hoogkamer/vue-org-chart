@@ -1,21 +1,26 @@
 <template lang='pug'>
-.header(:style='{ backgroundColor: config.title.color }') {{ config.title.text }}
+.header(:style='{ backgroundColor: isDark ? "var(--bg-secondary)" : config.title.color, color: isDark ? "var(--text-primary)" : "white", borderBottom: isDark ? "1px solid var(--border-color)" : "none" }') {{ config.title.text }}
   .edit_indicator(
     v-if='editMode',
     v-on:click='$store.commit("setEditMode", false)'
   ) Click to leave editmode
   search-box
   .menu
-    file-menu(v-if='editMode', @editconfig='editConfig = true')
-    options-menu(v-if='config.enableUserSettings')
     .home1
-      a(href='/')
-        i.material-icons.home(v-on:click='capture', title='Home') home
+      a(:href='isDark ? "#" : "/"' :style='{ color: isDark ? "var(--text-primary)" : "white" }')
+        i.material-icons.home(title='Home') home
     .screenshot1(v-if='config.enableScreenCapture')
       i.material-icons.screenshot(
         v-on:click='capture',
         title='Save as image'
       ) photo_camera
+    .theme-toggle1
+      i.material-icons.theme-toggle(
+        v-on:click='toggleTheme',
+        :title='isDark ? "Switch to light mode" : "Switch to dark mode"'
+      ) {{ isDark ? 'light_mode' : 'dark_mode' }}
+    file-menu(v-if='editMode', @editconfig='editConfig = true')
+    options-menu(v-if='config.enableUserSettings')
   .info(v-if='config.information')
     i.material-icons.info_icon(
       v-on:click='infoOpen = !infoOpen',
@@ -56,14 +61,35 @@ export default {
   data: function() {
     return {
       infoOpen: false,
-      editConfig: false
+      editConfig: false,
+      isDark: false
     }
   },
   computed: {
     ...mapState(['chart', 'editMode', 'config', 'updatedOn'])
   },
+  mounted() {
+    let savedTheme = localStorage.getItem('theme')
+    if (!savedTheme && this.config && this.config.startView && typeof this.config.startView.darkMode !== 'undefined') {
+      savedTheme = this.config.startView.darkMode ? 'dark' : 'light'
+    }
+    if (savedTheme === 'dark') {
+      this.isDark = true
+      document.documentElement.setAttribute('data-theme', 'dark')
+    } else {
+      this.isDark = false
+      document.documentElement.setAttribute('data-theme', 'light')
+    }
+  },
   methods: {
     ...mapActions(['initZoom']),
+    toggleTheme() {
+      this.isDark = !this.isDark
+      const newTheme = this.isDark ? 'dark' : 'light'
+      document.documentElement.setAttribute('data-theme', newTheme)
+      localStorage.setItem('theme', newTheme)
+      this.$store.dispatch('refreshLines')
+    },
     capture: function() {
       var area = document.querySelector('#chart')
       console.log(area)
@@ -134,42 +160,69 @@ function saveAs(uri, filename) {
   position: fixed;
   left: 0px;
   top: 0px;
-  z-index: 2;
+  z-index: 20;
+  transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 .screenshot1 {
-  display: inline-block;
-  box-sizing: content-box;
-  position: absolute;
-  top: 10px;
-  left: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  transition: background-color var(--transition-speed);
+}
+.theme-toggle1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  transition: background-color var(--transition-speed);
 }
 .screenshot,
-.home {
+.home,
+.theme-toggle {
+  font-size: 24px;
   cursor: pointer;
+  color: inherit;
+  transition: color var(--transition-speed);
 }
 .home1 a {
-  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .home1 {
-  display: inline-block;
-  box-sizing: content-box;
-  position: absolute;
-  top: 10px;
-  left: -50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  transition: background-color var(--transition-speed);
+}
+.screenshot1:hover,
+.theme-toggle1:hover,
+.home1:hover {
+  background-color: var(--bg-secondary);
 }
 .screenshot:hover,
 .home:hover,
-.info_icon:hover {
-  border: 1px solid white;
+.theme-toggle:hover {
+  color: var(--accent-color);
 }
 .menu {
   position: absolute;
-  top: 5px;
+  top: 0px;
   left: 60px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   font-size: 16px;
-  width: 200px;
-  text-align: left;
-  padding: 10px;
+  padding: 0 10px;
 }
 .gh {
   position: absolute;
@@ -201,13 +254,15 @@ function saveAs(uri, filename) {
 .info-text {
   width: 300px;
   font-size: 14px;
-  color: grey;
-  background-color: white;
-  border: 1px solid lightgrey;
+  color: var(--text-secondary);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
   position: absolute;
   top: 40px;
   right: 20px;
-  box-shadow: 2px 2px 2px grey;
+  box-shadow: var(--card-shadow);
+  border-radius: var(--card-radius);
+  transition: background-color var(--transition-speed), border var(--transition-speed);
 }
 .info-close {
   position: absolute;
